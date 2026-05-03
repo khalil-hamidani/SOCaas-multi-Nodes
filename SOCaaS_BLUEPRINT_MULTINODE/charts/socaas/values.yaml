@@ -1,0 +1,219 @@
+global:
+  nameOverride: ""
+  fullnameOverride: "socaas"
+  imagePullPolicy: IfNotPresent
+  labNetworkCidr: 192.168.122.0/24
+  hostBridgeIp: 192.168.122.1
+
+namespaces:
+  create: true
+  system: socaas-system
+  siem: socaas-siem
+  soar: socaas-soar
+  ir: socaas-thehive
+
+scheduling:
+  siemNodeSelector:
+    node-role: siem
+  soarNodeSelector:
+    node-role: soar
+  siemHostname: k8s-worker1
+  soarHostname: k8s-worker2
+
+storage:
+  createStaticPVs: true
+  storageClassName: socaas-local
+  reclaimPolicy: Retain
+  worker1Hostname: k8s-worker1
+  worker2Hostname: k8s-worker2
+  paths:
+    wazuhIndexer: /srv/socaas/wazuh/indexer
+    wazuhManager: /srv/socaas/wazuh/manager
+    wazuhDashboard: /srv/socaas/wazuh/dashboard
+    shuffleBackend: /srv/socaas/shuffle/backend
+    shuffleOpenSearch: /srv/socaas/shuffle/opensearch
+    redis: /srv/socaas/shuffle/redis
+    thehive: /srv/socaas/thehive/app
+    thehiveElasticsearch: /srv/socaas/thehive/elasticsearch
+    cassandra: /srv/socaas/cassandra
+    minio: /srv/socaas/minio
+  sizes:
+    wazuhIndexer: 20Gi
+    wazuhManager: 15Gi
+    wazuhDashboard: 5Gi
+    shuffleBackend: 5Gi
+    shuffleOpenSearch: 10Gi
+    redis: 2Gi
+    thehive: 5Gi
+    thehiveElasticsearch: 20Gi
+    cassandra: 20Gi
+    minio: 10Gi
+
+secrets:
+  wazuh:
+    adminUser: admin
+    adminPassword: SecretPassword
+    apiUser: wazuh-wui
+    apiPassword: MyS3cr37P450rChangeMe
+  shuffle:
+    adminEmail: admin@socaas.local
+    adminPassword: S0CaaS-Shuffle-2026!
+    opensearchUser: admin
+    opensearchPassword: S0CaaS-ShuffleOS-2026!
+  thehive:
+    secret: S0CaaS-TheHive-Secret-2026-ChangeMe
+    minioAccessKey: thehiveadmin
+    minioSecretKey: ChangeThisMinIOPassword!
+    apiKey: CHANGE_ME_AFTER_CREATING_THEHIVE_API_KEY
+  pipeline:
+    sharedSecret: S0CaaS-Wazuh-Webhook-2026
+
+wazuh:
+  enabled: true
+  version: "4.8.2"
+  indexer:
+    image: wazuh/wazuh-indexer
+    javaOpts: "-Xms768m -Xmx768m"
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1536Mi
+      limits:
+        cpu: "2"
+        memory: 2500Mi
+  manager:
+    image: wazuh/wazuh-manager
+    protocol: tcp
+    resources:
+      requests:
+        cpu: 400m
+        memory: 768Mi
+      limits:
+        cpu: "2"
+        memory: 1536Mi
+    nodePorts:
+      agentTcp: 31514
+      agentUdp: 31516
+      enrollment: 31515
+      api: 31550
+  dashboard:
+    image: wazuh/wazuh-dashboard
+    nodePort: 30002
+    containerPort: 5601
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 800m
+        memory: 1024Mi
+
+shuffle:
+  enabled: true
+  version: latest
+  frontend:
+    image: frikky/shuffle-frontend
+    nodePort: 30080
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  backend:
+    image: frikky/shuffle-backend
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 1024Mi
+  orborus:
+    image: frikky/shuffle-orborus
+    replicas: 1
+    resources:
+      requests:
+        cpu: 150m
+        memory: 256Mi
+      limits:
+        cpu: 800m
+        memory: 768Mi
+  redis:
+    image: redis:7-alpine
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 384Mi
+  opensearch:
+    image: opensearchproject/opensearch:2.11.1
+    javaOpts: "-Xms512m -Xmx512m"
+    resources:
+      requests:
+        cpu: 300m
+        memory: 1024Mi
+      limits:
+        cpu: "1"
+        memory: 1536Mi
+
+thehive:
+  enabled: true
+  image: strangebee/thehive:5.2
+  nodePort: 30900
+  javaOpts: "-Xms768m -Xmx768m"
+  resources:
+    requests:
+      cpu: 300m
+      memory: 1024Mi
+    limits:
+      cpu: "1"
+      memory: 1536Mi
+  cassandra:
+    image: cassandra:4.1
+    heapSize: 768M
+    heapNewSize: 256M
+    resources:
+      requests:
+        cpu: 300m
+        memory: 1200Mi
+      limits:
+        cpu: "1"
+        memory: 1800Mi
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.12
+    javaOpts: "-Xms512m -Xmx512m"
+    resources:
+      requests:
+        cpu: 300m
+        memory: 1024Mi
+      limits:
+        cpu: "1"
+        memory: 1536Mi
+  minio:
+    image: quay.io/minio/minio:latest
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 768Mi
+
+pipeline:
+  enabled: true
+  image: python:3.12-alpine
+  nativeShuffleWebhookUrl: ""
+  resources:
+    requests:
+      cpu: 50m
+      memory: 96Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+networkPolicies:
+  enabled: true

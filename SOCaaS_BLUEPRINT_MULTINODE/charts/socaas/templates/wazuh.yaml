@@ -1,0 +1,325 @@
+{{- if .Values.wazuh.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: socaas-wazuh-forwarder
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+data:
+  forwarder.py: |
+    import json, os, time, urllib.request
+    alerts_file = os.environ.get("ALERTS_FILE", "/alerts/alerts.json")
+    target = os.environ.get("TARGET_URL")
+    secret = os.environ.get("PIPELINE_SECRET", "")
+    print(f"SOCaaS Wazuh alert forwarder watching {alerts_file} -> {target}", flush=True)
+    while not os.path.exists(alerts_file):
+        time.sleep(5)
+    with open(alerts_file, "r", errors="ignore") as f:
+        f.seek(0, 2)
+        while True:
+            line = f.readline()
+            if not line:
+                time.sleep(2)
+                continue
+            try:
+                payload = json.loads(line)
+            except Exception:
+                continue
+            data = json.dumps({"source": "wazuh", "alert": payload}).encode()
+            req = urllib.request.Request(target, data=data, headers={"Content-Type": "application/json", "X-SOCaaS-Webhook-Secret": secret}, method="POST")
+            try:
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    print(f"forwarded alert response={resp.status}", flush=True)
+            except Exception as exc:
+                print(f"forward failed: {exc}", flush=True)
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: socaas-wazuh-indexer
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: wazuh-indexer
+    socaas.layer: siem
+spec:
+  serviceName: socaas-wazuh-indexer
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-wazuh-indexer
+      app.kubernetes.io/component: wazuh-indexer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-wazuh-indexer
+        app.kubernetes.io/component: wazuh-indexer
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: siem
+    spec:
+      nodeSelector:
+        {{- include "socaas.siemNodeSelector" . | nindent 8 }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values: [{{ .Values.scheduling.siemHostname | quote }}]
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: wazuh-indexer
+          image: "{{ .Values.wazuh.indexer.image }}:{{ .Values.wazuh.version }}"
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          env:
+            - {name: OPENSEARCH_JAVA_OPTS, value: {{ .Values.wazuh.indexer.javaOpts | quote }}}
+            - {name: discovery.type, value: single-node}
+            - {name: bootstrap.memory_lock, value: "false"}
+            - {name: plugins.security.disabled, value: "true"}
+          ports:
+            - {name: http, containerPort: 9200}
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/wazuh-indexer}
+          readinessProbe:
+            tcpSocket: {port: 9200}
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket: {port: 9200}
+            initialDelaySeconds: 90
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.wazuh.indexer.resources | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wazuh-indexer-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-wazuh-indexer
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    app.kubernetes.io/part-of: socaas
+    app.kubernetes.io/component: wazuh-indexer
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: socaas-wazuh-indexer
+    app.kubernetes.io/component: wazuh-indexer
+  ports:
+    - {name: http, port: 9200, targetPort: 9200}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: socaas-wazuh-manager
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: wazuh-manager
+    socaas.layer: siem
+spec:
+  serviceName: socaas-wazuh-manager
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-wazuh-manager
+      app.kubernetes.io/component: wazuh-manager
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-wazuh-manager
+        app.kubernetes.io/component: wazuh-manager
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: siem
+    spec:
+      nodeSelector:
+        {{- include "socaas.siemNodeSelector" . | nindent 8 }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values: [{{ .Values.scheduling.siemHostname | quote }}]
+      containers:
+        - name: wazuh-manager
+          image: "{{ .Values.wazuh.manager.image }}:{{ .Values.wazuh.version }}"
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          env:
+            - {name: INDEXER_URL, value: "http://socaas-wazuh-indexer:9200"}
+            - {name: FILEBEAT_SSL_VERIFICATION_MODE, value: none}
+            - name: WAZUH_API_USER
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: api-user}}
+            - name: WAZUH_API_PASSWORD
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: api-password}}
+          ports:
+            - {name: agent-tcp, containerPort: 1514, protocol: TCP}
+            - {name: agent-udp, containerPort: 1514, protocol: UDP}
+            - {name: enrollment, containerPort: 1515, protocol: TCP}
+            - {name: api, containerPort: 55000, protocol: TCP}
+          volumeMounts:
+            - {name: manager-data, mountPath: /var/ossec/data}
+            - {name: alerts, mountPath: /var/ossec/logs/alerts}
+          readinessProbe:
+            tcpSocket: {port: 1514}
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket: {port: 1514}
+            initialDelaySeconds: 90
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.wazuh.manager.resources | nindent 12 }}
+        - name: alert-forwarder
+          image: python:3.12-alpine
+          imagePullPolicy: IfNotPresent
+          command: ["python", "/app/forwarder.py"]
+          env:
+            - {name: ALERTS_FILE, value: /alerts/alerts.json}
+            - {name: TARGET_URL, value: "http://socaas-pipeline-gateway.{{ .Values.namespaces.soar }}.svc.cluster.local:8080/hooks/wazuh"}
+            - name: PIPELINE_SECRET
+              valueFrom: {secretKeyRef: {name: socaas-pipeline-secrets, key: shared-secret}}
+          volumeMounts:
+            - {name: forwarder, mountPath: /app}
+            - {name: alerts, mountPath: /alerts}
+          resources:
+            requests: {cpu: 25m, memory: 64Mi}
+            limits: {cpu: 200m, memory: 128Mi}
+      volumes:
+        - name: manager-data
+          persistentVolumeClaim:
+            claimName: wazuh-manager-pvc
+        - name: alerts
+          emptyDir: {}
+        - name: forwarder
+          configMap:
+            name: socaas-wazuh-forwarder
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-wazuh-manager
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    app.kubernetes.io/part-of: socaas
+    app.kubernetes.io/component: wazuh-manager
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: socaas-wazuh-manager
+    app.kubernetes.io/component: wazuh-manager
+  ports:
+    - {name: agent-tcp, port: 1514, targetPort: 1514, protocol: TCP}
+    - {name: agent-udp, port: 1514, targetPort: 1514, protocol: UDP}
+    - {name: enrollment, port: 1515, targetPort: 1515, protocol: TCP}
+    - {name: api, port: 55000, targetPort: 55000, protocol: TCP}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-wazuh-manager-nodeport
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    app.kubernetes.io/part-of: socaas
+    app.kubernetes.io/component: wazuh-manager
+spec:
+  type: NodePort
+  externalTrafficPolicy: Cluster
+  selector:
+    app.kubernetes.io/name: socaas-wazuh-manager
+    app.kubernetes.io/component: wazuh-manager
+  ports:
+    - {name: agent-tcp, port: 1514, targetPort: 1514, nodePort: {{ .Values.wazuh.manager.nodePorts.agentTcp }}, protocol: TCP}
+    - {name: agent-udp, port: 1514, targetPort: 1514, nodePort: {{ .Values.wazuh.manager.nodePorts.agentUdp }}, protocol: UDP}
+    - {name: enrollment, port: 1515, targetPort: 1515, nodePort: {{ .Values.wazuh.manager.nodePorts.enrollment }}, protocol: TCP}
+    - {name: api, port: 55000, targetPort: 55000, nodePort: {{ .Values.wazuh.manager.nodePorts.api }}, protocol: TCP}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socaas-wazuh-dashboard
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: wazuh-dashboard
+    socaas.layer: siem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-wazuh-dashboard
+      app.kubernetes.io/component: wazuh-dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-wazuh-dashboard
+        app.kubernetes.io/component: wazuh-dashboard
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: siem
+    spec:
+      nodeSelector:
+        {{- include "socaas.siemNodeSelector" . | nindent 8 }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values: [{{ .Values.scheduling.siemHostname | quote }}]
+      containers:
+        - name: wazuh-dashboard
+          image: "{{ .Values.wazuh.dashboard.image }}:{{ .Values.wazuh.version }}"
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          env:
+            - {name: INDEXER_URL, value: "http://socaas-wazuh-indexer:9200"}
+            - {name: SERVER_SSL_ENABLED, value: "false"}
+            - name: DASHBOARD_USERNAME
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: admin-user}}
+            - name: DASHBOARD_PASSWORD
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: admin-password}}
+          ports:
+            - {name: http, containerPort: {{ .Values.wazuh.dashboard.containerPort }}}
+          volumeMounts:
+            - {name: dashboard-data, mountPath: /usr/share/wazuh-dashboard/data}
+          readinessProbe:
+            tcpSocket: {port: {{ .Values.wazuh.dashboard.containerPort }}}
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket: {port: {{ .Values.wazuh.dashboard.containerPort }}}
+            initialDelaySeconds: 120
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.wazuh.dashboard.resources | nindent 12 }}
+      volumes:
+        - name: dashboard-data
+          persistentVolumeClaim:
+            claimName: wazuh-dashboard-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-wazuh-dashboard
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    app.kubernetes.io/part-of: socaas
+    app.kubernetes.io/component: wazuh-dashboard
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: socaas-wazuh-dashboard
+    app.kubernetes.io/component: wazuh-dashboard
+  ports:
+    - name: http
+      port: {{ .Values.wazuh.dashboard.containerPort }}
+      targetPort: {{ .Values.wazuh.dashboard.containerPort }}
+      nodePort: {{ .Values.wazuh.dashboard.nodePort }}
+{{- end }}

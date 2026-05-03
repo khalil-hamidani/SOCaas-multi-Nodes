@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib.sh"
+
+DESTROY_VMS="false"
+if [[ "${1:-}" == "--destroy-vms" ]]; then
+  DESTROY_VMS="true"
+fi
+
+confirm_danger "This will uninstall SOCaaS from Kubernetes and may reset cluster state. Type DELETE_SOCAAS_LAB to continue:"
+
+log "Uninstalling Helm release if present"
+ssh_node "${SOCAAS_MASTER_IP}" "helm uninstall ${SOCAAS_HELM_RELEASE} -n ${SOCAAS_HELM_NAMESPACE} || true"
+
+log "Deleting SOCaaS namespaces and retained PV/PVC objects"
+ssh_node "${SOCAAS_MASTER_IP}" "kubectl delete ns ${SOCAAS_SIEM_NAMESPACE} ${SOCAAS_SOAR_NAMESPACE} ${SOCAAS_IR_NAMESPACE} ${SOCAAS_HELM_NAMESPACE} --ignore-not-found=true || true; kubectl delete pv -l app.kubernetes.io/part-of=socaas --ignore-not-found=true || true"
+
+if [[ "$DESTROY_VMS" == "true" ]]; then
+  confirm_danger "VM destruction requested. This deletes VM definitions and disks. Type DELETE_SOCAAS_LAB again:"
+  for vm in "${SOCAAS_MASTER_NAME}" "${SOCAAS_WORKER1_NAME}" "${SOCAAS_WORKER2_NAME}"; do
+    sudo virsh -c qemu:///system destroy "$vm" 2>/dev/null || true
+    sudo virsh -c qemu:///system undefine "$vm" --remove-all-storage 2>/dev/null || true
+  done
+else
+  warn "VMs were not destroyed. Pass --destroy-vms for VM deletion."
+fi
+
+log "Reset complete"

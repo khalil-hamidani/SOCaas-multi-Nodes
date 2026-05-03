@@ -1,0 +1,41 @@
+# Laptop-tuned multi-node values for the Parrot + 3 Ubuntu VM lab.
+# This file intentionally keeps replicas at 1 and JVM heaps small.
+
+global:
+  hostBridgeIp: 192.168.122.1
+  labNetworkCidr: 192.168.122.0/24
+
+scheduling:
+  siemNodeSelector:
+    node-role: siem
+  soarNodeSelector:
+    node-role: soar
+  siemHostname: k8s-worker1
+  soarHostname: k8s-worker2
+
+storage:
+  worker1Hostname: k8s-worker1
+  worker2Hostname: k8s-worker2
+  sizes:
+    wazuhIndexer: 18Gi
+    wazuhManager: 10Gi
+    wazuhDashboard: 3Gi
+    shuffleBackend: 3Gi
+    shuffleOpenSearch: 8Gi
+    redis: 1Gi
+    thehive: 4Gi
+    thehiveElasticsearch: 15Gi
+    cassandra: 15Gi
+    minio: 8Gi
+
+shuffle:
+  orborus:
+    replicas: 1
+
+thehive:
+  javaOpts: "-Xms512m -Xmx768m"
+  cassandra:
+    heapSize: 768M
+    heapNewSize: 256M
+  elasticsearch:
+    javaOpts: "-Xms512m -Xmx512m"

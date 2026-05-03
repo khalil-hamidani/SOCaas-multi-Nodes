@@ -1,0 +1,16 @@
+apiVersion: v2
+name: socaas
+description: Multi-node SOCaaS lab chart for Wazuh, Shuffle, TheHive, and pipeline integration
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - soc
+  - siem
+  - soar
+  - wazuh
+  - shuffle
+  - thehive
+maintainers:
+  - name: SOCaaS Thesis Lab
+    email: security@example.local

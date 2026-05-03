@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl-alert-test
+  namespace: socaas-siem
+  labels:
+    app.kubernetes.io/name: curl-alert-test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:8.8.0
+      command:
+        - sh
+        - -c
+        - |
+          curl -sS -X POST http://socaas-pipeline-gateway.socaas-soar.svc.cluster.local:8080/hooks/wazuh \
+            -H 'Content-Type: application/json' \
+            -H 'X-SOCaaS-Webhook-Secret: S0CaaS-Wazuh-Webhook-2026' \
+            -d '{"source":"wazuh","rule":{"id":"100400","level":10,"description":"SOCaaS manifest test alert"},"agent":{"name":"manifest-test"}}'

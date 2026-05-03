@@ -1,0 +1,143 @@
+{{- if .Values.pipeline.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: socaas-pipeline-gateway
+  namespace: {{ .Values.namespaces.soar }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: pipeline-gateway
+data:
+  gateway.py: |
+    import json, os, urllib.request
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+    SECRET = os.environ.get("PIPELINE_SECRET", "")
+    NATIVE_SHUFFLE_URL = os.environ.get("NATIVE_SHUFFLE_WEBHOOK_URL", "")
+    THEHIVE_URL = os.environ.get("THEHIVE_URL", "http://socaas-thehive.socaas-thehive.svc.cluster.local:9000")
+    THEHIVE_API_KEY = os.environ.get("THEHIVE_API_KEY", "")
+    class Handler(BaseHTTPRequestHandler):
+        def _send(self, code, obj):
+            body = json.dumps(obj).encode()
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        def do_GET(self):
+            if self.path == "/healthz":
+                self._send(200, {"status": "ok"})
+            else:
+                self._send(404, {"error": "not found"})
+        def do_POST(self):
+            if self.path not in ["/hooks/wazuh", "/api/v1/hooks/wazuh-alert"]:
+                return self._send(404, {"error": "unknown hook"})
+            if SECRET and self.headers.get("X-SOCaaS-Webhook-Secret") != SECRET:
+                return self._send(403, {"error": "bad shared secret"})
+            length = int(self.headers.get("Content-Length", "0"))
+            raw = self.rfile.read(length)
+            try:
+                event = json.loads(raw.decode() or "{}")
+            except Exception:
+                return self._send(400, {"error": "invalid json"})
+            rule = event.get("rule") or event.get("alert", {}).get("rule", {})
+            agent = event.get("agent") or event.get("alert", {}).get("agent", {})
+            print(json.dumps({"received": True, "rule": rule, "agent": agent}), flush=True)
+            forwarded = False
+            if NATIVE_SHUFFLE_URL:
+                try:
+                    req = urllib.request.Request(NATIVE_SHUFFLE_URL, data=raw, headers={"Content-Type": "application/json"}, method="POST")
+                    urllib.request.urlopen(req, timeout=10).read()
+                    forwarded = True
+                except Exception as exc:
+                    print(f"native shuffle forward failed: {exc}", flush=True)
+            thehive_status = "skipped"
+            if THEHIVE_API_KEY and not THEHIVE_API_KEY.startswith("CHANGE_ME"):
+                try:
+                    alert = {
+                        "type": "wazuh",
+                        "source": "socaas-wazuh",
+                        "sourceRef": f"wazuh-{rule.get('id','unknown')}-{agent.get('id','unknown')}",
+                        "title": rule.get("description", "Wazuh alert"),
+                        "description": json.dumps(event, indent=2),
+                        "severity": min(3, max(1, int(rule.get("level", 1)) // 4 or 1)),
+                        "tlp": 2,
+                        "pap": 2,
+                    }
+                    req = urllib.request.Request(THEHIVE_URL.rstrip('/') + "/api/v1/alert", data=json.dumps(alert).encode(), headers={"Content-Type": "application/json", "Authorization": "Bearer " + THEHIVE_API_KEY}, method="POST")
+                    urllib.request.urlopen(req, timeout=10).read()
+                    thehive_status = "created"
+                except Exception as exc:
+                    thehive_status = f"failed: {exc}"
+                    print(f"thehive create failed: {exc}", flush=True)
+            self._send(202, {"status": "accepted", "workflow": "socaas-wazuh-alert-router", "forwarded_to_shuffle": forwarded, "thehive": thehive_status})
+    HTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socaas-pipeline-gateway
+  namespace: {{ .Values.namespaces.soar }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: pipeline-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-pipeline-gateway
+      app.kubernetes.io/component: pipeline-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-pipeline-gateway
+        app.kubernetes.io/component: pipeline-gateway
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: soar
+    spec:
+      nodeSelector:
+        {{- include "socaas.soarNodeSelector" . | nindent 8 }}
+      containers:
+        - name: gateway
+          image: {{ .Values.pipeline.image | quote }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          command: ["python", "/app/gateway.py"]
+          env:
+            - name: PIPELINE_SECRET
+              valueFrom: {secretKeyRef: {name: socaas-pipeline-secrets, key: shared-secret}}
+            - name: NATIVE_SHUFFLE_WEBHOOK_URL
+              valueFrom: {secretKeyRef: {name: socaas-pipeline-secrets, key: native-shuffle-webhook-url}}
+            - {name: THEHIVE_URL, value: "http://socaas-thehive.{{ .Values.namespaces.ir }}.svc.cluster.local:9000"}
+            - name: THEHIVE_API_KEY
+              valueFrom: {secretKeyRef: {name: socaas-pipeline-secrets, key: thehive-api-key}}
+          ports:
+            - {name: http, containerPort: 8080}
+          volumeMounts:
+            - {name: app, mountPath: /app}
+          readinessProbe:
+            httpGet: {path: /healthz, port: 8080}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /healthz, port: 8080}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.pipeline.resources | nindent 12 }}
+      volumes:
+        - name: app
+          configMap:
+            name: socaas-pipeline-gateway
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-pipeline-gateway
+  namespace: {{ .Values.namespaces.soar }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: socaas-pipeline-gateway
+    app.kubernetes.io/component: pipeline-gateway
+  ports:
+    - {name: http, port: 8080, targetPort: 8080}
+{{- end }}

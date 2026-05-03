@@ -1,0 +1,42 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: socaas-local
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-worker1-local-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: socaas-local
+  local:
+    path: /srv/socaas/example
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8s-worker1
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: example-worker1-local-pvc
+  namespace: socaas-siem
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: socaas-local
+  resources:
+    requests:
+      storage: 1Gi

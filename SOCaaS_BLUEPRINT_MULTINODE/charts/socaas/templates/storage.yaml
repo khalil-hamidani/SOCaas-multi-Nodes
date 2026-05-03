@@ -1,0 +1,328 @@
+{{- if .Values.storage.createStaticPVs }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storage.storageClassName }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: {{ .Values.storage.reclaimPolicy }}
+---
+{{- $sc := .Values.storage.storageClassName -}}
+{{- $rp := .Values.storage.reclaimPolicy -}}
+{{- $w1 := .Values.storage.worker1Hostname -}}
+{{- $w2 := .Values.storage.worker2Hostname -}}
+{{- $siem := .Values.namespaces.siem -}}
+{{- $soar := .Values.namespaces.soar -}}
+{{- $ir := .Values.namespaces.ir -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-wazuh-indexer
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: siem}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.wazuhIndexer }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.wazuhIndexer | quote }}}
+  claimRef: {namespace: {{ $siem }}, name: wazuh-indexer-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w1 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-wazuh-manager
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: siem}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.wazuhManager }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.wazuhManager | quote }}}
+  claimRef: {namespace: {{ $siem }}, name: wazuh-manager-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w1 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-wazuh-dashboard
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: siem}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.wazuhDashboard }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.wazuhDashboard | quote }}}
+  claimRef: {namespace: {{ $siem }}, name: wazuh-dashboard-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w1 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-shuffle-backend
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: soar}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.shuffleBackend }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.shuffleBackend | quote }}}
+  claimRef: {namespace: {{ $soar }}, name: shuffle-backend-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w2 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-shuffle-opensearch
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: soar}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.shuffleOpenSearch }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.shuffleOpenSearch | quote }}}
+  claimRef: {namespace: {{ $soar }}, name: shuffle-opensearch-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w2 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-redis
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: soar}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.redis }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.redis | quote }}}
+  claimRef: {namespace: {{ $soar }}, name: redis-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w2 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-thehive
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: ir}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.thehive }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.thehive | quote }}}
+  claimRef: {namespace: {{ $ir }}, name: thehive-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w2 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-thehive-es
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: ir}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.thehiveElasticsearch }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.thehiveElasticsearch | quote }}}
+  claimRef: {namespace: {{ $ir }}, name: thehive-elasticsearch-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w2 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-cassandra
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: ir}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.cassandra }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.cassandra | quote }}}
+  claimRef: {namespace: {{ $ir }}, name: cassandra-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w2 | quote }}]
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: socaas-pv-minio
+  labels: {app.kubernetes.io/part-of: socaas, socaas.layer: ir}
+spec:
+  capacity: {storage: {{ .Values.storage.sizes.minio }}}
+  volumeMode: Filesystem
+  accessModes: ["ReadWriteOnce"]
+  persistentVolumeReclaimPolicy: {{ $rp }}
+  storageClassName: {{ $sc }}
+  local: {path: {{ .Values.storage.paths.minio | quote }}}
+  claimRef: {namespace: {{ $ir }}, name: minio-pvc}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values: [{{ $w2 | quote }}]
+---
+{{- end }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wazuh-indexer-pvc
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.wazuhIndexer }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wazuh-manager-pvc
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.wazuhManager }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wazuh-dashboard-pvc
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.wazuhDashboard }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shuffle-backend-pvc
+  namespace: {{ .Values.namespaces.soar }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.shuffleBackend }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shuffle-opensearch-pvc
+  namespace: {{ .Values.namespaces.soar }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.shuffleOpenSearch }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: {{ .Values.namespaces.soar }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.redis }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: thehive-pvc
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.thehive }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: thehive-elasticsearch-pvc
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.thehiveElasticsearch }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cassandra-pvc
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.cassandra }}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: {{ .Values.storage.storageClassName }}
+  resources: {requests: {storage: {{ .Values.storage.sizes.minio }}}}

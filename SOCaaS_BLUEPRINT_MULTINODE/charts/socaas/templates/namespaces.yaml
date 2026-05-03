@@ -1,0 +1,33 @@
+{{- if .Values.namespaces.create }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.system }}
+  labels:
+    name: {{ .Values.namespaces.system }}
+    socaas.layer: system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.siem }}
+  labels:
+    name: {{ .Values.namespaces.siem }}
+    socaas.layer: siem
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.soar }}
+  labels:
+    name: {{ .Values.namespaces.soar }}
+    socaas.layer: soar
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.ir }}
+  labels:
+    name: {{ .Values.namespaces.ir }}
+    socaas.layer: ir
+{{- end }}

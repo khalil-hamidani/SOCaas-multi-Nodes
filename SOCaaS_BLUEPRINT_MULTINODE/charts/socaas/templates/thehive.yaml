@@ -1,0 +1,293 @@
+{{- if .Values.thehive.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: socaas-cassandra
+  namespace: {{ .Values.namespaces.ir }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: cassandra
+spec:
+  serviceName: socaas-cassandra
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-cassandra
+      app.kubernetes.io/component: cassandra
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-cassandra
+        app.kubernetes.io/component: cassandra
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: ir
+    spec:
+      nodeSelector:
+        {{- include "socaas.soarNodeSelector" . | nindent 8 }}
+      containers:
+        - name: cassandra
+          image: {{ .Values.thehive.cassandra.image | quote }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          env:
+            - {name: CASSANDRA_CLUSTER_NAME, value: TheHive}
+            - {name: MAX_HEAP_SIZE, value: {{ .Values.thehive.cassandra.heapSize | quote }}}
+            - {name: HEAP_NEWSIZE, value: {{ .Values.thehive.cassandra.heapNewSize | quote }}}
+          ports:
+            - {name: cql, containerPort: 9042}
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/cassandra}
+          readinessProbe:
+            tcpSocket: {port: 9042}
+            initialDelaySeconds: 90
+            periodSeconds: 20
+          livenessProbe:
+            tcpSocket: {port: 9042}
+            initialDelaySeconds: 180
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.thehive.cassandra.resources | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: cassandra-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-cassandra
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: socaas-cassandra
+    app.kubernetes.io/component: cassandra
+  ports:
+    - {name: cql, port: 9042, targetPort: 9042}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: socaas-thehive-elasticsearch
+  namespace: {{ .Values.namespaces.ir }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: thehive-elasticsearch
+spec:
+  serviceName: socaas-thehive-elasticsearch
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-thehive-elasticsearch
+      app.kubernetes.io/component: thehive-elasticsearch
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-thehive-elasticsearch
+        app.kubernetes.io/component: thehive-elasticsearch
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: ir
+    spec:
+      nodeSelector:
+        {{- include "socaas.soarNodeSelector" . | nindent 8 }}
+      containers:
+        - name: elasticsearch
+          image: {{ .Values.thehive.elasticsearch.image | quote }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          env:
+            - {name: discovery.type, value: single-node}
+            - {name: xpack.security.enabled, value: "false"}
+            - {name: ES_JAVA_OPTS, value: {{ .Values.thehive.elasticsearch.javaOpts | quote }}}
+          ports:
+            - {name: http, containerPort: 9200}
+          volumeMounts:
+            - {name: data, mountPath: /usr/share/elasticsearch/data}
+          readinessProbe:
+            tcpSocket: {port: 9200}
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket: {port: 9200}
+            initialDelaySeconds: 120
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.thehive.elasticsearch.resources | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: thehive-elasticsearch-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-thehive-elasticsearch
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: socaas-thehive-elasticsearch
+    app.kubernetes.io/component: thehive-elasticsearch
+  ports:
+    - {name: http, port: 9200, targetPort: 9200}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: socaas-minio
+  namespace: {{ .Values.namespaces.ir }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: minio
+spec:
+  serviceName: socaas-minio
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-minio
+      app.kubernetes.io/component: minio
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-minio
+        app.kubernetes.io/component: minio
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: ir
+    spec:
+      nodeSelector:
+        {{- include "socaas.soarNodeSelector" . | nindent 8 }}
+      containers:
+        - name: minio
+          image: {{ .Values.thehive.minio.image | quote }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          args: ["server", "/data", "--console-address", ":9001"]
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom: {secretKeyRef: {name: socaas-thehive-secrets, key: minio-access-key}}
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom: {secretKeyRef: {name: socaas-thehive-secrets, key: minio-secret-key}}
+          ports:
+            - {name: s3, containerPort: 9000}
+            - {name: console, containerPort: 9001}
+          volumeMounts:
+            - {name: data, mountPath: /data}
+          readinessProbe:
+            httpGet: {path: /minio/health/ready, port: 9000}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /minio/health/live, port: 9000}
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.thehive.minio.resources | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: minio-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-minio
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: socaas-minio
+    app.kubernetes.io/component: minio
+  ports:
+    - {name: s3, port: 9000, targetPort: 9000}
+    - {name: console, port: 9001, targetPort: 9001}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socaas-thehive
+  namespace: {{ .Values.namespaces.ir }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+    app.kubernetes.io/component: thehive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: socaas-thehive
+      app.kubernetes.io/component: thehive
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: socaas-thehive
+        app.kubernetes.io/component: thehive
+        app.kubernetes.io/part-of: socaas
+        socaas.layer: ir
+    spec:
+      nodeSelector:
+        {{- include "socaas.soarNodeSelector" . | nindent 8 }}
+      containers:
+        - name: thehive
+          image: {{ .Values.thehive.image | quote }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          env:
+            - {name: JVM_OPTS, value: {{ .Values.thehive.javaOpts | quote }}}
+            - name: THEHIVE_SECRET
+              valueFrom: {secretKeyRef: {name: socaas-thehive-secrets, key: secret}}
+            - name: MINIO_ACCESS_KEY
+              valueFrom: {secretKeyRef: {name: socaas-thehive-secrets, key: minio-access-key}}
+            - name: MINIO_SECRET_KEY
+              valueFrom: {secretKeyRef: {name: socaas-thehive-secrets, key: minio-secret-key}}
+          args:
+            - --secret
+            - $(THEHIVE_SECRET)
+            - --cql-hostnames
+            - socaas-cassandra
+            - --index-backend
+            - elasticsearch
+            - --es-hostnames
+            - socaas-thehive-elasticsearch
+            - --s3-endpoint
+            - http://socaas-minio:9000
+            - --s3-access-key
+            - $(MINIO_ACCESS_KEY)
+            - --s3-secret-key
+            - $(MINIO_SECRET_KEY)
+            - --s3-bucket
+            - thehive
+            - --s3-use-path-access-style
+          ports:
+            - {name: http, containerPort: 9000}
+          volumeMounts:
+            - {name: data, mountPath: /opt/thehive/data}
+          startupProbe:
+            tcpSocket: {port: 9000}
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket: {port: 9000}
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket: {port: 9000}
+            initialDelaySeconds: 120
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.thehive.resources | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: thehive-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socaas-thehive
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: socaas-thehive
+    app.kubernetes.io/component: thehive
+  ports:
+    - name: http
+      port: 9000
+      targetPort: 9000
+      nodePort: {{ .Values.thehive.nodePort }}
+{{- end }}

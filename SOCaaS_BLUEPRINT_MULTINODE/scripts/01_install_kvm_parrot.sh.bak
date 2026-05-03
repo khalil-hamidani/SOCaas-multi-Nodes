@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib.sh"
+
+log "Installing KVM/libvirt tooling on Parrot host"
+sudo apt update
+sudo apt install -y \
+  qemu-kvm \
+  libvirt-daemon-system \
+  libvirt-clients \
+  bridge-utils \
+  virt-manager \
+  virtinst \
+  qemu-utils \
+  cloud-image-utils \
+  cpu-checker \
+  net-tools \
+  curl \
+  wget \
+  jq \
+  unzip \
+  rsync
+
+sudo usermod -aG libvirt,kvm "$USER" || true
+sudo systemctl enable --now libvirtd 2>/dev/null || sudo systemctl enable --now libvirt-daemon
+sudo virsh net-autostart default || true
+sudo virsh net-start default || true
+
+log "Verifying KVM"
+if command -v kvm-ok >/dev/null 2>&1; then
+  kvm-ok || true
+fi
+virsh net-info default
+ip addr show "${SOCAAS_HOST_BRIDGE}" || true
+
+log "Refreshing SOCaaS storage permissions after libvirt install"
+"${REPO_ROOT}/scripts/00_prepare_socaas_storage.sh"
+
+log "KVM/libvirt installation complete. If group membership changed, log out/in before running virt-manager."

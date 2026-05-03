@@ -1,0 +1,12 @@
+SOCaaS multi-node lab installed.
+
+Access through HAProxy on the Parrot host:
+- Wazuh Dashboard: https://{{ .Values.global.hostBridgeIp }}:{{ .Values.wazuh.dashboard.nodePort }}
+- Shuffle UI: http://{{ .Values.global.hostBridgeIp }}:{{ .Values.shuffle.frontend.nodePort }}
+- TheHive UI: http://{{ .Values.global.hostBridgeIp }}:{{ .Values.thehive.nodePort }}
+
+Verify placement:
+  kubectl get pods -A -o wide | grep socaas
+
+Test pipeline:
+  bash scripts/13_test_alert_pipeline.sh

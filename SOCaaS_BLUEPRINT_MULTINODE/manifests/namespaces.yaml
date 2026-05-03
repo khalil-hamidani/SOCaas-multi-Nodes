@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: socaas-siem
+  labels:
+    socaas.layer: siem
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: socaas-soar
+  labels:
+    socaas.layer: soar
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: socaas-thehive
+  labels:
+    socaas.layer: ir

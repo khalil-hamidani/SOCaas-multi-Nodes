@@ -1,0 +1,218 @@
+{{- if .Values.networkPolicies.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-default-deny-siem
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-default-deny-soar
+  namespace: {{ .Values.namespaces.soar }}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-default-deny-ir
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-dns-siem
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-dns-soar
+  namespace: {{ .Values.namespaces.soar }}
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-dns-ir
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-wazuh-ingress
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: wazuh-manager
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: {{ .Values.global.labNetworkCidr | quote }}
+      ports:
+        - {protocol: TCP, port: 1514}
+        - {protocol: UDP, port: 1514}
+        - {protocol: TCP, port: 1515}
+        - {protocol: TCP, port: 55000}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-wazuh-dashboard-ingress
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: wazuh-dashboard
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: {{ .Values.global.labNetworkCidr | quote }}
+      ports:
+        - {protocol: TCP, port: {{ .Values.wazuh.dashboard.containerPort }}}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-siem-internal
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-wazuh-to-pipeline
+  namespace: {{ .Values.namespaces.siem }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: wazuh-manager
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              socaas.layer: soar
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/component: pipeline-gateway
+      ports:
+        - {protocol: TCP, port: 8080}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-soar-internal-and-ui
+  namespace: {{ .Values.namespaces.soar }}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector: {}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              socaas.layer: siem
+      ports:
+        - {protocol: TCP, port: 8080}
+    - from:
+        - ipBlock:
+            cidr: {{ .Values.global.labNetworkCidr | quote }}
+      ports:
+        - {protocol: TCP, port: 3000}
+        - {protocol: TCP, port: 5001}
+        - {protocol: TCP, port: 8080}
+  egress:
+    - to:
+        - podSelector: {}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              socaas.layer: ir
+      ports:
+        - {protocol: TCP, port: 9000}
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - {protocol: TCP, port: 80}
+        - {protocol: TCP, port: 443}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: socaas-allow-ir-internal-and-ui
+  namespace: {{ .Values.namespaces.ir }}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector: {}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              socaas.layer: soar
+      ports:
+        - {protocol: TCP, port: 9000}
+    - from:
+        - ipBlock:
+            cidr: {{ .Values.global.labNetworkCidr | quote }}
+      ports:
+        - {protocol: TCP, port: 9000}
+  egress:
+    - to:
+        - podSelector: {}
+{{- end }}
