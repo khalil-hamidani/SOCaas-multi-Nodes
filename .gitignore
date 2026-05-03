@@ -1,0 +1,35 @@
+# Generated evidence and local secrets
+generated/
+runtime/
+backups/
+downloads/
+repo/
+libvirt/
+logs/
+
+# Secrets and environment files
+*.env
+!*.env.example
+secrets.env
+*.pem
+*.key
+*.crt
+
+# Archives and disk images
+*.tgz
+*.tar.gz
+*.zip
+*.qcow2
+*.iso
+*.img
+*.seed
+
+# Logs
+*.log
+
+# Local editor files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+.codex
