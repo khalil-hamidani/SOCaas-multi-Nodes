@@ -224,15 +224,15 @@ spec:
           image: "{{ .Values.shuffle.frontend.image }}:{{ .Values.shuffle.version }}"
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           env:
-            - {name: BACKEND_HOSTNAME, value: "http://socaas-shuffle-backend:5001"}
+            - {name: BACKEND_HOSTNAME, value: "socaas-shuffle-backend"}
           ports:
-            - {name: http, containerPort: 3000}
+            - {name: http, containerPort: 80}
           readinessProbe:
-            tcpSocket: {port: 3000}
+            tcpSocket: {port: 80}
             initialDelaySeconds: 20
             periodSeconds: 10
           livenessProbe:
-            tcpSocket: {port: 3000}
+            tcpSocket: {port: 80}
             initialDelaySeconds: 60
             periodSeconds: 20
           resources:
@@ -251,7 +251,7 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 3000
+      targetPort: 80
       nodePort: {{ .Values.shuffle.frontend.nodePort }}
 ---
 apiVersion: apps/v1
@@ -284,7 +284,7 @@ spec:
           image: "{{ .Values.shuffle.orborus.image }}:{{ .Values.shuffle.version }}"
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           env:
-            - {name: BACKEND_HOSTNAME, value: "http://socaas-shuffle-backend:5001"}
+            - {name: BACKEND_HOSTNAME, value: "socaas-shuffle-backend"}
             - {name: ENVIRONMENT_NAME, value: Kubernetes}
             - {name: SHUFFLE_WORKER_VERSION, value: {{ .Values.shuffle.version | quote }}}
           resources:

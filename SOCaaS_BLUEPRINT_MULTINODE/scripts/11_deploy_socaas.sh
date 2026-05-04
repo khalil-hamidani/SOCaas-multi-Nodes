@@ -16,11 +16,17 @@ ssh_node "${SOCAAS_MASTER_IP}" "bash -s" <<REMOTE
 set -euo pipefail
 cd ~/SOCaaS_BLUEPRINT_MULTINODE
 sudo install -d -m 0755 -o "\$(id -u)" -g "\$(id -g)" "${REMOTE_RENDER_DIR}"
+
+# Pre-create release namespace with Helm labels so chart's Namespace resource is a no-op
+kubectl create ns ${SOCAAS_HELM_NAMESPACE} 2>/dev/null || true
+kubectl label ns ${SOCAAS_HELM_NAMESPACE} app.kubernetes.io/managed-by=Helm --overwrite
+kubectl annotate ns ${SOCAAS_HELM_NAMESPACE} meta.helm.sh/release-name=${SOCAAS_HELM_RELEASE} --overwrite
+kubectl annotate ns ${SOCAAS_HELM_NAMESPACE} meta.helm.sh/release-namespace=${SOCAAS_HELM_NAMESPACE} --overwrite
+
 helm lint charts/socaas -f charts/socaas/values-multinode.yaml
 helm template ${SOCAAS_HELM_RELEASE} charts/socaas -f charts/socaas/values-multinode.yaml > "${REMOTE_RENDER_DIR}/socaas-rendered.yaml"
 helm upgrade --install ${SOCAAS_HELM_RELEASE} charts/socaas \
   --namespace ${SOCAAS_HELM_NAMESPACE} \
-  --create-namespace \
   -f charts/socaas/values-multinode.yaml \
   --set-string secrets.wazuh.adminUser="${SOCAAS_WAZUH_ADMIN_USER}" \
   --set-string secrets.wazuh.adminPassword="${SOCAAS_WAZUH_ADMIN_PASSWORD}" \

@@ -34,6 +34,26 @@ data:
             except Exception as exc:
                 print(f"forward failed: {exc}", flush=True)
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: socaas-wazuh-dashboard-config
+  namespace: {{ .Values.namespaces.siem }}
+  labels:
+    {{- include "socaas.labels" . | nindent 4 }}
+data:
+  opensearch_dashboards.yml: |
+    server.host: 0.0.0.0
+    server.port: 5601
+    opensearch.hosts: ["https://socaas-wazuh-indexer:9200"]
+    opensearch.ssl.verificationMode: none
+    opensearch.requestHeadersWhitelist: [ authorization,securitytenant ]
+    opensearch_security.multitenancy.enabled: false
+    opensearch_security.readonly_mode.roles: ["kibana_read_only"]
+    uiSettings.overrides.defaultRoute: /app/wz-home
+    opensearch.username: {{ .Values.secrets.wazuh.adminUser | quote }}
+    opensearch.password: {{ .Values.secrets.wazuh.adminPassword | quote }}
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -153,8 +173,12 @@ spec:
           image: "{{ .Values.wazuh.manager.image }}:{{ .Values.wazuh.version }}"
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           env:
-            - {name: INDEXER_URL, value: "http://socaas-wazuh-indexer:9200"}
+            - {name: INDEXER_URL, value: "https://socaas-wazuh-indexer:9200"}
             - {name: FILEBEAT_SSL_VERIFICATION_MODE, value: none}
+            - name: INDEXER_USERNAME
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: admin-user}}
+            - name: INDEXER_PASSWORD
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: admin-password}}
             - name: WAZUH_API_USER
               valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: api-user}}
             - name: WAZUH_API_PASSWORD
@@ -166,7 +190,7 @@ spec:
             - {name: api, containerPort: 55000, protocol: TCP}
           volumeMounts:
             - {name: manager-data, mountPath: /var/ossec/data}
-            - {name: alerts, mountPath: /var/ossec/logs/alerts}
+            - {name: alerts, mountPath: /var/ossec/logs}
           readinessProbe:
             tcpSocket: {port: 1514}
             initialDelaySeconds: 30
@@ -182,13 +206,13 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["python", "/app/forwarder.py"]
           env:
-            - {name: ALERTS_FILE, value: /alerts/alerts.json}
+            - {name: ALERTS_FILE, value: /var/ossec/logs/alerts/alerts.json}
             - {name: TARGET_URL, value: "http://socaas-pipeline-gateway.{{ .Values.namespaces.soar }}.svc.cluster.local:8080/hooks/wazuh"}
             - name: PIPELINE_SECRET
               valueFrom: {secretKeyRef: {name: socaas-pipeline-secrets, key: shared-secret}}
           volumeMounts:
             - {name: forwarder, mountPath: /app}
-            - {name: alerts, mountPath: /alerts}
+            - {name: alerts, mountPath: /var/ossec/logs}
           resources:
             requests: {cpu: 25m, memory: 64Mi}
             limits: {cpu: 200m, memory: 128Mi}
@@ -279,8 +303,11 @@ spec:
           image: "{{ .Values.wazuh.dashboard.image }}:{{ .Values.wazuh.version }}"
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           env:
-            - {name: INDEXER_URL, value: "http://socaas-wazuh-indexer:9200"}
-            - {name: SERVER_SSL_ENABLED, value: "false"}
+            - {name: INDEXER_URL, value: "https://socaas-wazuh-indexer:9200"}
+            - name: INDEXER_USERNAME
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: admin-user}}
+            - name: INDEXER_PASSWORD
+              valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: admin-password}}
             - name: DASHBOARD_USERNAME
               valueFrom: {secretKeyRef: {name: socaas-wazuh-secrets, key: admin-user}}
             - name: DASHBOARD_PASSWORD
@@ -289,6 +316,9 @@ spec:
             - {name: http, containerPort: {{ .Values.wazuh.dashboard.containerPort }}}
           volumeMounts:
             - {name: dashboard-data, mountPath: /usr/share/wazuh-dashboard/data}
+            - name: dashboard-config
+              mountPath: /usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
+              subPath: opensearch_dashboards.yml
           readinessProbe:
             tcpSocket: {port: {{ .Values.wazuh.dashboard.containerPort }}}
             initialDelaySeconds: 45
@@ -303,6 +333,9 @@ spec:
         - name: dashboard-data
           persistentVolumeClaim:
             claimName: wazuh-dashboard-pvc
+        - name: dashboard-config
+          configMap:
+            name: socaas-wazuh-dashboard-config
 ---
 apiVersion: v1
 kind: Service

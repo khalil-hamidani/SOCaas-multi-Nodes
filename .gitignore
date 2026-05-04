@@ -33,3 +33,5 @@ secrets.env
 *.swp
 .DS_Store
 .codex
+
+AgentPrompte.md

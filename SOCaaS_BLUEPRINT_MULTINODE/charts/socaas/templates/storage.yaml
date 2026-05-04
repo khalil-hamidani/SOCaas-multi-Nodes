@@ -1,4 +1,4 @@
-{{- if .Values.storage.createStaticPVs }}
+{{ if .Values.storage.createStaticPVs }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -9,13 +9,13 @@ provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: {{ .Values.storage.reclaimPolicy }}
 ---
-{{- $sc := .Values.storage.storageClassName -}}
-{{- $rp := .Values.storage.reclaimPolicy -}}
-{{- $w1 := .Values.storage.worker1Hostname -}}
-{{- $w2 := .Values.storage.worker2Hostname -}}
-{{- $siem := .Values.namespaces.siem -}}
-{{- $soar := .Values.namespaces.soar -}}
-{{- $ir := .Values.namespaces.ir -}}
+{{ $sc := .Values.storage.storageClassName }}
+{{ $rp := .Values.storage.reclaimPolicy }}
+{{ $w1 := .Values.storage.worker1Hostname }}
+{{ $w2 := .Values.storage.worker2Hostname }}
+{{ $siem := .Values.namespaces.siem }}
+{{ $soar := .Values.namespaces.soar }}
+{{ $ir := .Values.namespaces.ir }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -225,8 +225,8 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values: [{{ $w2 | quote }}]
+{{ end }}
 ---
-{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
