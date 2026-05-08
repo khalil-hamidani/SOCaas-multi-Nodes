@@ -14,6 +14,7 @@ secrets.env
 *.pem
 *.key
 *.crt
+socaas.env.bak.vt-real
 
 # Archives and disk images
 *.tgz
@@ -35,3 +36,11 @@ secrets.env
 .codex
 
 AgentPrompte.md
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
