@@ -67,6 +67,7 @@ secrets:
     apiKey: CHANGE_ME_AFTER_CREATING_THEHIVE_API_KEY
   pipeline:
     sharedSecret: S0CaaS-Wazuh-Webhook-2026
+    virustotalApiKey: ""
 
 wazuh:
   enabled: true
@@ -133,6 +134,9 @@ shuffle:
   orborus:
     image: frikky/shuffle-orborus
     replicas: 1
+    environmentName: "Shuffle"
+    skipPipelines: "false"
+    dockerSocketMount: false
     resources:
       requests:
         cpu: 150m

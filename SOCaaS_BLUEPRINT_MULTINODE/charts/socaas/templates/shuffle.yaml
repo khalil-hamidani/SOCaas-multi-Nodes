@@ -285,8 +285,40 @@ spec:
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           env:
             - {name: BACKEND_HOSTNAME, value: "socaas-shuffle-backend"}
-            - {name: ENVIRONMENT_NAME, value: Kubernetes}
+            {{- if .Values.shuffle.orborus.environmentName }}
+            - {name: ENVIRONMENT_NAME, value: {{ .Values.shuffle.orborus.environmentName | quote }}}
+            {{- else }}
+            - {name: ENVIRONMENT_NAME, value: "Shuffle"}
+            {{- end }}
             - {name: SHUFFLE_WORKER_VERSION, value: {{ .Values.shuffle.version | quote }}}
+            - {name: SHUFFLE_BACKEND_URL, value: "http://socaas-shuffle-backend.{{ .Values.namespaces.soar }}.svc.cluster.local:5001"}
+            {{- if .Values.shuffle.orborus.baseUrl }}
+            - {name: BASE_URL, value: {{ .Values.shuffle.orborus.baseUrl | quote }}}
+            {{- end }}
+            {{- if .Values.shuffle.orborus.dockerHost }}
+            - {name: DOCKER_HOST, value: {{ .Values.shuffle.orborus.dockerHost | quote }}}
+            {{- end }}
+            {{- if .Values.shuffle.orborus.dockerApiVersion }}
+            - {name: DOCKER_API_VERSION, value: {{ .Values.shuffle.orborus.dockerApiVersion | quote }}}
+            {{- else }}
+            - {name: DOCKER_API_VERSION, value: "1.44"}
+            {{- end }}
+            - {name: SHUFFLE_SKIP_PIPELINES, value: {{ .Values.shuffle.orborus.skipPipelines | default "false" | quote }}}
+            {{- if .Values.shuffle.orborus.volumeBinds }}
+            - {name: SHUFFLE_VOLUME_BINDS, value: {{ .Values.shuffle.orborus.volumeBinds | quote }}}
+            {{- end }}
+          {{- if .Values.shuffle.orborus.dockerSocketMount }}
+          volumeMounts:
+            - mountPath: /var/run/docker.sock
+              name: docker-sock
+          {{- end }}
           resources:
             {{- toYaml .Values.shuffle.orborus.resources | nindent 12 }}
+      {{- if .Values.shuffle.orborus.dockerSocketMount }}
+      volumes:
+        - hostPath:
+            path: /var/run/docker.sock
+            type: Socket
+          name: docker-sock
+      {{- end }}
 {{- end }}

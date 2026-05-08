@@ -37,6 +37,7 @@ helm upgrade --install ${SOCAAS_HELM_RELEASE} charts/socaas \
   --set-string secrets.thehive.minioSecretKey="${SOCAAS_MINIO_SECRET_KEY}" \
   --set-string secrets.pipeline.sharedSecret="${SOCAAS_PIPELINE_SHARED_SECRET}" \
   --set-string pipeline.nativeShuffleWebhookUrl="${SOCAAS_NATIVE_SHUFFLE_WEBHOOK_URL}" \
+  --set-string secrets.pipeline.virustotalApiKey="${SOCAAS_VIRUSTOTAL_API_KEY:-}" \
   --timeout 20m \
   --wait
 kubectl get pods -A -o wide | grep socaas || true

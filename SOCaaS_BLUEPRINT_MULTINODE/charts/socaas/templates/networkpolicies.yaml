@@ -189,6 +189,11 @@ spec:
       ports:
         - {protocol: TCP, port: 80}
         - {protocol: TCP, port: 443}
+    - to:
+        - ipBlock:
+            cidr: {{ .Values.shuffle.orborus.dockerHostIp | default "192.168.122.12" | quote }}/32
+      ports:
+        - {protocol: TCP, port: 2375}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

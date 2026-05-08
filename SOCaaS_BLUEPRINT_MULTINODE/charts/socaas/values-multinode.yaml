@@ -31,6 +31,13 @@ storage:
 shuffle:
   orborus:
     replicas: 1
+    environmentName: "Shuffle"
+    baseUrl: "http://192.168.122.12:30080"
+    dockerHost: "tcp://192.168.122.12:2375"
+    dockerHostIp: "192.168.122.12"
+    skipPipelines: "false"
+    volumeBinds: "/var/run/docker.sock:/var/run/docker.sock"
+    dockerSocketMount: false
 
 thehive:
   javaOpts: "-Xms512m -Xmx768m"
@@ -39,3 +46,10 @@ thehive:
     heapNewSize: 256M
   elasticsearch:
     javaOpts: "-Xms512m -Xmx512m"
+
+pipeline:
+  nativeShuffleWebhookUrl: ""
+
+secrets:
+  pipeline:
+    virustotalApiKey: ""

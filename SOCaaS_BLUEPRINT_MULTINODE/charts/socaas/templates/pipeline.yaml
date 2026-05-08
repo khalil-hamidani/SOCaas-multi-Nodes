@@ -9,12 +9,91 @@ metadata:
     app.kubernetes.io/component: pipeline-gateway
 data:
   gateway.py: |
-    import json, os, urllib.request
+    import json, os, re, ipaddress, urllib.request
     from http.server import BaseHTTPRequestHandler, HTTPServer
+
     SECRET = os.environ.get("PIPELINE_SECRET", "")
     NATIVE_SHUFFLE_URL = os.environ.get("NATIVE_SHUFFLE_WEBHOOK_URL", "")
     THEHIVE_URL = os.environ.get("THEHIVE_URL", "http://socaas-thehive.socaas-thehive.svc.cluster.local:9000")
     THEHIVE_API_KEY = os.environ.get("THEHIVE_API_KEY", "")
+    VT_API_KEY = os.environ.get("VIRUSTOTAL_API_KEY", "")
+
+    def is_public_ip(value):
+        try:
+            ip = ipaddress.ip_address(value)
+            return ip.is_global
+        except Exception:
+            return False
+
+    def extract_observables(alert):
+        observables = {"ips": [], "domains": [], "hashes": []}
+        seen_ips = set()
+        seen_domains = set()
+        seen_hashes = set()
+
+        agent_ip = (alert.get("agent") or alert.get("alert", {}).get("agent", {})).get("ip", "")
+        if agent_ip and is_public_ip(agent_ip) and agent_ip not in seen_ips:
+            observables["ips"].append(agent_ip)
+            seen_ips.add(agent_ip)
+
+        text = json.dumps(alert)
+
+        for ip in re.findall(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', text):
+            if is_public_ip(ip) and ip not in seen_ips:
+                observables["ips"].append(ip)
+                seen_ips.add(ip)
+
+        for h in re.findall(r'\b[a-fA-F0-9]{64}\b', text):
+            if h not in seen_hashes:
+                observables["hashes"].append(h)
+                seen_hashes.add(h)
+        for h in re.findall(r'\b[a-fA-F0-9]{32}\b', text):
+            if h not in seen_hashes and h not in seen_ips:
+                observables["hashes"].append(h)
+                seen_hashes.add(h)
+
+        for d in re.findall(r'\b(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}\b', text):
+            dl = d.lower()
+            if not dl.endswith(".local") and dl not in seen_domains:
+                observables["domains"].append(d)
+                seen_domains.add(d)
+
+        for k in observables:
+            observables[k] = sorted(set(observables[k]))
+
+        return observables
+
+    def vt_get(path):
+        if not VT_API_KEY:
+            return {"enabled": False, "error": "missing_api_key"}
+        url = "https://www.virustotal.com/api/v3/" + path.lstrip("/")
+        try:
+            req = urllib.request.Request(url, headers={"x-apikey": VT_API_KEY})
+            resp = urllib.request.urlopen(req, timeout=10)
+            body = resp.read().decode()
+            return {
+                "enabled": True,
+                "status_code": resp.status,
+                "ok": True,
+                "body": json.loads(body) if body else {}
+            }
+        except urllib.error.HTTPError as e:
+            return {"enabled": True, "status_code": e.code, "ok": False, "error": str(e)}
+        except Exception as e:
+            return {"enabled": True, "ok": False, "error": str(e)}
+
+    def enrich_virustotal(observables):
+        if not VT_API_KEY:
+            return {"enabled": False, "reason": "missing_api_key", "observables": observables}
+        results = {}
+        for ip in observables.get("ips", []):
+            results[f"ip:{ip}"] = vt_get(f"/ip_addresses/{ip}")
+        for domain in observables.get("domains", []):
+            results[f"domain:{domain}"] = vt_get(f"/domains/{domain}")
+        for h in observables.get("hashes", []):
+            results[f"hash:{h}"] = vt_get(f"/files/{h}")
+        return {"enabled": True, "observables": observables, "results": results}
+
     class Handler(BaseHTTPRequestHandler):
         def _send(self, code, obj):
             body = json.dumps(obj).encode()
@@ -41,11 +120,19 @@ data:
                 return self._send(400, {"error": "invalid json"})
             rule = event.get("rule") or event.get("alert", {}).get("rule", {})
             agent = event.get("agent") or event.get("alert", {}).get("agent", {})
-            print(json.dumps({"received": True, "rule": rule, "agent": agent}), flush=True)
+            observables = extract_observables(event)
+            enrichment = enrich_virustotal(observables)
+            event["enrichment"] = {"virustotal": enrichment}
+            enriched_raw = json.dumps(event).encode()
+            print(json.dumps({
+                "received": True, "rule": rule, "agent": agent,
+                "observables_count": {k: len(v) for k, v in observables.items()},
+                "vt_enabled": enrichment.get("enabled", False)
+            }), flush=True)
             forwarded = False
             if NATIVE_SHUFFLE_URL:
                 try:
-                    req = urllib.request.Request(NATIVE_SHUFFLE_URL, data=raw, headers={"Content-Type": "application/json"}, method="POST")
+                    req = urllib.request.Request(NATIVE_SHUFFLE_URL, data=enriched_raw, headers={"Content-Type": "application/json"}, method="POST")
                     urllib.request.urlopen(req, timeout=10).read()
                     forwarded = True
                 except Exception as exc:
@@ -109,6 +196,8 @@ spec:
             - {name: THEHIVE_URL, value: "http://socaas-thehive.{{ .Values.namespaces.ir }}.svc.cluster.local:9000"}
             - name: THEHIVE_API_KEY
               valueFrom: {secretKeyRef: {name: socaas-pipeline-secrets, key: thehive-api-key}}
+            - name: VIRUSTOTAL_API_KEY
+              valueFrom: {secretKeyRef: {name: socaas-pipeline-secrets, key: virustotal-api-key}}
           ports:
             - {name: http, containerPort: 8080}
           volumeMounts:
