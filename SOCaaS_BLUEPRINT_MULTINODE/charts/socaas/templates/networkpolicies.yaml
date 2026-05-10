@@ -191,7 +191,7 @@ spec:
         - {protocol: TCP, port: 443}
     - to:
         - ipBlock:
-            cidr: {{ .Values.shuffle.orborus.dockerHostIp | default "192.168.122.12" | quote }}/32
+            cidr: {{ printf "%s/32" (.Values.shuffle.orborus.dockerHostIp | default "192.168.122.12") | quote }}
       ports:
         - {protocol: TCP, port: 2375}
 ---

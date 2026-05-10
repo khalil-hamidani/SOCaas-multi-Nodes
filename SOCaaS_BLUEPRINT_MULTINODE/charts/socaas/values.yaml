@@ -166,7 +166,7 @@ shuffle:
 
 thehive:
   enabled: true
-  image: strangebee/thehive:5.2
+  image: strangebee/thehive:5.3
   nodePort: 30900
   javaOpts: "-Xms768m -Xmx768m"
   resources:
