@@ -9,7 +9,8 @@ require_cmd wget
 
 WORKDIR="${SOCAAS_GENERATED_DIR}/vms"
 IMAGE_DOWNLOAD_DIR="${SOCAAS_DOWNLOADS_DIR}/images"
-BASE_IMG="${IMAGE_DOWNLOAD_DIR}/ubuntu-22.04-server-cloudimg-amd64.img"
+DOWNLOAD_CACHE_IMG="${IMAGE_DOWNLOAD_DIR}/ubuntu-22.04-server-cloudimg-amd64.img"
+BASE_IMG="${SOCAAS_LIBVIRT_CLOUD_IMAGE_PATH}"
 mkdir -p "${WORKDIR}" "${IMAGE_DOWNLOAD_DIR}"
 
 mountpoint -q "${SOCAAS_BASE_DIR}" || fatal "${SOCAAS_BASE_DIR} is not mounted. Run scripts/00_prepare_socaas_storage.sh first."
@@ -22,9 +23,19 @@ else
   SSH_KEY_LINE="$(cat "${SOCAAS_SSH_KEY}.pub")"
 fi
 
-if [[ ! -f "$BASE_IMG" ]]; then
-  log "Downloading Ubuntu 22.04 cloud image"
-  wget -O "$BASE_IMG" https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+sudo install -d -m 0755 -o libvirt-qemu -g kvm "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}"
+
+if [[ ! -f "${DOWNLOAD_CACHE_IMG}" ]]; then
+  log "Downloading Ubuntu 22.04 cloud image to ${DOWNLOAD_CACHE_IMG}"
+  wget -O "${DOWNLOAD_CACHE_IMG}" https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+fi
+
+if [[ ! -f "${BASE_IMG}" ]]; then
+  log "Staging Ubuntu 22.04 cloud image at ${BASE_IMG}"
+  sudo install -m 0644 -o libvirt-qemu -g kvm "${DOWNLOAD_CACHE_IMG}" "${BASE_IMG}"
+else
+  sudo chown libvirt-qemu:kvm "${BASE_IMG}"
+  sudo chmod 0644 "${BASE_IMG}"
 fi
 
 create_vm() {

@@ -13,7 +13,7 @@ The script creates:
 - `/srv/socaas/libvirt/images/k8s-worker1.qcow2`
 - `/srv/socaas/libvirt/images/k8s-worker2.qcow2`
 
-It also stores the downloaded Ubuntu cloud image under `/srv/socaas/downloads/images` and cloud-init seed files under `/srv/socaas/generated/vms`.
+It downloads the Ubuntu cloud image into `/srv/socaas/downloads/images`, stages the libvirt-readable copy at `/var/lib/libvirt/images/socaas/ubuntu-22.04-server-cloudimg-amd64.img`, and writes cloud-init seed files under `/srv/socaas/generated/vms`.
 
 It also injects:
 

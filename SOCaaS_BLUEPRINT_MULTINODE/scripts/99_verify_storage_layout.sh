@@ -22,6 +22,8 @@ for var in \
   SOCAAS_BASE_DIR \
   SOCAAS_REPO_DIR \
   SOCAAS_LIBVIRT_IMAGES_DIR \
+  SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR \
+  SOCAAS_LIBVIRT_CLOUD_IMAGE_PATH \
   SOCAAS_DOWNLOADS_DIR \
   SOCAAS_GENERATED_DIR \
   SOCAAS_BACKUPS_DIR \
@@ -39,6 +41,7 @@ log "Host directories"
 for dir in \
   "${SOCAAS_REPO_DIR}" \
   "${SOCAAS_LIBVIRT_IMAGES_DIR}" \
+  "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}" \
   "${SOCAAS_DOWNLOADS_DIR}" \
   "${SOCAAS_GENERATED_DIR}" \
   "${SOCAAS_BACKUPS_DIR}" \
@@ -50,6 +53,14 @@ for dir in \
     bad "$dir is missing"
   fi
 done
+
+log "Cloud image"
+if sudo test -f "${SOCAAS_LIBVIRT_CLOUD_IMAGE_PATH}"; then
+  ok "cloud image is at ${SOCAAS_LIBVIRT_CLOUD_IMAGE_PATH}"
+  sudo qemu-img info "${SOCAAS_LIBVIRT_CLOUD_IMAGE_PATH}" | awk '/file format|virtual size|disk size/ {print "cloud-image: " $0}'
+else
+  bad "cloud image is missing at ${SOCAAS_LIBVIRT_CLOUD_IMAGE_PATH}"
+fi
 
 log "Configured VM disk locations"
 for vm in "${SOCAAS_MASTER_NAME}" "${SOCAAS_WORKER1_NAME}" "${SOCAAS_WORKER2_NAME}"; do

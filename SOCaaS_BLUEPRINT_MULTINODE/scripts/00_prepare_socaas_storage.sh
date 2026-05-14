@@ -41,8 +41,10 @@ sudo install -d -m 0755 -o "${owner_user}" -g "${owner_group}" \
 
 if getent passwd libvirt-qemu >/dev/null 2>&1 && getent group kvm >/dev/null 2>&1; then
   sudo install -d -m 0770 -o libvirt-qemu -g kvm "${SOCAAS_LIBVIRT_IMAGES_DIR}"
+  sudo install -d -m 0755 -o libvirt-qemu -g kvm "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}"
 else
   sudo install -d -m 0775 -o "${owner_user}" -g "${owner_group}" "${SOCAAS_LIBVIRT_IMAGES_DIR}"
+  sudo install -d -m 0755 -o "${owner_user}" -g "${owner_group}" "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}"
   warn "libvirt-qemu:kvm is not available yet. Rerun this script after installing libvirt."
 fi
 
@@ -57,10 +59,20 @@ else
   warn "Skipping qemu access test because libvirt-qemu user does not exist yet."
 fi
 
+log "Checking libvirt/qemu access to ${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}"
+if getent passwd libvirt-qemu >/dev/null 2>&1; then
+  if sudo -u libvirt-qemu test -r "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}" -a -x "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}"; then
+    printf 'OK: libvirt-qemu can read and enter %s\n' "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}"
+  else
+    warn "libvirt-qemu cannot access ${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}. Check directory ownership, ACLs, and AppArmor policy."
+  fi
+fi
+
 log "Storage layout"
 printf '%s\n' \
   "${SOCAAS_REPO_DIR}" \
   "${SOCAAS_LIBVIRT_IMAGES_DIR}" \
+  "${SOCAAS_LIBVIRT_CLOUD_IMAGE_DIR}" \
   "${SOCAAS_DOWNLOADS_DIR}" \
   "${SOCAAS_GENERATED_DIR}" \
   "${SOCAAS_BACKUPS_DIR}" \

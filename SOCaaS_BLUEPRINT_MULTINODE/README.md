@@ -90,7 +90,7 @@ bash scripts/99_verify_storage_layout.sh
 /srv/socaas/runtime
 ```
 
-The VM qcow2 disks are created directly in `/srv/socaas/libvirt/images`; the blueprint does not depend on `/var/lib/libvirt/images` or `/src/socaas`. Downloaded cloud images are stored in `/srv/socaas/downloads`, and generated cloud-init/admin files are stored in `/srv/socaas/generated`.
+The VM qcow2 disks are created directly in `/srv/socaas/libvirt/images`. The shared Ubuntu cloud base image is staged under `/var/lib/libvirt/images/socaas` so libvirt/AppArmor can open it reliably, while the download cache remains under `/srv/socaas/downloads`. Generated cloud-init/admin files are stored in `/srv/socaas/generated`.
 
 Container images and Kubernetes runtime data live inside the VM disks. SOC application data uses local PersistentVolumes at `/srv/socaas/...` inside the worker VMs, so it also consumes the VM disks stored on the host under `/srv/socaas/libvirt/images`.
 
