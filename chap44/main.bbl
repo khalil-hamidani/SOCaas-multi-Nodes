@@ -1,0 +1,367 @@
+\begin{thebibliography}{10}
+
+\bibitem{loadbalancer}
+Load balancer definition.
+\newblock \url{https://en.wikipedia.org/wiki/Load_balancing_(computing)}.
+
+\bibitem{bejtlich2013nsm}
+Richard Bejtlich.
+\newblock {\em The Practice of Network Security Monitoring: Understanding Incident Detection and Response}.
+\newblock No Starch Press, San Francisco, 2013.
+\newblock Available at: \url{https://nostarch.com/node/255}.
+
+\bibitem{chuvakin2012logging}
+Anton Chuvakin, Kevin Schmidt, and Chris Phillips.
+\newblock {\em Logging and Log Management: The Authoritative Guide to Understanding the Concepts Surrounding Logging and Log Management}.
+\newblock Syngress, Waltham, 2012.
+\newblock Available at: \url{https://www.sciencedirect.com/book/9781597496353/logging-and-log-management}.
+
+\bibitem{containerd-docs}
+{containerd}.
+\newblock containerd documentation.
+\newblock \url{https://containerd.io/docs/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref10}
+{Cybersecurity and Infrastructure Security Agency}.
+\newblock Protecting against ransomware.
+\newblock \url{https://www.cisa.gov/news-events/news/protecting-against-ransomware}, 2021.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref11}
+{Cybersecurity and Infrastructure Security Agency}.
+\newblock Understanding denial-of-service attacks.
+\newblock \url{https://www.cisa.gov/news-events/news/understanding-denial-service-attacks}, 2021.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref9}
+{Cybersecurity and Infrastructure Security Agency}.
+\newblock Malware, phishing, and ransomware.
+\newblock \url{https://www.cisa.gov/topics/cyber-threats-and-advisories/malware-phishing-and-ransomware}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref38}
+{European Union Agency for Cybersecurity}.
+\newblock Threat landscape.
+\newblock \url{https://www.enisa.europa.eu/topics/cyber-threats/threat-landscape}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref41}
+{Fortinet}.
+\newblock Fortiguard socaas.
+\newblock \url{https://www.fortinet.com/products/socaas}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{haproxy-docs}
+{HAProxy Technologies}.
+\newblock Haproxy: The reliable, high performance tcp/http load balancer.
+\newblock \url{https://www.haproxy.org/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{helm-docs}
+{Helm Authors}.
+\newblock Helm documentation: The package manager for kubernetes.
+\newblock \url{https://helm.sh/docs/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref39}
+{IBM}.
+\newblock Cost of a data breach report.
+\newblock \url{https://www.ibm.com/reports/data-breach}, 2024.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref30}
+{IBM}.
+\newblock What is a security operations center?
+\newblock \url{https://www.ibm.com/topics/security-operations-center}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref34}
+{IBM}.
+\newblock What is a security operations center?
+\newblock \url{https://www.ibm.com/topics/security-operations-center}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref40}
+{IBM}.
+\newblock What is a security operations center?
+\newblock \url{https://www.ibm.com/topics/security-operations-center}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref36}
+{IBM}.
+\newblock What is siem?
+\newblock \url{https://www.ibm.com/topics/siem}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref25}
+Karen Kent and Murugiah Souppaya.
+\newblock Guide to computer security log management.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-92}, 2006.
+\newblock NIST Special Publication 800-92.
+
+\bibitem{ref26}
+Karen Kent and Murugiah Souppaya.
+\newblock Guide to computer security log management.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-92}, 2006.
+\newblock NIST Special Publication 800-92.
+
+\bibitem{kubernetes-container-runtimes}
+{Kubernetes}.
+\newblock Container runtimes.
+\newblock \url{https://kubernetes.io/docs/setup/production-environment/container-runtimes/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{kubeadm-install}
+{Kubernetes}.
+\newblock Installing kubeadm.
+\newblock \url{https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{k8s-docs}
+{Kubernetes}.
+\newblock Kubernetes components.
+\newblock \url{https://kubernetes.io/docs/concepts/overview/components/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref18}
+{Lockheed Martin}.
+\newblock Gaining the advantage: Applying cyber kill chain methodology to network defense.
+\newblock \url{https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/documents/cyber/Gaining_the_Advantage_Cyber_Kill_Chain.pdf}, 2015.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{luksa2017kubernetes}
+Marko Luksa.
+\newblock {\em Kubernetes in Action}.
+\newblock Manning Publications, Shelter Island, 2017.
+\newblock Available at: \url{https://www.manning.com/books/kubernetes-in-action}.
+
+\bibitem{ref20}
+{MITRE}.
+\newblock Mitre att\&ck.
+\newblock \url{https://attack.mitre.org/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref16}
+{MITRE}.
+\newblock Mitre att\&ck data sources.
+\newblock \url{https://attack.mitre.org/datasources/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref21}
+{MITRE}.
+\newblock Mitre att\&ck enterprise matrix.
+\newblock \url{https://attack.mitre.org/matrices/enterprise/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{mitre-attack-enterprise}
+{MITRE}.
+\newblock Mitre att\&ck enterprise matrix.
+\newblock \url{https://attack.mitre.org/matrices/enterprise/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref23}
+{MITRE}.
+\newblock Mitre att\&ck ics matrix.
+\newblock \url{https://attack.mitre.org/matrices/ics/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref22}
+{MITRE}.
+\newblock Mitre att\&ck mobile matrix.
+\newblock \url{https://attack.mitre.org/matrices/mobile/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref35}
+{National Institute of Standards and Technology}.
+\newblock Guide to intrusion detection and prevention systems.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-94}, 2007.
+\newblock NIST Special Publication 800-94.
+
+\bibitem{ref28}
+{National Institute of Standards and Technology}.
+\newblock Computer security incident handling guide.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-61r2}, 2012.
+\newblock NIST Special Publication 800-61 Revision 2.
+
+\bibitem{ref29}
+{National Institute of Standards and Technology}.
+\newblock Computer security incident handling guide.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-61r2}, 2012.
+\newblock NIST Special Publication 800-61 Revision 2.
+
+\bibitem{ref31}
+{National Institute of Standards and Technology}.
+\newblock Computer security incident handling guide.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-61r2}, 2012.
+\newblock NIST Special Publication 800-61 Revision 2.
+
+\bibitem{ref32}
+{National Institute of Standards and Technology}.
+\newblock Computer security incident handling guide.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-61r2}, 2012.
+\newblock NIST Special Publication 800-61 Revision 2.
+
+\bibitem{nist-sp800-61r2}
+{National Institute of Standards and Technology}.
+\newblock Computer security incident handling guide.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-61r2}, 2012.
+\newblock NIST Special Publication 800-61 Revision 2.
+
+\bibitem{ref6}
+{National Institute of Standards and Technology}.
+\newblock Glossary of key information security terms.
+\newblock \url{https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7298r2.pdf}, 2013.
+\newblock Used for confidentiality, integrity, and availability terminology.
+
+\bibitem{nist-sp800-83r1}
+{National Institute of Standards and Technology}.
+\newblock Guide to malware incident prevention and handling for desktops and laptops.
+\newblock \url{https://doi.org/10.6028/NIST.SP.800-83r1}, 2013.
+\newblock NIST Special Publication 800-83 Revision 1.
+
+\bibitem{ref27}
+{National Institute of Standards and Technology}.
+\newblock Alert definition.
+\newblock \url{https://csrc.nist.gov/glossary}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref14}
+{National Institute of Standards and Technology}.
+\newblock Computer virus definition.
+\newblock \url{https://csrc.nist.gov/glossary}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref24}
+{National Institute of Standards and Technology}.
+\newblock Event definition.
+\newblock \url{https://csrc.nist.gov/glossary}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref15}
+{National Institute of Standards and Technology}.
+\newblock Indicator definition.
+\newblock \url{https://csrc.nist.gov/glossary}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref7}
+{National Institute of Standards and Technology}.
+\newblock Nist computer security resource center glossary.
+\newblock \url{https://csrc.nist.gov/glossary}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref13}
+{National Institute of Standards and Technology}.
+\newblock Rootkit definition.
+\newblock \url{https://csrc.nist.gov/glossary}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref12}
+{National Institute of Standards and Technology}.
+\newblock Trojan horse definition.
+\newblock \url{https://csrc.nist.gov/glossary}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref-cost-breach}
+IBM Security.
+\newblock Cost of a data breach report 2024.
+\newblock \url{https://www.ibm.com/reports/data-breach}, 2024.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{shuffle-arch}
+{Shuffle}.
+\newblock Shuffle architecture.
+\newblock \url{https://shuffler.io/docs/architecture}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{shuffle-docs}
+{Shuffle}.
+\newblock Shuffle documentation.
+\newblock \url{https://shuffler.io/docs/about}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{sikorski2012malware}
+Michael Sikorski and Andrew Honig.
+\newblock {\em Practical Malware Analysis: The Hands-On Guide to Dissecting Malicious Software}.
+\newblock No Starch Press, San Francisco, 2012.
+\newblock Available at: \url{https://nostarch.com/malware}.
+
+\bibitem{thehive5-kubernetes}
+{StrangeBee}.
+\newblock Deploy thehive on kubernetes.
+\newblock \url{https://docs.strangebee.com/thehive/installation/kubernetes/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{thehive-docs}
+{StrangeBee}.
+\newblock Thehive 5 documentation.
+\newblock \url{https://docs.strangebee.com/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{thehive5-db-index}
+{StrangeBee}.
+\newblock Thehive database and index connection settings.
+\newblock \url{https://docs.strangebee.com/thehive/configuration/cassandra-elasticsearch-connection-settings/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{thehive5-requirements}
+{StrangeBee}.
+\newblock Thehive installation software requirements.
+\newblock \url{https://docs.strangebee.com/thehive/installation/software-requirements/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{calico-docs}
+{Tigera}.
+\newblock Calico open source documentation.
+\newblock \url{https://docs.tigera.io/calico/latest/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref-ransomware}
+Cybersecurity Ventures.
+\newblock Global ransomware damage costs prediction.
+\newblock \url{https://cybersecurityventures.com/global-ransomware-damage-costs-predicted-to-reach-250-billion-usd-by-2031/}, 2024.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{virustotal-api-v3}
+{VirusTotal}.
+\newblock Virustotal api v3 overview.
+\newblock \url{https://docs.virustotal.com/v3/reference/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{wazuh-agent}
+{Wazuh}.
+\newblock Wazuh agent documentation.
+\newblock \url{https://documentation.wazuh.com/current/installation-guide/wazuh-agent/index.html}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{wazuh-community}
+{Wazuh}.
+\newblock Wazuh community.
+\newblock \url{https://wazuh.com/community/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{wazuh-dashboard}
+{Wazuh}.
+\newblock Wazuh dashboard documentation.
+\newblock \url{https://documentation.wazuh.com/current/installation-guide/wazuh-dashboard/index.html}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{ref37}
+{Wazuh}.
+\newblock Wazuh documentation.
+\newblock \url{https://documentation.wazuh.com/current/}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{wazuh-indexer}
+{Wazuh}.
+\newblock Wazuh indexer documentation.
+\newblock \url{https://documentation.wazuh.com/current/installation-guide/wazuh-indexer/index.html}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\bibitem{wazuh-server}
+{Wazuh}.
+\newblock Wazuh server documentation.
+\newblock \url{https://documentation.wazuh.com/current/installation-guide/wazuh-server/index.html}, 2026.
+\newblock Accessed: 25 May 2026.
+
+\end{thebibliography}

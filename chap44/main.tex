@@ -1,0 +1,148 @@
+\documentclass[11pt,a4paper]{report}
+
+\input{preamble}
+
+\begin{document}
+
+% ========== TITLE PAGE ==========
+\begin{titlepage}
+    \centering
+    
+    \textbf{People's Democratic Republic of Algeria}\\
+    \textbf{Ministry of Higher Education and Scientific Research}\\
+    \textbf{Benyoucef Benkhedda University - Algiers 1}
+    
+    \vspace{0.3cm}
+    \rule{\linewidth}{0.5pt}
+    
+    \vspace{0.3cm}
+    
+    \begin{minipage}{0.25\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{figs/fc.jpg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \textbf{Faculty of Sciences}\\
+        \textbf{Department of Computer Science}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.25\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{figs/uni.jpg}
+    \end{minipage}
+    
+    \vspace{0.6cm}
+    \textit{Final Year Project submitted for the Master's degree in Computer Science}\\
+    \textit{Specialization: Networks and Embedded Systems (RSE)}
+    
+    \vspace{1cm}
+    \rule{8cm}{1pt}
+    
+    \vspace{0.3cm}
+    {\Large \textbf{Theme}}
+    
+    \vspace{0.3cm}
+    {\Large \textbf{Conception et D\'{e}ploiement d'un SOC Intelligent Bas\'{e} sur une Architecture SOAR Open Source.}}
+    
+    \vspace{0.3cm}
+    \rule{8cm}{1pt}
+    
+    \vspace{0.6cm}
+    \textbf{Presented and defended by:}
+    
+    \vspace{0.3cm}
+    \textbf{Mr. Hamidani Khalil} \hspace{0.5cm} \textbf{and} \hspace{0.5cm} \textbf{Mr. Zendagui Nazim}
+    
+    \vspace{0.6cm}
+    
+    \textit{Soutenu le 21 Juin 2026 devant le jury compos\'{e} de :}
+    
+    \vspace{0.3cm}
+    
+    \begin{tabular}{ll}
+        Mr. Friha \hspace{1.5cm} & Internal Supervisor \hspace{1.5cm} Doctor at University of Algiers 1 \\
+        \\
+        Mr. Salaheddine \hspace{1.5cm} & External Supervisor \hspace{1.5cm} Expert Threat Hunter at Alg\'{e}rie T\'{e}l\'{e}com
+    \end{tabular}
+    
+    \vspace{0.6cm}
+    \textit{Academic year: 2025-2026}
+    
+\end{titlepage}
+
+% ========== FRONT MATTER (Roman numerals) ==========
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\newpage
+\input{0-Dedication/dedication}
+
+\newpage
+\input{1-Acknowledgments/acknowledgments}
+
+\newpage
+\input{2-Abstract/abstract}
+
+% Table of Contents
+\newpage
+\phantomsection
+\tableofcontents
+
+% List of Tables
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+% List of Figures
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+
+% Acronyms
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Acronyms}
+\input{3-Acronymes/acronymes}
+
+% ========== GENERAL INTRODUCTION ==========
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\phantomsection
+\input{4-Introduction/introduction}
+
+% ========== CHAPTERS ==========
+\input{5-Chapters/chapter-1/ch1}
+
+\newpage
+\input{5-Chapters/chapter-2/ch2}
+
+\newpage
+\input{5-Chapters/chapter-3/ch3}
+
+\newpage
+\input{5-Chapters/chapter-4/ch4}
+
+% ========== APPENDICES ==========
+\appendix
+\newpage
+\input{appendix/appendix-a}
+
+\newpage
+\input{appendix/appendix-b}
+
+\newpage
+\input{appendix/appendix-c}
+
+% ========== BIBLIOGRAPHY ==========
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+\end{document}

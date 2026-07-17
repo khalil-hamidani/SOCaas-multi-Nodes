@@ -1,0 +1,823 @@
+Chapter 4 screenshot OCR and figure mapping manifest
+Generated from screenshots.zip and ch4.tex
+
+Important notes
+- OCR is best-effort. Terminal screenshots are usually accurate; web UI/dashboard screenshots may contain OCR errors.
+- The "safe figs filename" values remove spaces and fix a few obvious filename typos, so they are easier to use in LaTeX.
+- The original screenshots are not modified. A figs-ready zip with the safe names is provided separately.
+- Status meanings: GOOD = can be used directly; PARTIAL = useful but not exactly what the current caption asks for; MISSING = screenshot not provided; EXTRA = better for appendix or optional evidence.
+
+====================================================================================================
+A) Existing ch4.tex figure placeholders mapped to provided screenshots
+====================================================================================================
+fig:ch4-socaas-kubernetes-cluster : SOCaaS Kubernetes Cluster Architecture.png | GOOD | Architecture diagram is provided.
+fig:ch4-containerd-version : MISSING | MISSING | Need screenshot of containerd --version or containerd package version.
+fig:ch4-kubernetes-packages : MISSING | MISSING | Need screenshot showing kubeadm, kubelet, kubectl installed with v1.28.15.
+fig:ch4-kubeadm-init : MISSING | MISSING | Need screenshot of successful kubeadm init on k8s-master.
+fig:ch4-calico-pods : MISSING | MISSING | Need screenshot of Calico pods running, e.g. kubectl get pods -n calico-system or kube-system.
+fig:ch4-worker-join : kubextl get nodes .png | PARTIAL | Shows workers Ready after join, but not the kubeadm join command itself.
+fig:ch4-cluster-status : kubextl get nodes .png | GOOD | Nodes Ready with version and IPs.
+fig:ch4-wazuh-pods : wazuh pods.png | GOOD | kubectl output shows Wazuh pods running. kubectl pods.png is an alternate.
+fig:ch4-wazuh-dashboard : wazuh dashboard.png | GOOD | Wazuh endpoints/dashboard view.
+fig:ch4-wazuh-agent-status : wazuh dashboard.png | GOOD | Same screenshot shows connected/active agents.
+fig:ch4-wazuh-alerts : deleted files wazuh.png | PARTIAL | Shows Wazuh FIM/syscheck alert activity. A full Wazuh alerts table would be better.
+fig:ch4-pipeline-pod-service : shuffle pods.png | PARTIAL | Shows pipeline-gateway pod only; service is not visible.
+fig:ch4-pipeline-health : MISSING | MISSING | Need curl/browser health check response from Pipeline Gateway.
+fig:ch4-normalized-alert : MISSING | MISSING | Need sample normalized alert JSON/output from Pipeline Gateway.
+fig:ch4-dedup-evidence : MISSING | MISSING | Need logs or output proving repeated alerts reduced by TTL deduplication.
+fig:ch4-shuffle-pods : shuffle pods.png | GOOD | Shuffle, Redis, OpenSearch, Orborus, and pipeline gateway pods running.
+fig:ch4-shuffle-dashboard : MISSING | MISSING | Need Shuffle dashboard/home/workflow management screenshot. Workflow canvas is separate.
+fig:ch4-shuffle-workflow-canvas : final shuffle workflow.png | GOOD | Complete workflow canvas provided.
+fig:ch4-shuffle-execution : suffle_run.png | PARTIAL | Shows All Workflow Runs. A larger screenshot with run details would be stronger.
+fig:ch4-thehive-pods : thehive pods.png | GOOD | TheHive, Cassandra, MinIO, Elasticsearch pods running.
+fig:ch4-elasticsearch-backend : thehive pods.png | PARTIAL | Elasticsearch pod is visible; backend health/status screenshot would be stronger.
+fig:ch4-thehive-dashboard : thehive cases full.png | GOOD | TheHive case dashboard/list provided.
+fig:ch4-created-thehive-case : thehive malware case.png | GOOD | Detailed created case. malware case.png is alternate.
+fig:ch4-helm-chart-structure : MISSING | MISSING | Need screenshot/tree of charts/socaas containing Chart.yaml, values.yaml, templates, etc.
+fig:ch4-helm-templates : MISSING | MISSING | Need screenshot/tree of charts/socaas/templates.
+fig:ch4-helm-deployment : MISSING | MISSING | Need successful helm install/upgrade/status output.
+fig:ch4-end-to-end-pipeline : MISSING | MISSING | Need diagram of full endpoint -> Wazuh -> Pipeline Gateway -> Shuffle -> Telegram/email -> TheHive -> AI Sandbox flow.
+fig:ch4-ai-sandbox-architecture : ai-sandbox-wokflow.png | GOOD | AI Sandbox workflow diagram provided.
+fig:ch4-sandbox-request : after opencode run.png | PARTIAL | Shows sandbox run request/start; crop terminal for clarity.
+fig:ch4-sandbox-lifecycle : before opencode run.png + after opencode run.png + golden vm.png + sandbox-vm.png | PARTIAL | Evidence exists, but not as a single lifecycle diagram.
+fig:ch4-sandbox-report-first-page : MISSING | MISSING | Need screenshot of page 1 of generated PDF report.
+fig:ch4-thehive-sandbox-report : MISSING | MISSING | Need TheHive case showing attached/referenced sandbox PDF report.
+fig:ch4-sandbox-sample-submission : after opencode run.png | PARTIAL | Shows sample path/run. A screenshot of the actual submission request would be stronger.
+fig:ch4-static-analysis-summary : reports.png | PARTIAL | Shows generated static-analysis files, not the summary content.
+fig:ch4-reversed-logic : MISSING | MISSING | Need screenshot of report section containing pseudocode/reconstructed logic.
+fig:ch4-ioc-extraction : exfil server path.png or nc_result_aisandbox.png | PARTIAL | Shows observed IOC behavior; not the report IOC extraction section.
+fig:ch4-analyst-recommendations : thehive malware case.png | PARTIAL | Shows recommendations in TheHive, but not the AI Sandbox report recommendations.
+fig:ch4-pdf-report-preview : reports.png | PARTIAL | Shows report.pdf file, not a PDF preview.
+
+====================================================================================================
+B) Screenshot name : description, suggested placement, and OCR
+====================================================================================================
+
+01. SOCaaS Kubernetes Cluster Architecture.png : Architecture diagram of the SOCaaS lab on KVM/QEMU/libvirt. It shows virbr0 / 192.168.122.0/24, k8s-master as the control-plane node, k8s-worker1 as the SIEM/Wazuh node, k8s-worker2 as the SOAR/TheHive node, Linux and Windows victim endpoints, NodePort access, Telegram and email notifications, and the main Wazuh, Shuffle, Redis/OpenSearch, TheHive, Cassandra, and MinIO components.
+    Safe figs filename: socaas_kubernetes_cluster_architecture.png
+    Suggested placement: Section 4.2 - fig:ch4-socaas-kubernetes-cluster
+    Status: GOOD MATCH
+    Notes: Use as the main Kubernetes cluster architecture figure.
+    OCR text (best effort):
+      k8s-worker1 k8s-worker2
+      (SIEM Node) (SOAR / Case Management Node)
+      Oo = @ Shuffle TheHive Felearam
+      wart wart th : i SOAR Case 4 Notification
+      7 Manager Indexer ) | Dashboard CEE) e Co
+      ray } Redis/ || Cassandra/
+      vietim-01 OpenSearch ) | MinlO .
+      (Linux Endpoint) ——__ ——_——— Email
+      Kube-proxy kube- proxy
+      CT (Control Plane Node)
+      Cee Kubernetes API Server
+      Controller Manager
+      Scheduler
+      virbrO - 192.168.122.0/24
+      Host Machine - KVM/QEMU + libvirt Nedeport
+      pe erOny Services
+
+02. after opencode run.png : Terminal and Virtual Machine Manager after launching the AI Sandbox run with opencode. The command references AI_AGENT_PROMPT.md and the sample path samples/suspicious_file. The terminal shows the SOCaaS Sandbox Run case, run ID, and hash, while the VM manager shows the temporary sandbox VM created from the golden image.
+    Safe figs filename: ai_sandbox_after_opencode_run.png
+    Suggested placement: Section 4.8 or 4.9 - fig:ch4-sandbox-request; partial for fig:ch4-sandbox-sample-submission
+    Status: PARTIAL MATCH
+    Notes: Good evidence of the sandbox request/orchestrator start. For a clean report figure, crop the terminal area or combine it with before_opencode_run/golden_vm as lifecycle evidence.
+    OCR text (best effort):
+      @ > & /srv/socaas/Ai-sandbox > on ® P main !1 718 a
+      ) opencode run "follow AI_AGENT_PROMPT.md instructions, file path: samples/suspicious_file"
+      > iWAid) © despsecta are Virtual Machine Manager eco
+      File Edit View Help
+      Soper > I @ ~
+      Name ¥ CPUusage Host CPU usage
+      ~~ GEMU/KVM
+      # Todos
+      [+] Launch the sandbox VM with the suspicious_file sample [jj Ste" | |
+      [ ] SSH into VM and run static analysis
+      [ ] Run reverse engineering tools on the sample Boor | |
+      [ ] SCP results back to host
+      ‘k8s-workerz
+      [ ] Generate PDF report with all findings 7
+      sandbox- file-20260521-161646
+      ‘SANDBOX-VM-Golden
+      ietim-o
+      § bash /srv/socaas/Ai-sandbox/bin/socaas-sandbox-run —-sar Ml Site
+      === S0CaaS Sandbox Run === ne
+      Case: suspicious_file we er
+      Run: sandbox-suspicious_file-20260521-161646
+      Hash: 80d9811fb15790778f f3c6a19da4e038fce62F2ccBedfcO5391e- ee eee
+      tqesiiing) WSqsed) Cilameso-
+
+03. ai-sandbox-wokflow.png : AI Sandbox workflow/architecture diagram. It starts from a Wazuh malware alert, goes through Shuffle SOAR and the AI Sandbox Orchestrator, creates a temporary isolated VM, runs static analysis, dynamic analysis, reverse engineering, IOC extraction, artifact collection, disk reset/destruction, then sends behavior summary, reversed logic, IOCs, verdict, MITRE ATT&CK mapping, recommendations, and a PDF report to TheHive.
+    Safe figs filename: ai_sandbox_workflow.png
+    Suggested placement: Section 4.8 - fig:ch4-ai-sandbox-architecture
+    Status: GOOD MATCH
+    Notes: The filename contains a typo: wokflow. The safe filename fixes it to workflow.
+    OCR text (best effort):
+      i Temporary ;
+      q fe Isolated VM '
+      1
+      q q yy
+      = 1 roxgugeoy ace Tm ie
+      Boa * IY fi a
+      t iY | bea | es
+      => (sy => | Static Dynamic Reverse ==>
+      Ge fo) Create | analysis. analysis engineering |
+      Al Sandbox temporary | = '
+      Malware Alert Shuffle SOAR Orchestrator cuepiemen tie | &: E ' bauer
+      1
+      from Wazuh Workflow H loc Artifact { Disk bea 7
+      | ___extraction collection eruingmant reset
+      * Validate request Temporary Isolated VM
+      + Create temporary VM
+      + Submit suspicious file Vv
+      * Collect artifacts
+      + Generate report
+      * Destroy VM Behavior summary +
+      reversed logic +
+      recommendations
+      DeepSeek-V4-Pro Al
+      > &
+      + Malware behavior v=
+      + Reversed logic / pseudocode = a
+      + 10Cs — i
+      R + Sandbox verdict
+      * MITRE ATT&CK mapping Cul * Extracted OCs
+      * Recommended actions py alt + PDF report Thelii
+      * Analyst eHive
+      Al-Generated Malware recommendations Case Management
+      Analysis Report
+
+04. before opencode run.png : Terminal prepared to run opencode with AI_AGENT_PROMPT.md and samples/suspicious_file before sandbox execution. Virtual Machine Manager shows the relevant VMs in the shutoff state before the temporary sandbox analysis starts.
+    Safe figs filename: ai_sandbox_before_opencode_run.png
+    Suggested placement: Section 4.8 - partial evidence for fig:ch4-sandbox-lifecycle
+    Status: PARTIAL MATCH
+    Notes: Use only if you want before/after sandbox lifecycle evidence. It is not a standalone lifecycle diagram.
+    OCR text (best effort):
+      @ > & /srv/socaas/Ai-sandbox > on ®& P main !1 718
+      ) opencode run "follow AI_AGENT_PROMPT.md instructions, file path: samples/suspicious_fite']
+      Virtual Machine Manager eco
+      File Edit View Help
+      Bopen & IE @ ~
+      Name + CPUusage Host CPU usage
+      ~~ GEMU/KVM
+      aes a
+      ‘Shutoff
+      Bio |
+      ‘Shutoff
+      aes |
+      ‘Shutoff
+      Se a |
+      ‘Shutoff
+      a: |
+      ‘Shutoff
+      = ee
+      ‘Shutoff
+
+05. deleted files wazuh.png : Wazuh File Integrity Monitoring dashboard filtered for syscheck alerts on agent 001 / DESKTOP-2CA1J07. It visualizes most active users and file actions such as deleted, modified, and added events.
+    Safe figs filename: wazuh_deleted_files_fim_dashboard.png
+    Suggested placement: Section 4.4 - fig:ch4-wazuh-alerts, or appendix evidence for Wazuh FIM validation
+    Status: PARTIAL MATCH
+    Notes: This is a Wazuh alert/evidence view, but it is FIM-specific. A generic Wazuh alerts table would be stronger for fig:ch4-wazuh-alerts.
+    OCR text (best effort):
+      = Ww. File Integrity Mo... | DESKTOP-2CA1J07
+      Dashboard — Inventory Events
+      ®v_ Search
+      mmanagername: socaas-wazu-manager-0 | rule.groups: syscheck || agentid: 001 + Add fiter
+      Most active users ¢ etions ra
+      ristrators (9.6894) a deleted (3.9256) =f
+      motitied (54.996)
+      SYSTEM (90.32%
+
+06. download the malware.png : Windows victim VM desktop/File Explorer view during the malware-download step. It supports the malware-delivery scenario but does not correspond to a current Chapter 4 placeholder.
+    Safe figs filename: victim_download_malware.png
+    Suggested placement: Appendix or Section 4.10 malware validation evidence; no direct ch4.tex placeholder
+    Status: EXTRA / APPENDIX
+    Notes: Use in an appendix if documenting the malware infection path.
+    OCR text (best effort):
+      win10-vicitm on QEMU/KVM.
+      File VirtualMachine View Send Key
+      oe 1e®- @ is:
+      ~
+      ae
+      © tpehere to search AH @m = eas) Ses hu
+
+07. exfil server path.png : Netcat listener on port 4444 receiving a connection and exfiltrated file content. The screenshot shows FILE: ./passwords.txt and example credentials, proving that the controlled sample sent password-file content to the listener.
+    Safe figs filename: exfil_server_path_listener.png
+    Suggested placement: Section 4.9 - partial evidence for fig:ch4-ioc-extraction, or Appendix C malware behavior evidence
+    Status: PARTIAL MATCH / APPENDIX
+    Notes: This is runtime behavior evidence, not the sandbox report IOC extraction screenshot requested by fig:ch4-ioc-extraction.
+    OCR text (best effort):
+      @ > © ~/exfil_server_path
+      > nc —lvp 4444
+      Listening on 0.0.0.0 4444
+      Connection received on 192.168.122.1 37960
+      FILE: ./passwords. txt
+      fakeEmail@gmail. com: Fak3Pa5Sword!
+      admin@gmail. com: IamTh3Admin!
+
+08. fake_website_on_the_vm_victim.png : Windows victim browser opened to a fake ChatGPT Pro / OpenAI-themed page at 192.168.122.180:80. It appears to be the social-engineering or malware-delivery page used in the validation scenario.
+    Safe figs filename: victim_fake_website_chatgpt_pro.png
+    Suggested placement: Appendix or Section 4.10 malware validation evidence; no direct ch4.tex placeholder
+    Status: EXTRA / APPENDIX
+    Notes: Use only as scenario context. Be careful not to present it as a real OpenAI page.
+    OCR text (best effort):
+      win10-vicitm on QEMU/KVM eco
+      File VirtualMachine View SendKey
+      Ge prue- s&s By
+      Y @ chateer Pro—Free Access |Open X ++ - @ x
+      EG A Notsecure 192168.122.18080 ot 4h Gon
+      G Openal Research Products Safety Company GED
+      Limited-Time Early Access Program
+      Offer expres in 05:57:26
+
+09. final shuffle workflow.png : Shuffle workflow canvas for SOCaaS alert triage. It shows the webhook, Normalize SOC Alert, VirusTotal enrichment, AI recommended actions, Telegram/email payload building, TheHive case creation, malware branch, AI Sandbox request, sandbox analysis request, TheHive sandbox update, and final response.
+    Safe figs filename: shuffle_final_workflow_canvas.png
+    Suggested placement: Section 4.4 - fig:ch4-shuffle-workflow-canvas
+    Status: GOOD MATCH
+    Notes: Use for the complete Shuffle workflow canvas.
+    OCR text (best effort):
+      ¢ Shuffle workflow
+      & Generate Al Recommended Actions
+      &) Build VirusTotal Target on
+      7 ~——_, / i} Build Context TheHive Email Body ; : | Final Response
+      ' 4
+      Vista v3 i 4
+      | i} Build Telegram Payload 1} Greate Thellive Case
+      Z —, © Send Email Notation
+      Normalize SOC Alert - Z
+      & IF MALWARE (*) .
+      » Sen Telegram Noticaton
+      Webhook 1 : B® Build Al Sandbox Request
+      fe) Request Al Sandbox Analysis
+      ™ a) Build TheHive Sandbox Update
+      _ @ Update TheHve Case Win Sandbox Report
+
+10. golden vm.png : Virtual Machine Manager list showing k8s-master, k8s-worker1, k8s-worker2, and SANDBOX-VM-Golden in a shutoff state. It confirms the presence of the golden VM used as the sandbox base image.
+    Safe figs filename: sandbox_golden_vm_vmm.png
+    Suggested placement: Section 4.8 - partial evidence for fig:ch4-sandbox-lifecycle
+    Status: PARTIAL MATCH
+    Notes: Useful as one piece of the temporary VM lifecycle, but not enough alone for the full lifecycle diagram.
+    OCR text (best effort):
+      Name + CPUusage Host CPU usage
+      ~~ GEMU/KVM
+      B ‘k8s-master
+      ‘Shutoff
+      B ‘k8s-worker1
+      ‘Shutoff
+      B ‘k8s-worker2
+      ‘Shutoff
+      B ‘SANDBOX-VM-Golden
+      ‘Shutoff
+      bs
+      ‘Shutoff
+      ‘Shutoff
+
+11. hexstrike_server_mcp.png : Terminal running hexstrike_server. It shows HexStrike AI starting process-pool workers and launching an AI tools API server for offensive intelligence, recon, exploitation, and analysis tooling.
+    Safe figs filename: hexstrike_server_mcp.png
+    Suggested placement: Appendix/tooling evidence; no direct ch4.tex placeholder
+    Status: EXTRA / APPENDIX
+    Notes: Only use if the thesis discusses the AI agent tool stack. Otherwise keep it out of Chapter 4.
+    OCR text (best effort):
+      tkhali lesocaas-main]—[~/VH_SANDBOX_TMP/malware_analyst_AI_agent]
+      $hexstrike_server
+      2026-05-18 16:41:06,552 - __main__ - INFO - % Process pool worker 0 started
+      2026-05-18 16:41:06,552 - __main__ - INFO - % Process pool worker 1 started
+      2026-05-18 16:41:06,552 - __main__ - INFO - % Process pool worker 2 started
+      2026-05-18 16:41:06,553 - __main__ - INFO - % Process pool worker 3 started
+      # HexStrike AI - Blood-Red Offensive Intelligence Core |
+      $% Al-Automated Recon | Exploitation | Analysis Pipeline |
+      @ Bug Bounty | CTF | Red Team | Zero-Day Research |
+      2026-05-18 16:41:06,578 - __main__ - INFO -
+      2026-05-18 16:41:06,578 - __main__ - INFO - | # Starting HexStrike AI Tools API Server
+      2026-05-18 16:41:06.578 - main —- INFO —-
+
+12. kubectl namespace.png : Terminal output of kubectl get ns filtered for SOCaaS namespaces. It shows socaas-siem, socaas-soar, socaas-system, and socaas-thehive in Active status with an age of 15 days.
+    Safe figs filename: kubectl_get_namespaces_socaas.png
+    Suggested placement: Optional Section 4.3 deployment evidence; no direct ch4.tex placeholder
+    Status: EXTRA / OPTIONAL
+    Notes: Good optional evidence if you add a namespace-status figure.
+    OCR text (best effort):
+      @ > = /srv/socaas > on & B main 74 at kubernetes—admin@kubernetes @ ¢ at 04:14:15 PM ©
+      ) kubectl get ns | grep -E 'socaas|NAME' || true
+      NAME STATUS AGE
+      socaas-siem Active 15d
+      socaas-soar Active 15d
+      socaas-system Active 15d
+      socaas-thehive Active 15d
+
+13. kubectl pods.png : Terminal output of kubectl get pods -n socaas-siem -o wide. It lists socaas-wazuh-dashboard, socaas-wazuh-indexer-0, and socaas-wazuh-manager-0 as Running with pod IP addresses.
+    Safe figs filename: kubectl_wazuh_pods_wide.png
+    Suggested placement: Section 4.4 - alternate for fig:ch4-wazuh-pods
+    Status: DUPLICATE / ALTERNATE
+    Notes: Overlaps with wazuh pods.png. Prefer wazuh pods.png because its custom columns are clearer.
+    OCR text (best effort):
+      @ > = /srv/socaas > on & P main 76 at kubernetes—admin@kubernetes @ ¢ at 04:21:42 PM ©
+      > kubectl get pods -n socaas-siem -o wide| awk '{print $1,$2,$3,$4,$5,$6,$8}' | column -t
+      NAME READY STATUS RESTARTS AGE IP NOMINATED
+      socaas—wazuh-dashboard-8648cd5457-r2bf5 1/1 Running 16 (135m ago) 10.244,.194.83
+      socaas—wazuh-indexer-0 1/1 Running 17 (135m ago) 10.244.194.89
+      socaas—wazuh-manager-0 2/2 Running 14 (135m ago) 10.244,194.87
+
+14. kubextl get nodes .png : Terminal output of kubectl get nodes -o wide. It shows k8s-master, k8s-worker1, and k8s-worker2 in Ready status, Kubernetes version v1.28.15, Ubuntu 22.04.5 LTS, and the node IP addresses 192.168.122.10, 192.168.122.11, and 192.168.122.12.
+    Safe figs filename: kubectl_get_nodes.png
+    Suggested placement: Section 4.3 - fig:ch4-cluster-status; partial for fig:ch4-worker-join
+    Status: GOOD MATCH
+    Notes: Use for Kubernetes Cluster Status. It proves workers joined, but it is not a screenshot of the actual kubeadm join command.
+    OCR text (best effort):
+      @ > = /srv/socaas > on & B main 74 at kubernetes—admin@kubernetes @ ¢ at 02:08:25 PM ©
+      >» kubectl get nodes -o wide | awk '{print $1,$2,$4,$5,$6,$8,$9,$10}' | column -t
+      NAME STATUS AGE VERSION INTERNAL-IP OS-IMAGE KERNEL-VERSION CONTAINER-RUNTIME
+      k8s-master Ready 16d vi1.28.15 192.168.122.1@ Ubuntu 22.04.5 LTS
+      k8s-worker1 Ready 16d vi1.28.15 192.168.122.11 Ubuntu 22.04.5 LTS
+      k8s-worker2 Ready 16d vi1.28.15 192.168.122.12 Ubuntu 22.04.5 LTS
+
+15. malware case.png : Wide TheHive case page for [SOCaaS][CRITICAL][malware] Rule 554 on DESKTOP-2CA1J07. It shows tags, case metadata, severity CRITICAL, SOC score 21, alert type malware, agent IP 192.168.122.98, EICAR test-file detection, file path, file hash, network observables, VirusTotal information, and recommended actions.
+    Safe figs filename: thehive_malware_case_wide.png
+    Suggested placement: Section 4.4 - alternate for fig:ch4-created-thehive-case; possible malware validation evidence
+    Status: DUPLICATE / GOOD MATCH
+    Notes: Overlaps with thehive malware case.png. Use the one that renders best in the thesis.
+    OCR text (best effort):
+      > [SOCaaS][CRITICAL][malware] Rule 554 - DESKTOP-2CA1J07
+      B> © is -123514400 & General = Tasks (0) @ Observables (0) 9 TTPs(0) @ Attachments @ Timeline [Pages History # Linkedalerts x
+      SOCaas Shuffle ntegratio ‘Tags
+      BEEN 5 {[ostip-192.108.122.1 [[rule-s54 [ al-success [| hash-275a021pbb6489e54047180917... [ loc-file-hash [| foc-dns {critical | soceas [| virustotat-lookup
+      created at asj0s/2026 02:24 {[ domain-wwwvirustotatcom ff srcip-192.168.12298 | wazuh [ ioc-domain | type-matware | foc-urt [| at-recommended-actions shuttle [| atert-type-matware
+      br Description
+      & @ SOCaaS Security Alert
+      case
+      = js # Case ID: SOC-20260515-012315-554-eicar-malware-1778807852
+      Assignee
+      « Severity: CRITICAL
+      SOCaaS Shuffle Integration «SOC Score: 21
+      a « Alert Type: malware
+      Status m= Agent
+      la @ New + Name: DESKTOP-2CA07
+      # IP: 192.168.122.98
+      Q__ Start date + 1D: 002
+      15/05/2026 02:24 W Rule
+      a «1D: 554
+      aE Tasks completion # Wazuh Level: 12
+      No tasks « Description: EICAR test file detected - known malware hash
+      Malware / Endpoint Observables
+      Contributors « File Name: C:\Users\win10-victim\AppData\Roaming\MicrosoftEdge\update_helper.exe
+      + File Path: C:\Users\win10-victim\AppDatalRoaming\MicrosoftEdgelupdate_helper.exe
+      « File Hash: 275a021bbfb6489e54d471899/7 db9d1663fc695ec2fe2a2c453BaabfES1fd0f
+      @ Related Network Observables
+      « Source IP: 192.168.122.98
+      « Destination IP: 192.168.1221
+      « Domain: www.virustotal.com
+      © URL: https:/www.virustotal.com/guil/file/275a021bbfb6489e54d471899F7db9d1663fc695ec2fe2a2cd538aabf651Fdof
+      « DNS Query: www.virustotal.com
+      ©) 7 VirusTotal
+      « Malicious: 66
+      # Suspicious: 0
+
+16. malware telegram notification.png : Telegram message from SOCaaS Alert Bot for a malware detection. It includes CRITICAL severity, SOC score 21, case ID, host DESKTOP-2CA1J07 at 192.168.122.98, malware file/path/hash, VirusTotal result, and rule 554 for EICAR known malware hash.
+    Safe figs filename: telegram_malware_notification_a.png
+    Suggested placement: Section 4.7 AI triage evidence or Appendix malware validation; no direct ch4.tex placeholder
+    Status: DUPLICATE / EXTRA
+    Notes: Duplicate of telegram malware notification.png. Keep only one in the thesis unless comparing two runs.
+    OCR text (best effort):
+      @ @ $OCaas Alert Bot
+      “= bot
+      ® soCaas Alert: Malware Detection Today
+      @ Severity
+      + Level: CRITICAL
+      + SOC Score: 21
+      + Case ID: SOC-20260515-130851-554-eicar-malware-
+      1778807852
+      =m Host
+      + Name: DESKTOP-2CA1J07
+      + IP: 192.168.122.98
+      & Malware Details
+      + File: C:\Users\win10-
+      victim\AppData\Roaming\MicrosoftEdge\update_helper.exe
+      + Path: C:\\Users\\win10-
+      victim\\AppData\\Roaming\\MicrosoftEdge\\update_helper.ex
+      e
+      + Hash:
+      275a021bbfb6489e54d471899f 7db9d1663fc695ec2fe2a2c4538aab
+      f651fdof
+      4 VirusTotal
+      Target: file hash /
+      275a021bbfb6489e54d471899f 7db9d1663f c695ec2fe2a2c4538aabt
+      651fdof
+      + Result: 65 malicious / © suspicious
+      i Rue
+      + 1D: 554
+      + Description: EICAR test file detected - known malware hash
+      Wazuh > VirusTotal > Shuffle > Email/TheHive
+
+17. nc_result_aisandbox.png : Netcat listener result during the AI Sandbox malware case. It shows a connection received while listening on 0.0.0.0:4444 and the exfiltrated ./passwords.txt content with example credentials.
+    Safe figs filename: ai_sandbox_nc_exfil_result.png
+    Suggested placement: Section 4.9 - partial evidence for fig:ch4-ioc-extraction, or Appendix C malware behavior evidence
+    Status: PARTIAL MATCH / APPENDIX
+    Notes: Very similar to exfil server path.png. Keep whichever is clearer.
+    OCR text (best effort):
+      Likhalilesocaas-main]-[~/VM_SANDBOX_TMP/malware_analyst_AI_agent]
+      gnc -lvp 4444
+      Listening on 0.0.0.0 4444
+      Connection received on 192.168.122.1 47854
+      FILE: ./passwords. txt
+      fakeEmail@gmail. com: Fak3Pa5Sword!
+      admin@gmail. com: IamTh3Admin!
+
+18. nmap_scan_cli.png : Terminal output of sudo nmap -sS -Pn -p 1-200 192.168.122.180. It reports host up, one open port 22/tcp ssh, 199 filtered TCP ports, QEMU virtual NIC MAC address, and scan completion in 2.85 seconds.
+    Safe figs filename: nmap_scan_cli.png
+    Suggested placement: Appendix A - Nmap Port Scan Detection and Response
+    Status: EXTRA / APPENDIX A
+    Notes: Chapter 4 summarizes Nmap validation and points to Appendix A, so this is appendix evidence rather than a main Chapter 4 placeholder.
+    OCR text (best effort):
+      @ > & /srv/socaas > on ® P main !7 25
+      > sudo nmap -sS -Pn -p 1-200 192.168.122.180
+      Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-12 20:43 CET
+      Nmap scan report for 192.168.122.180
+      Host is up (0.0023s latency).
+      Not shown: 199 filtered tcp ports (no-response)
+      PORT STATE SERVICE
+      22/tcp open ssh
+      MAC Address: 52:54:00:15:A5:15 (QEMU virtual NIC)
+      Nmap done: 1 IP address (1 host up) scanned in 2.85 seconds
+
+19. reports.png : Directory tree of AI Sandbox report artifacts under reports/fake_update/sandbox-fake_update-20260521-134607. It shows report.pdf plus analysis artifacts such as all_strings.txt, byte_frequency.txt, disassembly.txt, file_info.txt, file_type.txt, hashes.json, hex_dump.txt, pe_headers.txt, strings_commands.txt, strings_pe.txt, and strings_urls.txt.
+    Safe figs filename: ai_sandbox_reports_artifacts_tree.png
+    Suggested placement: Section 4.9 - partial for fig:ch4-pdf-report-preview or fig:ch4-static-analysis-summary
+    Status: PARTIAL MATCH
+    Notes: This proves artifacts/report.pdf were generated, but it is not a screenshot of the report first page or report preview.
+    OCR text (best effort):
+      reports
+      L— fake_update
+      L_ sandbox-fake_update-20260521-134607
+      gen_report.py
+      report.pdf
+      sandbox-fake_update-20260521-134607
+      all_strings.txt
+      byte_frequency.txt
+      disassembly. txt
+      file_info.txt
+      file_type.txt
+      hashes. json
+      hex_dump. txt
+      pe_headers. txt
+      strings_commands.txt
+      strings_pe.txt
+      strings_urls.txt
+
+20. run the malware.png : Windows victim VM showing a security/open-file warning before running the downloaded malware/sample. It supports the malware execution scenario.
+    Safe figs filename: victim_run_malware_warning.png
+    Suggested placement: Appendix or Section 4.10 malware validation evidence; no direct ch4.tex placeholder
+    Status: EXTRA / APPENDIX
+    Notes: Use only as validation-scenario evidence; not a core implementation figure.
+    OCR text (best effort):
+      win10-vicitm on QEMU/KVM.
+      File VirtualMachine View Send Key
+      Be 1e®- @ Re
+      ~
+      ae
+      Bi Videos ae
+      item 1 item selected 859 b un Cancel
+      MAAwways ask before opening this file
+      (Dcublicher. You should only run software from publishers you trust
+      e here to sear | @ @ .608"
+      EO Type here to search =| me a & Ge FAW oa2006
+
+21. sandbox-vm.png : Terminal output of virsh list --all from /srv/socaas/Ai-sandbox. It lists k8s-master, k8s-worker1, k8s-worker2, SANDBOX-VM-Golden, victim-01, and win10-victim in shutoff state.
+    Safe figs filename: virsh_sandbox_vms_shutoff.png
+    Suggested placement: Section 4.8 - partial evidence for fig:ch4-sandbox-lifecycle
+    Status: PARTIAL MATCH
+    Notes: Use as sandbox VM inventory evidence, not as the full lifecycle diagram.
+    OCR text (best effort):
+      @ > & /srv/socaas/Ai-sandbox > on & P main !1 712
+      > virsh List all
+      Id Name State
+      - k8s-master shut off
+      - _k8s-worker1 shut off
+      - _k8s-worker2 shut off
+      - SANDBOX-VM-Golden shut off
+      = victim-01 shut off
+      - winl0-vicitm shut off
+
+22. shuffle pods.png : Terminal output of kubectl get pods -n socaas-soar with custom columns. It shows socaas-pipeline-gateway, socaas-redis, socaas-shuffle-backend, socaas-shuffle-frontend, socaas-shuffle-opensearch, and socaas-shuffle-orborus running with pod IP addresses.
+    Safe figs filename: shuffle_pods_pipeline_gateway.png
+    Suggested placement: Section 4.4 - fig:ch4-shuffle-pods; partial for fig:ch4-pipeline-pod-service
+    Status: GOOD MATCH / PARTIAL
+    Notes: Good for Shuffle Pods Running. For Pipeline Gateway Pod and Service, capture a separate kubectl get pod,svc screenshot showing the service as well.
+    OCR text (best effort):
+      @ > & /srv/socaas > on & B main ?7 at kubernetes—admin@kubernetes @ ¢ at 04:26:47 PM ©
+      > kubectl get pods -n socaas-soar \
+      -o custom-columns='NAME: .metadata.name, READY: .status.containerStatuses [*].ready,STATUS:.status.phase, RESTARTS:
+      . status. containerStatuses [*].restartCount,AGE:.metadata.creationTimestamp,IP:.status.podIP
+      NAME READY STATUS RESTARTS AGE IP
+      socaas—pipeline-gateway-75979cbc9c-56n7t true Running 8 2026-05-11T13:28:36Z 10.244,126.11
+      socaas-redis—76bbdc5b7-9wpwq true Running 17 2026-05-03T18:51:26Z 10.244.126.47
+      socaas-shuff le-backend-6f 8b8b687b-dgf lt true Running 17 2026-05-03T18:51:26Z 10.244.126.18
+      socaas-shuffle-frontend-5f45d4768d-2qsnp true Running 20 2026-05-03T18:55:34Z 10.244.126.60
+      socaas-shuff le-opensearch-0 true Running 17 2026-05-03T18:51:26Z 10.244.126.58
+      socaas-shuff le-orborus-86cfbb7796-6x4kj true Running 8 2026-05-11T13:39:58Z 10.244.126.28
+
+23. suffle_run.png : Shuffle All Workflow Runs page showing workflow run status. The visible summary indicates a finished run and no currently executing or aborted runs.
+    Safe figs filename: shuffle_workflow_run.png
+    Suggested placement: Section 4.4 - fig:ch4-shuffle-execution
+    Status: GOOD MATCH / PARTIAL
+    Notes: Filename contains a typo: suffle. Use as workflow execution evidence; a larger screenshot would be clearer.
+    OCR text (best effort):
+      # All Workflow Runs we
+      if & REFRESH RUNS )
+      BEE 2 [osc |e |
+      | SS ee @>?
+
+24. telegram malware notification.png : Telegram malware notification from SOCaaS Alert Bot with CRITICAL severity, SOC score 21, case ID, host DESKTOP-2CA1J07, IP 192.168.122.98, malware file path/hash, VirusTotal malicious count, and Wazuh rule 554.
+    Safe figs filename: telegram_malware_notification_b.png
+    Suggested placement: Section 4.7 AI triage evidence or Appendix malware validation; no direct ch4.tex placeholder
+    Status: DUPLICATE / EXTRA
+    Notes: Duplicate of malware telegram notification.png. Keep one copy only.
+    OCR text (best effort):
+      @ @ $OCaas Alert Bot
+      “= bot
+      ® soCaas Alert: Malware Detection Today
+      @ Severity
+      + Level: CRITICAL
+      + SOC Score: 21
+      + Case ID: SOC-20260515-130851-554-eicar-malware-
+      1778807852
+      =m Host
+      + Name: DESKTOP-2CA1J07
+      + IP: 192.168.122.98
+      & Malware Details
+      + File: C:\Users\win10-
+      victim\AppData\Roaming\MicrosoftEdge\update_helper.exe
+      + Path: C:\\Users\\win10-
+      victim\\AppData\\Roaming\\MicrosoftEdge\\update_helper.ex
+      e
+      + Hash:
+      275a021bbfb6489e54d471899f 7db9d1663fc695ec2fe2a2c4538aab
+      f651fdof
+      4 VirusTotal
+      Target: file hash /
+      275a021bbfb6489e54d471899f 7db9d1663f c695ec2fe2a2c4538aabt
+      651fdof
+      + Result: 65 malicious / © suspicious
+      i Rue
+      + 1D: 554
+      + Description: EICAR test file detected - known malware hash
+      Wazuh > VirusTotal > Shuffle > Email/TheHive
+
+25. telegram_nmap_alert.png : Telegram alert for the Nmap scan scenario. It shows CRITICAL severity, SOC score 15, case ID, agent victim-01 at 192.168.122.180, rule 4000, Nmap port scan detected from 192.168.122.1, destination port/protocol/action, VirusTotal enrichment, and pipeline path Wazuh -> Pipeline Gateway -> VirusTotal -> Shuffle -> Telegram/Email -> TheHive.
+    Safe figs filename: telegram_nmap_alert.png
+    Suggested placement: Appendix A - Nmap Port Scan Detection and Response
+    Status: EXTRA / APPENDIX A
+    Notes: Use for Appendix A, not for a current Chapter 4 placeholder.
+    OCR text (best effort):
+      eG SOCaaS Alert Bot
+      == / bot
+      Today
+      vy SOCaaS Alert @ Severity + Level: CRITICAL + SOC Score:
+      15 + Case ID: S0c-20260512- 194334 -4000-1778615010. 746383
+      eq Agent - Name: victim-01 + IP: 192.168.122.180 + ID: 001
+      rt Rule - ID: 4000 + Wazuh Level: 12 + Description: Nmap port
+      scan detected from 192.168.122.1 @ Observables - Source IP:
+      192.168.122.1 * Destination IP: 192.168.122.180 * Source
+      Port: 52684 + Destination Port: 110 + Protocol: Tcp + Action: UFw
+      BLOCK * Domain: Unknown 4 VirusTotal - Enabled: True +
+      Malicious: 0 + Suspicious: © {B Alert - Alert ID:
+      1778615010. 746383 * Source: wazuh + Location:
+      /var/log/syslog * Manager: socaas-wazuh-manager-0 Wazuh
+      > Pipeline Gateway > VirusTotal > Shuffle > Telegram/Email >
+      TheHive
+
+26. thehive cases full.png : TheHive cases list/dashboard showing multiple SOCaaS cases, including CRITICAL malware and scan cases, tags, tasks, observables, TTPs, linked alerts, and dates. It demonstrates that cases are being created and tracked in TheHive.
+    Safe figs filename: thehive_cases_dashboard.png
+    Suggested placement: Section 4.4 - fig:ch4-thehive-dashboard
+    Status: GOOD MATCH / PARTIAL
+    Notes: Good for a TheHive dashboard/case-list figure.
+    OCR text (best effort):
+      eS @>
+      Ss Status Severity: #Number + Title E Details Assignee | Dates S.> C., U.
+      oO #335 - [SOCaaS][CRITICAL][malware] Tasks ° S. 15/05/2026 14:10 (=
+      = nN wes 060 Rule 554 - DESKTOP-2CA1I07 Observables 0 & sjosjaoxe 1410
+      { ostio-192.268.1221 {| rute-554 tps 5
+      PS © [ hesh-275e021bomodesesaas7s89017 Linked Alerts
+      [lecttiehash [tocans v
+      = None
+      oO #334 - [SOCaaS][CRITICAL][scan] Rule Tasks ° S. 15/05/2026 14:07 (=
+      a ‘ wee 8718 viet OF} Observables ° . 15/05/2026 14:07
+      oy H oe-scn. | ostp-152.:08:322160 tps 5
+      Pe) [[estiat rute-s7ie f arteitea V Linked Alerts
+      = None
+      Q Task o
+      (@ #21 - [socaasyjtow] asks . 15/05/2026 01:29 &
+      Toman {windows_event] Rule 503 - Observables °
+      ~ DESKTOP-2CA1J07 c, 15/05/2026 01:29
+      a TTPs o
+      CS) Linked Alerts o
+      (a (EE ~
+      = None
+      B #319 - [SOCaaS][LOW]|[generic] Rule Tasks ° S. 15/05/2026 01:05 (=
+      —— 503 - DESKTOP-2CALIO7 Observables ° . 15/05/2026 01:08
+      oy Worse [tesa tps 5
+      [tvpe-ceneric | soceas | ow v Linked Alerts 0
+      = None
+      B #313 - [SOCaaS][LOW][auth] Rule Tasks ° S. 15/05/2026 00:34 &
+      es 60106 - DESKTOP-2CA1J07 Observables 0 &.sjos)2026 00-34
+      [ ster-type-autn [ user-svSTEM tps 5
+      © [ aisuccess [ user-context [ socees Linked Alerts
+      = None
+
+27. thehive malware case.png : Detailed TheHive malware case for [SOCaaS][CRITICAL][malware] Rule 554 - DESKTOP-2CA1J07. It includes case ID, severity, SOC score, alert type, agent name/IP/ID, Wazuh rule details, EICAR test-file detection, malware file path/hash, network observables, VirusTotal results, metadata, and recommended analyst actions.
+    Safe figs filename: thehive_malware_case_detail.png
+    Suggested placement: Section 4.4 - fig:ch4-created-thehive-case; partial for Section 4.7 analyst recommendations
+    Status: GOOD MATCH
+    Notes: This is the strongest Created TheHive Case screenshot. It does not clearly show a sandbox PDF attachment, so do not use it as fig:ch4-thehive-sandbox-report unless you update the caption.
+    OCR text (best effort):
+      > [SOCaaS][CRITICAL][malware] Rule 554 - DESKTOP-2CA1J07 ®
+      @) ® id ~82153504 © General = Tasks (0) — @ Observables (0) @ TTPs (0)
+      SOCaaS Shuffle Integratio ‘Tags
+      & created by © {[estip-192.108.1221 | rute-s54
+      {[ hash-275a021bbt0489e54d47189917... || loc-file-hash
+      ae Gxrias ERS aAD [toc-ans ff crticat | virustotal-tookup
+      [ domain-www.virustotalcom || srcip-192.168.122.98
+      ( wezun | foc-comain | type-matware {| al-faited
+      2 {[soceas ff toc-urt || al-recommended-actions shuffle
+      [ ster-typemownare
+      = Assignee Description
+      SOCaaS Shuffle Integration
+      8 @ SOCaaS Security Alert
+      Status D Case
+      « Case ID: SOC-20260515-130851-554-eicar-malware-
+      la @ New
+      1778807852
+      Q__ Start date . Severity CRITICAL
+      . core: 21
+      45/05/2026 14:10 « Alert Type: malware
+      a |, - m= Agent
+      jasks completion « Name: DESKTOP-2CAJ07
+      No tasks # IP: 192.168.122.98
+      Contributors +10: 002
+      Rule
+      «1D: 554
+      « Wazuh Level: 12
+      « Description: EICAR test file detected - known malware
+      hash
+      Malware / Endpoint Observables
+      «File Name: C:\Users\win10-
+      victim\AppData\Roaming\MicrosoftEdge\update_helper.exe
+      « File Path: C:\Users\win10-
+      victim\AppData\Roaming\MicrosoftEdge\update_helper.exe
+      «File Hash:
+      275a021bbfb6489e54d47 189917 db9d1663fc695ec2fe2a2c45:
+      @ Related Network Observables
+      « Source IP: 192.168.122.98
+      « Destination IP: 192.168.1221
+      « Domain: www.virustotal.com
+      URL:
+      https:/wwvirustotal.com/guiffile/275a021bbfb6489e54d
+      « DNS Query: www.virustotal.com
+      7 VirusTotal
+      « Malicious: 65
+      # Suspicious: 0
+      «Harmless: 59
+      « Undetected: 2
+      B Alert Metadata
+      « Alert ID: eicar-malware-1778807852
+      «Source: wazuh
+      ‘% Recommended Analyst Actions
+      @) + Review the Wazuh alert manually because Al
+      generation failed or returned an incomplete response.
+      sont ® + Validate the affected asset, rule description, alert type,
+      and observable fields.
+
+28. thehive pods.png : Terminal output of kubectl get pods -n socaas-thehive with custom columns. It shows socaas-cassandra-0, socaas-minio-0, socaas-thehive, and socaas-thehive-elasticsearch-0 running with pod IPs.
+    Safe figs filename: thehive_pods.png
+    Suggested placement: Section 4.4 - fig:ch4-thehive-pods; partial for fig:ch4-elasticsearch-backend
+    Status: GOOD MATCH / PARTIAL
+    Notes: Good for TheHive Pods Running. For Elasticsearch Backend Status, a curl/_cluster/health or backend status screenshot would be stronger.
+    OCR text (best effort):
+      @ > & /srv/socaas > on & B main 79 at kubernetes—admin@kubernetes @ ¢ at 04:29:38 PM ©
+      > kubectl get pods -n socaas-thehive \
+      -o custom-columns='NAME: .metadata.name, READY: .status.containerStatuses [*]. ready, STATUS: .status. phase, RESTARTS
+      . status. containerStatuses [*].restartCount,AGE:.metadata.creationTimestamp,IP:.status.podIP
+      NAME READY STATUS RESTARTS AGE IP
+      socaas-cassandra-0 true Running 17 2026-05-03T18:51:26Z 10.244.126.13
+      socaas-minio-O true Running 17 2026-05-03T18:51:26Z 10.244.126.46
+      socaas-thehive-95bc7cc99-r56jd true Running 11 2026-05-08T16:05:05Z 10.244.126.59
+      socaas-thehive-elasticsearch-@ true Running 17 2026-05-03T18:51:26Z 10.244.126.2
+
+29. thehive_case_nmap.png : TheHive case list entry for a CRITICAL Rule 4000 Nmap/scan case associated with victim-01. It includes tags such as critical, srcip-192.168.122.1, rule-4000, and wazuh.
+    Safe figs filename: thehive_nmap_case_entry.png
+    Suggested placement: Appendix A - Nmap Port Scan Detection and Response
+    Status: EXTRA / APPENDIX A
+    Notes: Use for Appendix A Nmap case evidence.
+    OCR text (best effort):
+      Ss. Status Severity | #Number + Title
+      oO #214 - [SOCaaS][CRITICAL] Rule 4000 - friend-victim-01
+      & ae gg | ostin-192:108:122.20 [critical srcip-192.168.122.1 [ rute-4000_ | wazuh
+      eo = None
+
+30. virsh list --all.png : Terminal output of virsh list --all showing running KVM/libvirt VMs: k8s-worker2, k8s-master, k8s-worker1, win10-victim, and victim-01.
+    Safe figs filename: virsh_list_all_running_lab_vms.png
+    Suggested placement: Optional Section 4.2/4.3 lab infrastructure evidence; no direct ch4.tex placeholder
+    Status: EXTRA / OPTIONAL
+    Notes: Useful if you add a figure proving the lab VM inventory.
+    OCR text (best effort):
+      @ > & /srv/socaas > on ® P main !1 217
+      > virsh List all
+      Id Name State
+      1 -k8s-worker2 running
+      2 k8s-master running
+      3 k8s-workerl — running
+      5 winl@-vicitm running
+      6 victim-01 running
+
+31. wazuh dashboard.png : Wazuh dashboard Endpoints view showing agent coverage and active agents. It lists Windows and Linux agents such as DESKTOP-2CA1J07, victim-01, friend-victim-01, and DESKTOP-2CB1H09 with IP addresses, operating systems, Wazuh version, and active status.
+    Safe figs filename: wazuh_dashboard_agents.png
+    Suggested placement: Section 4.4 - fig:ch4-wazuh-dashboard and fig:ch4-wazuh-agent-status
+    Status: GOOD MATCH
+    Notes: Can cover both Wazuh Dashboard and Wazuh Agent Status if the caption is written carefully.
+    OCR text (best effort):
+      = OW. | Endpoints ® ®
+      status DETAILS EVOLUTION
+      Last 20 days V
+      4 © cisconnected
+      Active (4)
+      © Aatve Active Disconnected Pending Never connected Agents coverage 5 @ scive
+      © Disconnected (0) 4 0 0 0 100.00% E. © pending
+      © Pending (0) a
+      © Never connected (0) Lastenrolied agent Most acive agent © © seeeoe2c000. 202005109900
+      friend-victim-01 DESKTOP-2CA1J07 timestamp per 3 hours
+      Agents (3) @® Deploy new agent © Refresh ch Export formatted gS
+      1D Name IP address Group(s) Operating system Clusternode Version Status Actions
+      001 DESKTOP-2CA107 192.168.122.908 defaut| | Microsoft Windows 10 Home 10.0.19046.3803 nodeot vae.2 eacive © e%
+      002 victim-o1 192.168.122.180 etaut | QQ Ubuntu 22.045 LTS nodeot v4.2 @ acive @ @&
+      003 tiend-vict-01 192.168.122.20 etaut | QQ Ubuntu 22.045 LTS nodeot v4.2 @ acive @ @&
+      004‘ DESKTOP-2CB1H09 192.168.122.113 defaut |_| Microsoft Windows 10 Pro nodeot vae.2 eacive © e%
+
+32. wazuh pods.png : Terminal output of kubectl get pods -n socaas-siem with custom columns. It shows socaas-wazuh-dashboard, socaas-wazuh-indexer-0, and socaas-wazuh-manager-0 running, including readiness, restarts, timestamps, and pod IPs.
+    Safe figs filename: wazuh_pods.png
+    Suggested placement: Section 4.4 - fig:ch4-wazuh-pods
+    Status: GOOD MATCH
+    Notes: Preferred Wazuh pods figure.
+    OCR text (best effort):
+      @ > = /srv/socaas > on & B main 78 at kubernetes—admin@kubernetes @ ¢ at 04:28:11 PM ©
+      > kubectl get pods -n socaas-siem \
+      -o custom-columns='NAME: .metadata.name, READY: .status.containerStatuses [*].ready,STATUS:.status.phase, RESTARTS:
+      . status. containerStatuses [*].restartCount,AGE:.metadata.creationTimestamp,IP:.status.podIP
+      NAME READY STATUS RESTARTS AGE IP
+      socaas—wazuh-dashboard-8648cd5457-r2bf5 true Running 16 2026-05-04T14:19:59Z 10.244.194.83
+      socaas-wazuh-indexer-0 true Running 17 2026-05-03T18:51:26Z 10.244.194.89
+      socaas—wazuh-manager-0 true, true Running 7,7 2026-05-13T13:58:13Z 10.244.194.87
+
+====================================================================================================
+C) Missing or weak screenshots/figures you should provide for Chapter 4
+====================================================================================================
+Kubernetes deployment evidence:
+  - containerd runtime version: command such as containerd --version or dpkg -l | grep containerd.
+  - Kubernetes packages installed: kubeadm, kubelet, kubectl at v1.28.15.
+  - kubeadm init success on k8s-master.
+  - Calico pods running.
+  - optional stronger worker-join evidence: actual kubeadm join output, not only kubectl get nodes.
+
+Pipeline Gateway evidence:
+  - Pipeline Gateway pod AND service in socaas-soar namespace; current shuffle pods.png shows the pod but not the service.
+  - Pipeline Gateway health check response.
+  - Sample normalized alert JSON/output after extraction and normalization.
+  - Deduplication evidence showing repeated alerts suppressed by the 300-second TTL cache.
+
+Shuffle and TheHive evidence:
+  - Shuffle dashboard/home/workflow-management screenshot; current screenshots show workflow canvas and run status only.
+  - Larger Shuffle workflow execution details screenshot if possible.
+  - Elasticsearch backend health/status for TheHive; current thehive pods.png only proves the Elasticsearch pod is running.
+
+Helm chart evidence:
+  - Helm chart structure screenshot showing Chart.yaml, values.yaml, values-multinode.yaml, and templates/.
+  - Templates folder screenshot showing namespaces.yaml, networkpolicies.yaml, pipeline.yaml, shuffle.yaml, thehive.yaml, wazuh.yaml, etc.
+  - Successful helm install/upgrade/status output for the socaas chart.
+
+High-level pipeline diagram:
+  - End-to-end SOCaaS detection and response pipeline diagram: victim endpoint -> Wazuh -> Alert Forwarder -> Pipeline Gateway -> Shuffle -> Telegram/email -> TheHive -> optional AI Sandbox.
+
+AI Sandbox report evidence:
+  - Generated PDF report first page.
+  - TheHive case showing the sandbox report attached or referenced.
+  - Static analysis summary section from the report.
+  - Reversed logic / pseudocode section from the report.
+  - IOC extraction section from the report.
+  - Analyst recommendations section from the report.
+  - PDF report preview showing multiple pages or the final five-page report.
+
+====================================================================================================
+D) Duplicates and appendix-only screenshots
+====================================================================================================
+- Duplicates/alternates: malware telegram notification.png and telegram malware notification.png are effectively the same; use one.
+- Duplicates/alternates: malware case.png and thehive malware case.png both show the malware TheHive case; use the clearer one.
+- Duplicates/alternates: kubectl pods.png and wazuh pods.png both support Wazuh pod status; prefer wazuh pods.png.
+- Similar evidence: exfil server path.png and nc_result_aisandbox.png both show netcat exfiltration results; use one unless the appendix needs both.
+- Appendix A candidates: nmap_scan_cli.png, telegram_nmap_alert.png, thehive_case_nmap.png.
+- Malware scenario appendix candidates: fake_website_on_the_vm_victim.png, download the malware.png, run the malware.png, exfil server path.png, nc_result_aisandbox.png.
+- Optional/tooling evidence: hexstrike_server_mcp.png, virsh list --all.png, kubectl namespace.png, golden vm.png, sandbox-vm.png.
+
+====================================================================================================
+E) Suggested LaTeX usage note
+====================================================================================================
+Because many original filenames contain spaces, punctuation, or typos, use the safe filenames from the figs-ready zip when possible. Example:
+  \includegraphics[width=0.82\textwidth]{figs/wazuh_pods.png}
+Instead of:
+  \includegraphics[width=0.82\textwidth]{figs/wazuh pods.png}

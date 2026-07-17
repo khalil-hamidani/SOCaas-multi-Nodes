@@ -1,0 +1,157 @@
+% ========== ENCODING AND FONTS ==========
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{comment}
+
+% ========== GEOMETRY (MARGINS) ==========
+\usepackage{geometry}
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm}
+
+% ========== MATH AND SYMBOLS ==========
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ========== GRAPHICS AND COLORS ==========
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{pdfpages}
+
+% ========== TABLES ==========
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+
+% ========== LISTS ==========
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=0.2em, leftmargin=1.5em, label={---}}
+\setlist[enumerate]{itemsep=0.2em, leftmargin=1.5em}
+
+% ========== LAYOUT ENHANCEMENT ==========
+\usepackage{adjustbox}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{indentfirst}
+
+% ========== FLOATS ==========
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{xurl}
+\usepackage{listings}
+
+% ========== HYPERLINKS ==========
+\usepackage[
+    colorlinks=true,
+    linkcolor=black!70,
+    citecolor=gray!70!black,
+    urlcolor=blue!70!black,
+    bookmarks=true,
+    bookmarksnumbered=true,
+    unicode=true,
+    pdftitle={Master Thesis - SOCaaS},
+    pdfauthor={Hamidani Khalil \& Zendagui Nazim}
+]{hyperref}
+
+% ========== CUSTOM COLORS ==========
+\definecolor{tableheader}{RGB}{220,230,242}
+\definecolor{codebackground}{RGB}{248,248,248}
+\definecolor{codecomment}{RGB}{90,110,90}
+\definecolor{codekeyword}{RGB}{30,70,150}
+\definecolor{codestring}{RGB}{150,60,40}
+
+% ========== CODE LISTINGS ==========
+\lstdefinestyle{socaaspython}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{codekeyword}\bfseries,
+    stringstyle=\color{codestring},
+    commentstyle=\color{codecomment}\itshape,
+    backgroundcolor=\color{codebackground},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{black!30},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b
+}
+
+% ========== LINE SPACING ==========
+\onehalfspacing
+
+% ========== PARAGRAPH SETTINGS ==========
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0.8\baselineskip}
+
+% ========== TABLE OF CONTENTS STYLING ==========
+\usepackage{tocloft}
+
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\listfigurename}{List of Figures}
+\renewcommand{\listtablename}{List of Tables}
+
+\setlength{\cftbeforesecskip}{2pt}
+\setlength{\cftbeforesubsecskip}{1pt}
+\renewcommand{\cftsecfont}{\normalfont}
+\renewcommand{\cftsubsecfont}{\normalfont}
+\renewcommand{\cftsecpagefont}{\normalfont}
+\renewcommand{\cftsubsecpagefont}{\normalfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
+
+\setlength{\cftsecindent}{0pt}
+\setlength{\cftsubsecindent}{1.5em}
+\setlength{\cftsubsubsecindent}{3em}
+
+% ========== HEADER/FOOTER - LEFT, UPPERCASE, ITALIC, SMALL ==========
+\pagestyle{fancy}
+\fancyhf{}
+
+% Header: LEFT side, small font, italic, UPPERCASE
+\fancyhead[L]{\small\itshape\MakeUppercase{\leftmark}}
+\fancyhead[R]{}
+
+% Footer: Page number at bottom center
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+% Plain style for chapter first pages (no header, only page number)
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+% Force chapter pages to use plain style
+\makeatletter
+\let\oldchapter\chapter
+\def\chapter{\@ifstar{\starchapter}{\@ifnextchar[{\atchapter}{\schapter}}}
+\def\starchapter#1{\oldchapter*{#1}\thispagestyle{plain}}
+\def\atchapter[#1]#2{\oldchapter[#1]{#2}\thispagestyle{plain}}
+\def\schapter#1{\oldchapter{#1}\thispagestyle{plain}}
+\makeatother
+
+% ========== TITLE FORMATTING ==========
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-20pt}{40pt}
+
+\titleformat{\section}
+{\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}

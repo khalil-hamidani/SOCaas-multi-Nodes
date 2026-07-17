@@ -1,0 +1,7 @@
+Listening on 0.0.0.0 4444
+Connection received on 192.168.122.1 52366
+FILE:./passwords.txt
+nazim
+khalil
+
+

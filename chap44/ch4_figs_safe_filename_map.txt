@@ -1,0 +1,33 @@
+original_filename	safe_figs_filename	status	suggested_placement
+SOCaaS Kubernetes Cluster Architecture.png	socaas_kubernetes_cluster_architecture.png	GOOD MATCH	Section 4.2 - fig:ch4-socaas-kubernetes-cluster
+after opencode run.png	ai_sandbox_after_opencode_run.png	PARTIAL MATCH	Section 4.8 or 4.9 - fig:ch4-sandbox-request; partial for fig:ch4-sandbox-sample-submission
+ai-sandbox-wokflow.png	ai_sandbox_workflow.png	GOOD MATCH	Section 4.8 - fig:ch4-ai-sandbox-architecture
+before opencode run.png	ai_sandbox_before_opencode_run.png	PARTIAL MATCH	Section 4.8 - partial evidence for fig:ch4-sandbox-lifecycle
+deleted files wazuh.png	wazuh_deleted_files_fim_dashboard.png	PARTIAL MATCH	Section 4.4 - fig:ch4-wazuh-alerts, or appendix evidence for Wazuh FIM validation
+download the malware.png	victim_download_malware.png	EXTRA / APPENDIX	Appendix or Section 4.10 malware validation evidence; no direct ch4.tex placeholder
+exfil server path.png	exfil_server_path_listener.png	PARTIAL MATCH / APPENDIX	Section 4.9 - partial evidence for fig:ch4-ioc-extraction, or Appendix C malware behavior evidence
+fake_website_on_the_vm_victim.png	victim_fake_website_chatgpt_pro.png	EXTRA / APPENDIX	Appendix or Section 4.10 malware validation evidence; no direct ch4.tex placeholder
+final shuffle workflow.png	shuffle_final_workflow_canvas.png	GOOD MATCH	Section 4.4 - fig:ch4-shuffle-workflow-canvas
+golden vm.png	sandbox_golden_vm_vmm.png	PARTIAL MATCH	Section 4.8 - partial evidence for fig:ch4-sandbox-lifecycle
+hexstrike_server_mcp.png	hexstrike_server_mcp.png	EXTRA / APPENDIX	Appendix/tooling evidence; no direct ch4.tex placeholder
+kubectl namespace.png	kubectl_get_namespaces_socaas.png	EXTRA / OPTIONAL	Optional Section 4.3 deployment evidence; no direct ch4.tex placeholder
+kubectl pods.png	kubectl_wazuh_pods_wide.png	DUPLICATE / ALTERNATE	Section 4.4 - alternate for fig:ch4-wazuh-pods
+kubextl get nodes .png	kubectl_get_nodes.png	GOOD MATCH	Section 4.3 - fig:ch4-cluster-status; partial for fig:ch4-worker-join
+malware case.png	thehive_malware_case_wide.png	DUPLICATE / GOOD MATCH	Section 4.4 - alternate for fig:ch4-created-thehive-case; possible malware validation evidence
+malware telegram notification.png	telegram_malware_notification_a.png	DUPLICATE / EXTRA	Section 4.7 AI triage evidence or Appendix malware validation; no direct ch4.tex placeholder
+nc_result_aisandbox.png	ai_sandbox_nc_exfil_result.png	PARTIAL MATCH / APPENDIX	Section 4.9 - partial evidence for fig:ch4-ioc-extraction, or Appendix C malware behavior evidence
+nmap_scan_cli.png	nmap_scan_cli.png	EXTRA / APPENDIX A	Appendix A - Nmap Port Scan Detection and Response
+reports.png	ai_sandbox_reports_artifacts_tree.png	PARTIAL MATCH	Section 4.9 - partial for fig:ch4-pdf-report-preview or fig:ch4-static-analysis-summary
+run the malware.png	victim_run_malware_warning.png	EXTRA / APPENDIX	Appendix or Section 4.10 malware validation evidence; no direct ch4.tex placeholder
+sandbox-vm.png	virsh_sandbox_vms_shutoff.png	PARTIAL MATCH	Section 4.8 - partial evidence for fig:ch4-sandbox-lifecycle
+shuffle pods.png	shuffle_pods_pipeline_gateway.png	GOOD MATCH / PARTIAL	Section 4.4 - fig:ch4-shuffle-pods; partial for fig:ch4-pipeline-pod-service
+suffle_run.png	shuffle_workflow_run.png	GOOD MATCH / PARTIAL	Section 4.4 - fig:ch4-shuffle-execution
+telegram malware notification.png	telegram_malware_notification_b.png	DUPLICATE / EXTRA	Section 4.7 AI triage evidence or Appendix malware validation; no direct ch4.tex placeholder
+telegram_nmap_alert.png	telegram_nmap_alert.png	EXTRA / APPENDIX A	Appendix A - Nmap Port Scan Detection and Response
+thehive cases full.png	thehive_cases_dashboard.png	GOOD MATCH / PARTIAL	Section 4.4 - fig:ch4-thehive-dashboard
+thehive malware case.png	thehive_malware_case_detail.png	GOOD MATCH	Section 4.4 - fig:ch4-created-thehive-case; partial for Section 4.7 analyst recommendations
+thehive pods.png	thehive_pods.png	GOOD MATCH / PARTIAL	Section 4.4 - fig:ch4-thehive-pods; partial for fig:ch4-elasticsearch-backend
+thehive_case_nmap.png	thehive_nmap_case_entry.png	EXTRA / APPENDIX A	Appendix A - Nmap Port Scan Detection and Response
+virsh list --all.png	virsh_list_all_running_lab_vms.png	EXTRA / OPTIONAL	Optional Section 4.2/4.3 lab infrastructure evidence; no direct ch4.tex placeholder
+wazuh dashboard.png	wazuh_dashboard_agents.png	GOOD MATCH	Section 4.4 - fig:ch4-wazuh-dashboard and fig:ch4-wazuh-agent-status
+wazuh pods.png	wazuh_pods.png	GOOD MATCH	Section 4.4 - fig:ch4-wazuh-pods

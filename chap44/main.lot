@@ -1,0 +1,21 @@
+\babel@toc {english}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces MITRE ATT\&CK VS Cyber Kill Chain}}{18}{table.2.1}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Alert Criticality Levels}}{20}{table.2.2}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Comparison between Event, Alert, and Incident}}{21}{table.2.3}%
+\contentsline {table}{\numberline {2.4}{\ignorespaces Roles and Responsibilities of the SOC Human Component}}{23}{table.2.4}%
+\contentsline {table}{\numberline {2.5}{\ignorespaces Comparison between SIEM, SOAR, and XDR}}{27}{table.2.5}%
+\contentsline {table}{\numberline {2.6}{\ignorespaces Comparison between IDS and IPS}}{29}{table.2.6}%
+\contentsline {table}{\numberline {2.7}{\ignorespaces Comparison between SOCaaS and Internal SOC}}{32}{table.2.7}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Tool Selection Criteria}}{35}{table.3.1}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Comparison between Different SIEMs}}{40}{table.3.2}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces SOCaaS Kubernetes Cluster Components}}{53}{table.4.1}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces SOCaaS Wazuh Alert Triage Workflow}}{59}{table.4.2}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Evaluation of SOCaaS Implementation Results}}{78}{table.4.3}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

@@ -1,0 +1,174 @@
+#!/bin/bash
+# SOCaaS Sandbox Runner - MVP
+# Usage: socaas-sandbox-run --sample <file> --case-id <id> [--out-dir <dir>]
+
+set -euo pipefail
+
+# === Defaults ===
+SAMPLE=""
+CASE_ID=""
+OUT_DIR="/srv/socaas/Ai-sandbox/reports"
+GOLDEN_DISK="/var/lib/libvirt/images/socaas-sandbox/SANDBOX-VM-Golden.qcow2"
+DISK_DIR="/var/lib/libvirt/images/socaas-sandbox"
+SSH_KEY="$HOME/.ssh/id_ed25519"
+VM_USER="k8s-user"
+VM_IP=""
+VM_NAME=""
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+RUN_ID=""
+
+# === Parse args ===
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --sample) SAMPLE="$2"; shift 2 ;;
+    --case-id) CASE_ID="$2"; shift 2 ;;
+    --out-dir) OUT_DIR="$2"; shift 2 ;;
+    *) echo "Unknown arg: $1"; exit 1 ;;
+  esac
+done
+
+# === Validate ===
+if [ -z "$SAMPLE" ] || [ ! -f "$SAMPLE" ]; then
+  echo '{"status":"error","error":"sample not found"}' 
+  exit 1
+fi
+if [ -z "$CASE_ID" ]; then
+  echo '{"status":"error","error":"case-id required"}'
+  exit 1
+fi
+
+SAMPLE_SHA256=$(sha256sum "$SAMPLE" | awk '{print $1}')
+RUN_ID="sandbox-${CASE_ID}-${TIMESTAMP}"
+VM_NAME="$RUN_ID"
+VM_DISK="${DISK_DIR}/${VM_NAME}.qcow2"
+VM_MAC="52:54:00$(openssl rand -hex 3 | sed 's/\(..\)/:\1/g')"
+VM_UUID=$(uuidgen)
+REPORT_DIR="${OUT_DIR}/${CASE_ID}"
+RUN_DIR="${REPORT_DIR}/${RUN_ID}"
+
+echo "=== SOCaaS Sandbox Run ==="
+echo "Case: $CASE_ID"
+echo "Run:  $RUN_ID"
+echo "Hash: $SAMPLE_SHA256"
+
+# === Cleanup function (called manually or on error) ===
+cleanup() {
+  echo "--- Cleanup ---"
+  virsh destroy "$VM_NAME" 2>/dev/null || true
+  virsh undefine "$VM_NAME" --nvram 2>/dev/null || true
+  sudo rm -f "$VM_DISK" 2>/dev/null || true
+  echo '{"vm_destroyed":true,"vm_undefined":true,"disk_deleted":true}'
+}
+# Only cleanup on script error (set -e), not on normal exit
+trap 'cleanup' ERR
+
+# === Create linked clone ===
+echo "Creating linked clone..."
+sudo qemu-img create -f qcow2 -F qcow2 -b "$GOLDEN_DISK" "$VM_DISK" 2>/dev/null
+sudo chown libvirt-qemu:libvirt-qemu "$VM_DISK" 2>/dev/null
+
+# === Build VM XML ===
+XML_TMP="/tmp/${VM_NAME}.xml"
+cp /srv/socaas/Ai-sandbox/templates/sandbox-vm.xml "$XML_TMP"
+sed -i "s|{{VM_NAME}}|$VM_NAME|g" "$XML_TMP"
+sed -i "s|{{VM_UUID}}|$VM_UUID|g" "$XML_TMP"
+sed -i "s|{{VM_DISK}}|$VM_DISK|g" "$XML_TMP"
+sed -i "s|{{VM_MAC}}|$VM_MAC|g" "$XML_TMP"
+
+# === Boot VM ===
+echo "Starting VM..."
+virsh define "$XML_TMP" 2>/dev/null
+virsh start "$VM_NAME" 2>/dev/null
+
+# === Wait for IP (up to 180s) ===
+echo "Waiting for IP..."
+for i in $(seq 1 36); do
+  VM_IP=$(virsh domifaddr "$VM_NAME" --source agent 2>/dev/null | grep -oP '\d+\.\d+\.\d+\.\d+' | head -1 || true)
+  if [ -z "$VM_IP" ]; then
+    VM_IP=$(cat /var/lib/libvirt/dnsmasq/virbr-sandbox.status 2>/dev/null | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+for x in data:
+    if x.get('mac-address','').lower() == '${VM_MAC}'.lower():
+        print(x['ip-address'])
+        break
+" 2>/dev/null)
+  fi
+  if [ -n "$VM_IP" ]; then
+    echo "IP: $VM_IP (${i}x5s)"
+    break
+  fi
+  sleep 5
+done
+
+if [ -z "$VM_IP" ]; then
+  echo '{"status":"error","error":"VM did not get IP"}'
+  exit 1
+fi
+
+# === Add temp NAT for SCP ===
+IFACE=$(ip route | grep default | awk '{print $5}')
+sudo iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o "$IFACE" -j MASQUERADE 2>/dev/null || true
+sudo iptables -I FORWARD -s 192.168.200.0/24 -j ACCEPT 2>/dev/null || true
+sudo iptables -I FORWARD -d 192.168.200.0/24 -j ACCEPT 2>/dev/null || true
+
+# Wait for SSH
+echo "Waiting for SSH..."
+for i in $(seq 1 24); do
+  if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=3 -i "$SSH_KEY" "$VM_USER@$VM_IP" 'hostname' 2>/dev/null; then
+    break
+  fi
+  sleep 5
+done
+
+# === Fix VM networking ===
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$SSH_KEY" "$VM_USER@$VM_IP" \
+  'echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
+   sudo ip route replace default via 192.168.200.1 2>/dev/null || true
+   echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts' 2>/dev/null
+
+# === SCP sample to VM ===
+echo "Uploading sample..."
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$SSH_KEY" \
+  "$SAMPLE" "$VM_USER@$VM_IP:/sandbox/in/sample.bin" 2>/dev/null
+
+# === AI Analysis (manual for MVP — AI agent runs this) ===
+echo ""
+echo "=== SAMPLE READY ==="
+echo "Sample uploaded to VM at /sandbox/in/sample.bin"
+echo "VM IP: $VM_IP"
+echo "Run ID: $RUN_ID"
+echo ""
+echo "AI agent: SSH into the VM and run analysis, then call cleanup."
+echo ""
+echo "ssh -i $SSH_KEY $VM_USER@$VM_IP"
+echo ""
+echo "Sandbox dirs: /sandbox/in /sandbox/out /sandbox/tools"
+echo "Available tools: strings file sha256sum xxd objdump"
+echo ""
+echo "After analysis, collect results from /sandbox/out/<run_id>/"
+echo "Then call: virsh destroy $VM_NAME"
+echo ""
+echo "=== SAMPLE INFO ==="
+echo "File: $SAMPLE"
+echo "SHA256: $SAMPLE_SHA256"
+
+# Output JSON for automation
+cat <<JSON
+{
+  "status": "ready",
+  "case_id": "$CASE_ID",
+  "run_id": "$RUN_ID",
+  "sample_sha256": "$SAMPLE_SHA256",
+  "vm_name": "$VM_NAME",
+  "vm_ip": "$VM_IP",
+  "vm_user": "$VM_USER",
+  "sample_path_vm": "/sandbox/in/sample.bin",
+  "report_dir": "$RUN_DIR",
+  "cleanup_cmd": "/srv/socaas/Ai-sandbox/bin/cleanup_sandbox_vm.sh $VM_NAME"
+}
+JSON
+
+echo ""
+echo "VM will stay alive until you run:"
+echo "  /srv/socaas/Ai-sandbox/bin/cleanup_sandbox_vm.sh $VM_NAME"

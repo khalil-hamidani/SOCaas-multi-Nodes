@@ -1,0 +1,2 @@
+                with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+            matches.append((filepath, content))

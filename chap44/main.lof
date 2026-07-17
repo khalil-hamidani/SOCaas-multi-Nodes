@@ -1,0 +1,55 @@
+\babel@toc {english}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces General Organization Chart of Algérie Telecom}}{5}{figure.1.1}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Organization Chart of the Information Systems Division}}{6}{figure.1.2}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Threat Modeling}}{13}{figure.2.1}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Cyber Kill Chain}}{16}{figure.2.2}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces MITRE ATT\&CK Enterprise Matrix Tactics}}{17}{figure.2.3}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces IDS Location}}{28}{figure.2.4}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces IPS Location}}{29}{figure.2.5}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Kubernetes Architecture}}{38}{figure.3.1}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Wazuh Agent Architecture}}{41}{figure.3.2}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Wazuh Server Architecture}}{42}{figure.3.3}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Shuffle Architecture}}{43}{figure.3.4}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Apache Cassandra Architecture}}{46}{figure.3.5}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Elasticsearch Architecture}}{46}{figure.3.6}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces MinIO Object Storage Architecture}}{47}{figure.3.7}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Load Balancer Architecture}}{48}{figure.3.8}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces SOC Platform Operation}}{49}{figure.3.9}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces SOCaaS Kubernetes Cluster Architecture}}{54}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Installed Kubernetes Packages and Versions}}{55}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Kubernetes Cluster Status}}{55}{figure.4.3}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Wazuh Pods Running}}{56}{figure.4.4}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Wazuh Dashboard -- Endpoints}}{57}{figure.4.5}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Wazuh File Integrity Monitoring Alerts}}{57}{figure.4.6}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Pipeline Gateway Pod and Kubernetes Service}}{58}{figure.4.7}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Shuffle Pods Running}}{60}{figure.4.8}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Shuffle Dashboard and Application Workspace}}{60}{figure.4.9}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Shuffle Workflow Canvas}}{61}{figure.4.10}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Shuffle Workflow Runs Showing Successful SOCaaS Executions}}{61}{figure.4.11}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces TheHive Pods Running}}{62}{figure.4.12}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces TheHive Cases Dashboard}}{63}{figure.4.13}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Created TheHive Case}}{64}{figure.4.14}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces SOCaaS Helm Chart Directory Structure}}{65}{figure.4.15}%
+\contentsline {figure}{\numberline {4.16}{\ignorespaces SOCaaS Helm Templates Folder}}{66}{figure.4.16}%
+\contentsline {figure}{\numberline {4.17}{\ignorespaces Successful SOCaaS Helm Deployment}}{66}{figure.4.17}%
+\contentsline {figure}{\numberline {4.18}{\ignorespaces End-to-End SOCaaS Detection and Response Pipeline}}{67}{figure.4.18}%
+\contentsline {figure}{\numberline {4.19}{\ignorespaces Shuffle AI Recommended Actions Node Output}}{68}{figure.4.19}%
+\contentsline {figure}{\numberline {4.20}{\ignorespaces AI Recommended Analyst Actions for Data Exfiltration Alert}}{69}{figure.4.20}%
+\contentsline {figure}{\numberline {4.21}{\ignorespaces AI Sandbox Architecture}}{70}{figure.4.21}%
+\contentsline {figure}{\numberline {4.22}{\ignorespaces AI Sandbox Orchestrator Request}}{71}{figure.4.22}%
+\contentsline {figure}{\numberline {4.23}{\ignorespaces TheHive Malware Case with AI Recommended Actions}}{73}{figure.4.23}%
+\contentsline {figure}{\numberline {4.24}{\ignorespaces Static Analysis Artifacts}}{74}{figure.4.24}%
+\contentsline {figure}{\numberline {4.25}{\ignorespaces Observed IOC Behaviour -- Netcat Exfiltration Listener}}{74}{figure.4.25}%
+\contentsline {figure}{\numberline {4.26}{\ignorespaces Telegram Notification for Malware Detection}}{76}{figure.4.26}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Controlled Nmap Port Scan Command}}{81}{figure.A.1}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Telegram Notification for Nmap Port Scan Detection}}{82}{figure.A.2}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces TheHive Case Created for Nmap Port Scan Detection}}{82}{figure.A.3}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {B.1}{\ignorespaces AI Recommended Analyst Actions for C2 Beacon Detection}}{83}{figure.B.1}%
+\addvspace {10\p@ }

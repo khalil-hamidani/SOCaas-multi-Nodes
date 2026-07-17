@@ -1,0 +1,9 @@
+NMAP SCAN RESULTS
+=================
+T0: 2026-05-29T14:19:01.213Z (alert triggered)
+Gateway: forwarded_to_shuffle=True
+TheHive:  (check range 595-620)
+Scan IP: 10.99.55.209
+UFW BLOCK entries on victim: 10
+nmap scan: 999 filtered ports, 1 open (22/tcp)
+Block:    (check /var/log/socaas-block.log)

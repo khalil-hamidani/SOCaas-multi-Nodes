@@ -1,0 +1,1 @@
+-rwxrwxr-x 1 k8s-user k8s-user 1215 May 21  2026 /sandbox/in/sample.bin

@@ -1,0 +1,141 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{List of Tables}{vii}{section*.2}%
+\contentsline {chapter}{List of Figures}{viii}{section*.3}%
+\contentsline {chapter}{Acronyms}{x}{section*.4}%
+\contentsline {chapter}{\numberline {1}General Introduction}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {1}Presentation of the Host Organization: Algérie Télécom}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}History}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Missions and Objectives}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}General Organization Chart of Algérie Telecom}{4}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Presentation of the Host Structure}{5}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Presentation of the Supervised Structure (Information Systems Division)}{5}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Organization Chart of the Information Systems Division}{6}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Strategic Positioning and Prospects}{6}{subsection.1.4.3}%
+\contentsline {section}{\numberline {1.5}General Project Framework}{7}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Risk of the Absence of a SOC}{7}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}The Strategic Imperative : Digital Sovereignty and the Open-Source Mandate}{7}{subsection.1.5.2}%
+\contentsline {subsection}{\numberline {1.5.3}Envisioned Solution and Its Objectives}{9}{subsection.1.5.3}%
+\contentsline {section}{\numberline {1.6}Conclusion}{10}{section.1.6}%
+\contentsline {chapter}{\numberline {2}Generalities on the Security Operations Center}{12}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introduction}{12}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Generalities on Security}{12}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Objective of Information Systems Security}{12}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Vulnerability, Threat, and Risk}{13}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Computer Threats}{13}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Indicators of Compromise (IoC)}{14}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Tactics, Techniques, and Procedures (TTP)}{15}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.6}Cyber Kill Chain}{15}{subsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.2.7}MITRE ATT\&CK}{16}{subsection.2.2.7}%
+\contentsline {subsubsection}{MITRE ATT\&CK Tactics}{16}{subsubsection*.6}%
+\contentsline {subsubsection}{MITRE ATT\&CK Techniques}{17}{subsubsection*.7}%
+\contentsline {subsubsection}{Comparison between MITRE ATT\&CK and Cyber Kill Chain}{18}{subsubsection*.8}%
+\contentsline {section}{\numberline {2.3}Terminologies}{18}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Event}{18}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Logs}{18}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Alert}{19}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Incident}{20}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Comparison between Event, Alert, and Incident}{21}{subsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.3.6}Container}{21}{subsection.2.3.6}%
+\contentsline {section}{\numberline {2.4}Security Operations Center (SOC)}{21}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}SOC Activities}{22}{subsection.2.4.1}%
+\contentsline {subsubsection}{Preparation, Planning, and Prevention}{22}{subsubsection*.9}%
+\contentsline {subsubsection}{Monitoring, Detection, and Response}{22}{subsubsection*.10}%
+\contentsline {subsubsection}{Recovery, Improvement, and Compliance}{22}{subsubsection*.11}%
+\contentsline {subsection}{\numberline {2.4.2}SOC Components}{22}{subsection.2.4.2}%
+\contentsline {subsubsection}{People}{23}{subsubsection*.12}%
+\contentsline {subsubsection}{Processes}{23}{subsubsection*.13}%
+\contentsline {subsubsection}{Technologies}{23}{subsubsection*.14}%
+\contentsline {section}{\numberline {2.5}SOC Technologies and Tools}{24}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Security Information and Event Management (SIEM)}{24}{subsection.2.5.1}%
+\contentsline {subsubsection}{SIEM Functionalities}{24}{subsubsection*.15}%
+\contentsline {subsubsection}{SIEM Advantages}{24}{subsubsection*.16}%
+\contentsline {subsection}{\numberline {2.5.2}Security Orchestration, Automation and Response (SOAR)}{25}{subsection.2.5.2}%
+\contentsline {subsubsection}{SOAR Elements}{25}{subsubsection*.17}%
+\contentsline {subsubsection}{SOAR Advantages}{25}{subsubsection*.18}%
+\contentsline {subsubsection}{Relationship between SIEM and SOAR}{26}{subsubsection*.19}%
+\contentsline {subsection}{\numberline {2.5.3}Extended Detection and Response (XDR)}{26}{subsection.2.5.3}%
+\contentsline {subsubsection}{XDR Operation}{26}{subsubsection*.20}%
+\contentsline {subsubsection}{XDR Advantages}{26}{subsubsection*.21}%
+\contentsline {subsubsection}{Comparison between SIEM, SOAR, and XDR}{27}{subsubsection*.22}%
+\contentsline {subsection}{\numberline {2.5.4}Intrusion Detection System \& Intrusion Prevention System (IDS / IPS)}{27}{subsection.2.5.4}%
+\contentsline {subsubsection}{Intrusion Detection System (IDS)}{27}{subsubsection*.23}%
+\contentsline {subsubsection}{Intrusion Prevention System (IPS)}{28}{subsubsection*.24}%
+\contentsline {subsubsection}{Comparison between IDS and IPS}{29}{subsubsection*.25}%
+\contentsline {section}{\numberline {2.6}SOC Challenges}{29}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Alert Fatigue}{29}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Complexity of Environments}{30}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Cybersecurity Skills Shortage}{30}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Evolution of Threats and Sophisticated Attacks}{30}{subsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.6.5}Compliance and Regulation}{31}{subsection.2.6.5}%
+\contentsline {subsection}{\numberline {2.6.6}Costs and Return on Investment (ROI)}{31}{subsection.2.6.6}%
+\contentsline {section}{\numberline {2.7}Security Operations Center as a Service (SOCaaS)}{31}{section.2.7}%
+\contentsline {subsection}{\numberline {2.7.1}SOCaaS Advantages}{31}{subsection.2.7.1}%
+\contentsline {subsection}{\numberline {2.7.2}SOCaaS Challenges}{32}{subsection.2.7.2}%
+\contentsline {subsection}{\numberline {2.7.3}Comparison between SOCaaS and Internal SOC}{32}{subsection.2.7.3}%
+\contentsline {section}{\numberline {2.8}SOCaaS Solution}{33}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Conclusion}{33}{section.2.9}%
+\contentsline {chapter}{\numberline {3}Design of the SOCaaS Solution}{34}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introduction}{34}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Tool Selection Criteria}{34}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Supporting Design Components}{36}{subsection.3.2.1}%
+\contentsline {section}{\numberline {3.3}Kubernetes}{36}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Kubernetes Components}{37}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Main Kubernetes Resources}{37}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Helm}{38}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Key Concepts of Helm}{38}{subsection.3.4.1}%
+\contentsline {section}{\numberline {3.5}SIEM Choice}{39}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Open-source Solutions}{39}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Proprietary Solutions Critical}{39}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Wazuh}{40}{subsection.3.5.3}%
+\contentsline {subsubsection}{Wazuh Components}{41}{subsubsection*.26}%
+\contentsline {section}{\numberline {3.6}SOAR Choice}{42}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}SOA: Shuffle}{42}{subsection.3.6.1}%
+\contentsline {subsubsection}{Architecture}{43}{subsubsection*.27}%
+\contentsline {paragraph}{1. Frontend (Graphical User Interface)}{43}{paragraph*.28}%
+\contentsline {paragraph}{2. Backend (Main Server)}{43}{paragraph*.29}%
+\contentsline {subsubsection}{Datastore (Database)}{44}{subsubsection*.30}%
+\contentsline {subsubsection}{Orborus (Worker Scheduler)}{44}{subsubsection*.31}%
+\contentsline {subsubsection}{Workers (Execution Units)}{44}{subsubsection*.32}%
+\contentsline {subsubsection}{Applications (Apps)}{44}{subsubsection*.33}%
+\contentsline {subsubsection}{Workflows}{44}{subsubsection*.34}%
+\contentsline {subsubsection}{Triggers}{44}{subsubsection*.35}%
+\contentsline {subsection}{\numberline {3.6.2}SIRP: TheHive}{45}{subsection.3.6.2}%
+\contentsline {subsubsection}{Key Features}{45}{subsubsection*.36}%
+\contentsline {subsubsection}{Architecture}{45}{subsubsection*.37}%
+\contentsline {paragraph}{1. TheHive (Main Application)}{45}{paragraph*.38}%
+\contentsline {paragraph}{2. Apache Cassandra (Database)}{45}{paragraph*.39}%
+\contentsline {paragraph}{3. Elasticsearch (Indexing Engine)}{46}{paragraph*.40}%
+\contentsline {paragraph}{4. MinIO (Object Storage)}{46}{paragraph*.41}%
+\contentsline {subsection}{\numberline {3.6.3}TIP: Threat Intelligence Platform}{47}{subsection.3.6.3}%
+\contentsline {subsubsection}{VirusTotal}{47}{subsubsection*.42}%
+\contentsline {subsubsection}{EmailRep}{47}{subsubsection*.43}%
+\contentsline {section}{\numberline {3.7}Load Balancer}{48}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}HAProxy}{48}{subsection.3.7.1}%
+\contentsline {subsubsection}{Characteristics of HAProxy}{48}{subsubsection*.44}%
+\contentsline {section}{\numberline {3.8}Operation of the SOC Platform}{48}{section.3.8}%
+\contentsline {section}{\numberline {3.9}Conclusion}{49}{section.3.9}%
+\contentsline {chapter}{\numberline {4}Implementation and Validation of the SOCaaS Platform}{51}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Introduction}{51}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Overview of the Kubernetes Cluster}{52}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Deployment of the Kubernetes Cluster}{54}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Deployment of SOCaaS Security Tools}{55}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Wazuh SIEM Deployment}{56}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Pipeline Gateway Deployment}{57}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Shuffle SOAR Deployment}{59}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}TheHive Case Management Deployment}{62}{subsection.4.4.4}%
+\contentsline {section}{\numberline {4.5}Implementation of the SOCaaS Helm Chart}{65}{section.4.5}%
+\contentsline {section}{\numberline {4.6}End-to-End Detection and Response Pipeline}{66}{section.4.6}%
+\contentsline {section}{\numberline {4.7}AI-Assisted Alert Triage}{67}{section.4.7}%
+\contentsline {section}{\numberline {4.8}AI Sandbox Malware Analysis}{69}{section.4.8}%
+\contentsline {section}{\numberline {4.9}AI Sandbox Case Study: Password File Exfiltration Script}{71}{section.4.9}%
+\contentsline {section}{\numberline {4.10}Validation Scenarios}{75}{section.4.10}%
+\contentsline {subsection}{\numberline {4.10.1}Malware and AI Sandbox Validation}{75}{subsection.4.10.1}%
+\contentsline {subsection}{\numberline {4.10.2}Nmap Port Scan Validation}{76}{subsection.4.10.2}%
+\contentsline {subsection}{\numberline {4.10.3}C2 Beacon Validation}{77}{subsection.4.10.3}%
+\contentsline {section}{\numberline {4.11}Evaluation of Results}{77}{section.4.11}%
+\contentsline {section}{\numberline {4.12}Limitations and Security Considerations}{79}{section.4.12}%
+\contentsline {section}{\numberline {4.13}Conclusion}{80}{section.4.13}%
+\contentsline {chapter}{\numberline {A}Nmap Port Scan Detection and Response}{81}{appendix.A}%
+\contentsline {chapter}{\numberline {B}C2 Beacon Detection and Response}{83}{appendix.B}%
+\contentsline {chapter}{\numberline {C}AI Sandbox Generated Malware Analysis Report}{84}{appendix.C}%
+\contentsline {chapter}{Bibliography}{90}{section*.45}%

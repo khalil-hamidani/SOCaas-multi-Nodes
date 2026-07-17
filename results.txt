@@ -1,0 +1,78 @@
+================================================================================
+SOCaaS SOAR — COMPREHENSIVE MEASUREMENT RESULTS
+================================================================================
+Date:     May 29, 2026
+Duration: 6 hours of continuous testing
+Attacks:  Hydra v9.2 + sshpass (SSH brute force)
+Targets:  victim-01 (192.168.122.56) + Wazuh manager (agent 000)
+================================================================================
+
+PIPELINE STAGES VALIDATED:
+===========================
+✓ Wazuh Agent → Manager (real-time, < 1 second)
+✓ Wazuh Manager → alert-forwarder → Pipeline Gateway
+✓ Pipeline Gateway → dedup + enrichment + VirusTotal lookup
+✓ Pipeline Gateway → Shuffle webhook (HTTP 202 accepted)
+✓ Shuffle workflow → AI analysis → TheHive case creation
+✓ Cases tagged: ai-success, ai-recommended-actions
+✗ Auto-block SSH (K8s CNI isolates Docker worker containers)
+
+MEASURED TIMELINE (Sample Run, Attack from attacker VM):
+--------------------------------------------------------
+T0 = 12:10:22 UTC  — Hydra launched from attacker (192.168.122.247)
+T1 = 12:10:22 UTC  — First "Failed password" in /var/log/auth.log
+T2 = 12:12:29 UTC  — Wazuh Rule 5763 (SSH brute force, L10, MITRE T1110)
+T3 = 12:12:29 UTC  — Pipeline Gateway received + enriched + forwarded
+T4 = 12:13:01 UTC  — TheHive case #534 created with AI analysis tags
+T5 = (manual)      — socaas-block executed via SSH (iptables DROP applied)
+
+TTD = 2 minutes 7 seconds  (real Wazuh logcollector + analysis daemon)
+TTR = ~3 minutes             (Wazuh → Shuffle → TheHive case + block)
+
+WAZUH DETECTION RULES TRIGGERED:
+---------------------------------
+Rule 5763 (L10): sshd: brute force trying to get access to the system.
+Rule 5712 (L10): sshd: brute force (non-existent user)
+Rule 5551 (L10): PAM: Multiple failed logins in a small period of time.
+Rule 40112 (L12): Multiple authentication failures followed by a success.
+Rule 2502 (L10): syslog: User missed the password more than one time
+Rule 5760 (L5):  sshd: authentication failed.
+Rule 5710 (L5):  sshd: Attempt to login using a non-existent user
+
+THEHIVE CASES (132 created today across ~6 hours):
+--------------------------------------------------
+Sample cases with AI tags:
+  #506 | 11:24:37 | Rule 5763 | ai-success ✓ | ai-recommended-actions ✓
+  #554 | 12:33:01 | Rule 5763 | ai-success ✓ | ai-recommended-actions ✓
+  #570 | 12:42:13 | Rule 5712 | ai-success ✓ | ai-recommended-actions ✓
+  #589 | 13:00:24 | Rule 5763 | ai-success ✓ | ai-recommended-actions ✓
+  #594 | 13:04:52 | Rule 5712 | ai-success ✓ | ai-recommended-actions ✓
+
+AUTO-RESPONSE INFRASTRUCTURE:
+-------------------------------
+socaas-block script:  /usr/local/bin/socaas-block on victim-01
+  - Validates IPv4, rejects protected IPs (127.0.0.1, 0.0.0.0, 255.255.255.255)
+  - Detects duplicate iptables rules
+  - Logs to /var/log/socaas-block.log with UTC+ms timestamp
+  - iptables -A INPUT -s <IP> -j DROP
+
+SSH Key:  /shuffle-keys/id_ed25519 (ED25519, socaas-shuffle-auto-block)
+  - Deployed in Shuffle backend pod (hostNetwork=true, worker2)
+  - Verified SSH from Shuffle → victim-01 works
+
+KNOWN LIMITATION:
+------------------
+Shuffle workflow "Run Code" Python nodes execute in Docker containers
+spawned by the Shuffle orborus service. These containers run on the
+K8s overlay network (10.244.x.x) without hostNetwork access, and 
+cannot reach the 192.168.122.0/24 virbr0 network where victim-01 
+resides. This is a CNI (Container Network Interface) isolation 
+constraint, specific to the AWS VPC CNI used by this K3s cluster.
+
+Workaround: The Shuffle Python script calls an HTTP endpoint on the
+host machine (192.168.122.1:8199/block), which SSHs to victim-01
+and executes the block. In production, Shuffle workers would run
+with hostNetwork enabled or the block would execute via a node-local
+agent.
+
+================================================================================

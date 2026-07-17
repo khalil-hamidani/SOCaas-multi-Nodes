@@ -1,0 +1,196 @@
+\documentclass[11pt,a4paper]{report}
+
+% ========== PACKAGES ==========
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{comment}
+
+% Geometry
+\usepackage{geometry}
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm}
+
+% Math and symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Graphics and colors
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+
+% Lists
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=0.2em, leftmargin=1.5em, label={---}}
+\setlist[enumerate]{itemsep=0.2em, leftmargin=1.5em}
+
+% Layout enhancement
+\usepackage{adjustbox}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{indentfirst}
+
+% Floats
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{xurl}
+
+% Links
+\usepackage[
+    colorlinks=true,
+    linkcolor=black!70,
+    citecolor=gray!70!black,
+    urlcolor=blue!70!black,
+    bookmarks=true,
+    bookmarksnumbered=true,
+    unicode=true,
+    pdftitle={Master Thesis - SOCaaS},
+    pdfauthor={Hamidani Khalil \& Zendagui Nazim}
+]{hyperref}
+
+% ========== CUSTOM COLORS ==========
+\definecolor{tableheader}{RGB}{220,230,242}
+
+% ========== LINE SPACING ==========
+\onehalfspacing
+
+% ========== PARAGRAPH SETTINGS ==========
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0.8\baselineskip}
+
+% ========== HEADER/FOOTER ==========
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{\leftmark}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ========== TITLE FORMATTING - BLACK ==========
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-20pt}{40pt}
+
+\titleformat{\section}
+{\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% ========== DOCUMENT ==========
+\begin{document}
+
+% ========== TITLE PAGE ==========
+\begin{titlepage}
+    \centering
+    
+    \vspace*{0.3cm}
+    \textbf{People's Democratic Republic of Algeria}\\
+    \textbf{Ministry of Higher Education and Scientific Research}\\
+    \textbf{Benyoucef Benkhedda University - Algiers 1}
+    
+    \vspace{0.3cm}
+    \rule{\linewidth}{0.5pt}
+    
+    \vspace{0.3cm}
+    
+    \begin{minipage}{0.25\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{figs/fc.jpg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \textbf{Faculty of Sciences}\\
+        \textbf{Department of Computer Science}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.25\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{figs/uni.jpg}
+    \end{minipage}
+    
+    \vspace{0.6cm}
+    \textit{Final Year Project submitted for the Master's degree in Computer Science}\\
+    \textit{Specialization: Networks and Embedded Systems (RSE)}
+    
+    \vspace{1cm}
+    \rule{8cm}{1pt}
+    
+    \vspace{0.3cm}
+    {\Large \textbf{Theme}}
+    
+    \vspace{0.3cm}
+    {\Large \textbf{Conception et D\'{e}ploiement d'un SOC Intelligent Bas\'{e} sur une Architecture SOAR Open Source.}}
+    
+    \vspace{0.3cm}
+    \rule{8cm}{1pt}
+    
+    \vspace{0.6cm}
+    \textbf{Presented and defended by:}
+    
+    \vspace{0.3cm}
+    \textbf{Mr. Hamidani Khalil} \hspace{0.5cm} \textbf{and} \hspace{0.5cm} \textbf{Mr. Zendagui Nazim}
+    
+    \vspace{0.6cm}
+    
+    \textit{Soutenu le 21 Juin 2026 devant le jury compos\'{e} de :}
+    
+    \vspace{0.3cm}
+    
+    \begin{tabular}{ll}
+        Mr. Friha \hspace{1.5cm} & Internal Supervisor \hspace{1.5cm} Doctor at University of Algiers 1 \\
+        \\
+        Mr. Salaheddine \hspace{1.5cm} & External Supervisor \hspace{1.5cm} Expert Threat Hunter at Alg\'{e}rie T\'{e}l\'{e}com
+    \end{tabular}
+    
+    \vspace{0.6cm}
+    \textit{Academic year: 2025-2026}
+    
+\end{titlepage}
+
+% ========== FRONT MATTER (each on new page) ==========
+\newpage
+\input{0-Dedication/dedication}
+
+\newpage
+\input{1-Acknowledgments/acknowledgments}
+
+\newpage
+\input{2-Abstract/abstract}
+
+\newpage
+\input{3-Acronymes/acronymes}
+
+% ========== GENERAL INTRODUCTION ==========
+
+\newpage
+\input{4-Introduction/introduction}
+
+% ========== CHAPTERS ==========
+\newpage
+\input{5-Chapters/chapter-1/ch1}
+
+\newpage
+\input{5-Chapters/chapter-2/ch2}
+
+\newpage
+\input{5-Chapters/chapter-3/ch3}
+
+\newpage
+\input{5-Chapters/chapter-4/ch4}
+
+\end{document}

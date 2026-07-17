@@ -1,0 +1,1 @@
+bash: line 28: analyzeHeadless: command not found
