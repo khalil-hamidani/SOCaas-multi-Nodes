@@ -1,0 +1,820 @@
+.
+├── AgentPrompte.md
+├── Ai-sandbox
+│   ├── AI_AGENT_PROMPT.md
+│   ├── bin
+│   │   ├── cleanup_sandbox_vm.sh
+│   │   ├── socaas-sandbox-run
+│   │   └── wait_for_vm_ip.sh
+│   ├── logs
+│   ├── reports
+│   │   ├── suspicious_file
+│   │   │   └── sandbox-suspicious_file-20260528-174611
+│   │   │       └── sandbox-suspicious_file-20260528-174611
+│   │   │           └── report.pdf
+│   │   ├── suspicious_file_00
+│   │   │   └── sandbox-suspicious_file-20260521-201225
+│   │   │       └── sandbox-suspicious_file-20260521-201225
+│   │   │           ├── all_strings.txt
+│   │   │           ├── byte_frequency.txt
+│   │   │           ├── disassembly.txt
+│   │   │           ├── file_info.txt
+│   │   │           ├── file_type.txt
+│   │   │           ├── hashes.json
+│   │   │           ├── hex_dump.txt
+│   │   │           ├── pe_headers.txt
+│   │   │           ├── report.pdf
+│   │   │           ├── strings_commands.txt
+│   │   │           ├── strings_pe.txt
+│   │   │           └── strings_urls.txt
+│   │   └── suspicious_file_report
+│   │       └── sandbox-suspicious_file-20260528-174611
+│   │           └── sandbox-suspicious_file-20260528-174611
+│   │               ├── all_strings.txt
+│   │               ├── byte_frequency.txt
+│   │               ├── disassembly.txt
+│   │               ├── file_info.txt
+│   │               ├── file_type.txt
+│   │               ├── hashes.json
+│   │               ├── hex_dump.txt
+│   │               ├── pe_headers.txt
+│   │               ├── report.pdf
+│   │               ├── reverse
+│   │               │   ├── diec.txt
+│   │               │   ├── full_disassembly.txt
+│   │               │   ├── functions.txt
+│   │               │   ├── ghidra_analysis.txt
+│   │               │   ├── ghidra_project
+│   │               │   ├── imports.txt
+│   │               │   ├── main_disassembly.txt
+│   │               │   ├── rabin_info.txt
+│   │               │   ├── rabin_strings.txt
+│   │               │   ├── search_base64.txt
+│   │               │   ├── search_cmd.txt
+│   │               │   ├── search_http.txt
+│   │               │   ├── search_powershell.txt
+│   │               │   └── symbols.txt
+│   │               ├── strings_commands.txt
+│   │               ├── strings_pe.txt
+│   │               └── strings_urls.txt
+│   ├── runs
+│   ├── samples
+│   │   └── suspicious_file
+│   ├── templates
+│   │   └── sandbox-vm.xml
+│   └── tmp
+├── backups
+│   ├── final-validated-demo
+│   │   ├── deployments.txt
+│   │   ├── haproxy.cfg
+│   │   ├── pods.txt
+│   │   ├── services.txt
+│   │   ├── socaas-siem-configmaps.yaml
+│   │   ├── socaas-soar-configmaps.yaml
+│   │   └── statefulsets.txt
+│   ├── haproxy
+│   │   └── haproxy.cfg.bak.20260503-172441
+│   ├── thehive-community-license-20260508-162944
+│   │   ├── alert-create-after-license.txt
+│   │   ├── case-create-after-license.txt
+│   │   ├── k8s-pods-before.txt
+│   │   ├── k8s-pvc-before.txt
+│   │   ├── k8s-svc-before.txt
+│   │   ├── k8s-workloads-before.txt
+│   │   ├── license-activation-response.txt
+│   │   ├── thehive-logs-after-license-restart.txt
+│   │   ├── thehive-logs-before.txt
+│   │   └── workloads-before.yaml
+│   ├── thehive-upgrade-20260508-150928
+│   │   ├── alert-create-after.txt
+│   │   ├── alert-create-before.txt
+│   │   ├── case-create-after.txt
+│   │   ├── case-create-before.txt
+│   │   ├── charts-backup
+│   │   │   └── socaas
+│   │   │       ├── Chart.yaml
+│   │   │       ├── templates
+│   │   │       │   ├── _helpers.tpl
+│   │   │       │   ├── namespaces.yaml
+│   │   │       │   ├── networkpolicies.yaml
+│   │   │       │   ├── NOTES.txt
+│   │   │       │   ├── pipeline.yaml
+│   │   │       │   ├── rbac.yaml
+│   │   │       │   ├── secrets.yaml
+│   │   │       │   ├── shuffle.yaml
+│   │   │       │   ├── storage.yaml
+│   │   │       │   ├── thehive.yaml
+│   │   │       │   └── wazuh.yaml
+│   │   │       ├── values-multinode.yaml
+│   │   │       └── values.yaml
+│   │   ├── configmaps.yaml
+│   │   ├── db-inspection
+│   │   │   ├── 01-tables.txt
+│   │   │   ├── 02-status-full.json
+│   │   │   ├── 03-org-admin.json
+│   │   │   ├── 04-license-list.json
+│   │   │   ├── 05-listUser.json
+│   │   │   ├── 06-getLicense.json
+│   │   │   ├── 07-license-detail.txt
+│   │   │   ├── 08-user-list.txt
+│   │   │   ├── 10-graphindex-license.txt
+│   │   │   ├── 11-graphindex-quota.txt
+│   │   │   ├── 12-edgestore-count.txt
+│   │   │   ├── 13-systemlog.txt
+│   │   │   ├── DATABASE_REPAIR_ANALYSIS.md
+│   │   │   └── FINAL_REPORT.md
+│   │   ├── events-after.txt
+│   │   ├── events-before.txt
+│   │   ├── FINAL_CONCLUSION.md
+│   │   ├── images-after.txt
+│   │   ├── k8s-all.txt
+│   │   ├── networkpolicies-orig.yaml
+│   │   ├── pods-after.txt
+│   │   ├── pvcs.txt
+│   │   ├── pvs.txt
+│   │   ├── redeploy-5.2.15.txt
+│   │   ├── redeploy-5.2-rollback.txt
+│   │   ├── redeploy-output.txt
+│   │   ├── scripts-backup
+│   │   │   ├── 00_check_host_resources.sh
+│   │   │   ├── 00_prepare_socaas_storage.sh
+│   │   │   ├── 01_install_kvm_parrot.sh
+│   │   │   ├── 01_install_kvm_parrot.sh.bak
+│   │   │   ├── 02_create_vms.sh
+│   │   │   ├── 02_create_vms.sh.bak
+│   │   │   ├── 03_prepare_all_nodes.sh
+│   │   │   ├── 04_init_master.sh
+│   │   │   ├── 05_join_workers_template.sh
+│   │   │   ├── 06_install_calico.sh
+│   │   │   ├── 07_label_nodes.sh
+│   │   │   ├── 08_prepare_worker_storage.sh
+│   │   │   ├── 09_install_haproxy_host.sh
+│   │   │   ├── 10_install_helm.sh
+│   │   │   ├── 11_deploy_socaas.sh
+│   │   │   ├── 12_verify_cluster.sh
+│   │   │   ├── 13_test_alert_pipeline.sh
+│   │   │   ├── 99_fix_shuffle_docker_nat.sh
+│   │   │   ├── 99_fix_shuffle_docker_tcp.sh
+│   │   │   ├── 99_reset_lab.sh
+│   │   │   ├── 99_reset_lab.sh.bak
+│   │   │   ├── 99_rollback_shuffle_docker_nat.sh
+│   │   │   ├── 99_verify_storage_layout.sh
+│   │   │   ├── 99_verify_storage_layout.sh.bak
+│   │   │   ├── lib.sh
+│   │   │   ├── phase5_update_friend_endpoint_ips.sh
+│   │   │   └── phase5_use_tailscale_for_friend_endpoint.sh
+│   │   ├── secrets.yaml
+│   │   ├── thehive-logs-after.txt
+│   │   ├── user-current-after.txt
+│   │   ├── user-current-before.txt
+│   │   ├── values-multinode.yaml.before-upgrade
+│   │   ├── values.yaml.before-upgrade
+│   │   ├── workloads.yaml
+│   │   └── yaml-file-list.txt
+│   └── wazuh-detection-response-fix-20260512-192633
+│       ├── configmaps-siem.yaml
+│       ├── local_rules.xml.before
+│       ├── manager-ossec.conf.before
+│       ├── pods-siem.txt
+│       └── victim-ossec.conf.before
+├── chap44
+│   ├── 0-Dedication
+│   │   └── dedication.tex
+│   ├── 1-Acknowledgments
+│   │   └── acknowledgments.tex
+│   ├── 2-Abstract
+│   │   └── abstract.tex
+│   ├── 3-Acronymes
+│   │   └── acronymes.tex
+│   ├── 4-Introduction
+│   │   └── introduction.tex
+│   ├── 5-Chapters
+│   │   ├── chapter-1
+│   │   │   └── ch1.tex
+│   │   ├── chapter-2
+│   │   │   └── ch2.tex
+│   │   ├── chapter-3
+│   │   │   └── ch3.tex
+│   │   └── chapter-4
+│   │       └── ch4.tex
+│   ├── appendix
+│   │   ├── appendix-a.tex
+│   │   ├── appendix-b.tex
+│   │   ├── appendix-c.tex
+│   │   └── report.pdf
+│   ├── bibliography.bib
+│   ├── ch4_figs_ocr_mapping.txt
+│   ├── ch4_figs_safe_filename_map.txt
+│   ├── draft.md
+│   ├── figs
+│   │   ├── ai_recommendations_c2_beacon.png
+│   │   ├── ai_recommendations_data_exfiltration.png
+│   │   ├── ai_sandbox_after_opencode_run.png
+│   │   ├── ai_sandbox_before_opencode_run.png
+│   │   ├── ai_sandbox_nc_exfil_result.png
+│   │   ├── ai_sandbox_reports_artifacts_tree.png
+│   │   ├── ai_sandbox_workflow.png
+│   │   ├── Cassandra.png
+│   │   ├── CyberKillCycle.png
+│   │   ├── Director general.png
+│   │   ├── Division Systemes d'information.png
+│   │   ├── Elasticsearch.png
+│   │   ├── exfil_server_path_listener.png
+│   │   ├── fc.jpg
+│   │   ├── helm_chart_structure_tree.png
+│   │   ├── helm_deployment_success.png
+│   │   ├── helm_templates_folder.png
+│   │   ├── hexstrike_server_mcp.png
+│   │   ├── IDS_Location.png
+│   │   ├── IPS_Location.png
+│   │   ├── kubectl_get_namespaces_socaas.png
+│   │   ├── kubectl_get_nodes.png
+│   │   ├── kubectl_wazuh_pods_wide.png
+│   │   ├── Kubernetes_Architecture.png
+│   │   ├── kubernetes_packages_installed.png
+│   │   ├── Load_Balancer.png
+│   │   ├── MinIO.png
+│   │   ├── MITRE_ATT&CK_Enterprise_Matrix_Tactics.png
+│   │   ├── nmap_scan_cli.png
+│   │   ├── pipeline_gateway_pod_service.png
+│   │   ├── sandbox_golden_vm_vmm.png
+│   │   ├── Shuffle_Architecture.png
+│   │   ├── shuffle_build_telegram_payload_node.png
+│   │   ├── shuffle_build_virustotal_target_node.png
+│   │   ├── shuffle_create_thehive_case_node.png
+│   │   ├── shuffle_final_response_node.png
+│   │   ├── shuffle_final_workflow_canvas.png
+│   │   ├── shuffle_generate_ai_recommended_actions_node.png
+│   │   ├── shuffle_normalize_soc_alert_node.png
+│   │   ├── shuffle_pods_pipeline_gateway.png
+│   │   ├── shuffle_welcome_dashboard.png
+│   │   ├── shuffle_workflow_run.png
+│   │   ├── shuffle_workflow_runs_new.png
+│   │   ├── socaas_end_to_end_pipeline_diagram.jpg
+│   │   ├── socaas_kubernetes_cluster_architecture.png
+│   │   ├── telegram_malware_notification_a.png
+│   │   ├── telegram_malware_notification_b.png
+│   │   ├── telegram_malware_notification.png
+│   │   ├── telegram_nmap_alert.png
+│   │   ├── telegram_nmap_scan_notification.png
+│   │   ├── thehive_cases_dashboard.png
+│   │   ├── thehive_malware_case_ai_recommendations.png
+│   │   ├── thehive_malware_case_detail.png
+│   │   ├── thehive_malware_case_wide.png
+│   │   ├── thehive_nmap_case_entry.png
+│   │   ├── thehive_pods.png
+│   │   ├── ThreatModeling.jpg
+│   │   ├── uni.jpg
+│   │   ├── victim_download_malware.png
+│   │   ├── victim_fake_website_chatgpt_pro.png
+│   │   ├── victim_run_malware_warning.png
+│   │   ├── virsh_list_all_running_lab_vms.png
+│   │   ├── virsh_sandbox_vms_shutoff.png
+│   │   ├── Wazuh_Agent_Architecture.png
+│   │   ├── wazuh_dashboard_agents.png
+│   │   ├── wazuh_deleted_files_fim_dashboard.png
+│   │   ├── wazuh_pods.png
+│   │   └── Wazuh_Server_Architecture.png
+│   ├── figs_ch4_ready.zip
+│   ├── main.aux
+│   ├── main.bbl
+│   ├── main.blg
+│   ├── main.fdb_latexmk
+│   ├── main.fls
+│   ├── main.lof
+│   ├── main.log
+│   ├── main.lot
+│   ├── main.out
+│   ├── main.pdf
+│   ├── main.tex
+│   ├── main.toc
+│   ├── Memoire-SSI-026-Francais-72-93.converted-english.md
+│   ├── newones_ch4_figure_mapping_ocr.txt
+│   ├── preamble.tex
+│   └── project_overview.md
+├── chap44.zip
+├── chapter 4
+│   └── SOCaaS_Project_Overview.md
+├── chapter_4_socaas_implementation_validation.md
+├── downloads
+│   └── images
+│       └── ubuntu-22.04-server-cloudimg-amd64.img
+├── figs
+│   ├── ai_sandbox_after_opencode_run.png
+│   ├── ai_sandbox_before_opencode_run.png
+│   ├── ai_sandbox_nc_exfil_result.png
+│   ├── ai_sandbox_reports_artifacts_tree.png
+│   ├── ai_sandbox_workflow.png
+│   ├── exfil_server_path_listener.png
+│   ├── hexstrike_server_mcp.png
+│   ├── kubectl_get_namespaces_socaas.png
+│   ├── kubectl_get_nodes.png
+│   ├── kubectl_wazuh_pods_wide.png
+│   ├── nmap_scan_cli.png
+│   ├── sandbox_golden_vm_vmm.png
+│   ├── shuffle_final_workflow_canvas.png
+│   ├── shuffle_pods_pipeline_gateway.png
+│   ├── shuffle_workflow_run.png
+│   ├── socaas_kubernetes_cluster_architecture.png
+│   ├── telegram_malware_notification_a.png
+│   ├── telegram_malware_notification_b.png
+│   ├── telegram_nmap_alert.png
+│   ├── thehive_cases_dashboard.png
+│   ├── thehive_malware_case_detail.png
+│   ├── thehive_malware_case_wide.png
+│   ├── thehive_nmap_case_entry.png
+│   ├── thehive_pods.png
+│   ├── victim_download_malware.png
+│   ├── victim_fake_website_chatgpt_pro.png
+│   ├── victim_run_malware_warning.png
+│   ├── virsh_list_all_running_lab_vms.png
+│   ├── virsh_sandbox_vms_shutoff.png
+│   ├── wazuh_dashboard_agents.png
+│   ├── wazuh_deleted_files_fim_dashboard.png
+│   └── wazuh_pods.png
+├── generated
+│   ├── helm
+│   │   └── socaas-rendered.yaml
+│   ├── kube
+│   │   ├── admin.conf
+│   │   └── kubeadm-join-command.txt
+│   └── vms
+│       ├── k8s-master-meta-data.yaml
+│       ├── k8s-master-network-config.yaml
+│       ├── k8s-master-seed.iso
+│       ├── k8s-master-user-data.yaml
+│       ├── k8s-worker1-meta-data.yaml
+│       ├── k8s-worker1-network-config.yaml
+│       ├── k8s-worker1-seed.iso
+│       ├── k8s-worker1-user-data.yaml
+│       ├── k8s-worker2-meta-data.yaml
+│       ├── k8s-worker2-network-config.yaml
+│       ├── k8s-worker2-seed.iso
+│       └── k8s-worker2-user-data.yaml
+├── khalil_workflow.json
+├── libvirt
+│   └── images
+│       ├── k8s-master.pre-thehive-53-upgrade-20260508-150928
+│       ├── k8s-master.qcow2
+│       ├── k8s-worker1.pre-thehive-53-upgrade-20260508-150928
+│       ├── k8s-worker1.qcow2
+│       ├── k8s-worker2.pre-thehive-53-upgrade-20260508-150928
+│       └── k8s-worker2.qcow2
+├── logs
+│   ├── phase5_validated_2026-05-04_18-11.log
+│   ├── pipeline_gateway_to_shuffle_connected_2026-05-05_17-51.log
+│   └── pre_shutdown_2026-05-03_22-54.log
+├── Memoire_soc_nazim_khalil
+│   ├── 0-Dedication
+│   │   └── dedication.tex
+│   ├── 1-Acknowledgments
+│   │   └── acknowledgments.tex
+│   ├── 2-Abstract
+│   │   └── abstract.tex
+│   ├── 3-Acronymes
+│   │   └── acronymes.tex
+│   ├── 4-Introduction
+│   │   └── introduction.tex
+│   ├── 5-Chapters
+│   │   ├── chapter-1
+│   │   │   └── ch1.tex
+│   │   ├── chapter-2
+│   │   │   └── ch2.tex
+│   │   ├── chapter-3
+│   │   │   └── ch3.tex
+│   │   └── chapter-4
+│   │       └── ch4.tex
+│   ├── figs
+│   │   ├── CyberKillCycle.png
+│   │   ├── Director general.png
+│   │   ├── Division Systemes d'information.png
+│   │   ├── fc.jpg
+│   │   ├── Kubernetes_Architecture.png
+│   │   ├── ThreatModeling.jpg
+│   │   ├── uni.jpg
+│   │   └── Wazuh_Server_Architecture.png
+│   ├── figs_ch4_ready.zip
+│   ├── main.tex
+│   ├── Preambule
+│   │   └── Preambule.tex
+│   └── usage_data_2026_5.zip
+├── Memoire_soc_nazim_khalil-00.zip
+├── Memoire_soc_nazim_khalil-01.zip
+├── Memoire_soc_nazim_khalil-02.zip
+├── Memoire_soc_nazim_khalil.zip
+├── myminio
+│   └── thehive
+├── README.md
+├── repo
+├── results2_nmap.txt
+├── results.txt
+├── runtime
+├── screenshots
+│   ├── after opencode run.png
+│   ├── ai-sandbox-wokflow.png
+│   ├── before opencode run.png
+│   ├── deleted files wazuh.png
+│   ├── download the malware.png
+│   ├── exfil server path.png
+│   ├── fake_website_on_the_vm_victim.png
+│   ├── final shuffle workflow.png
+│   ├── golden vm.png
+│   ├── hexstrike_server_mcp.png
+│   ├── kubectl namespace.png
+│   ├── kubectl pods.png
+│   ├── kubextl get nodes .png
+│   ├── malware case.png
+│   ├── malware telegram notification.png
+│   ├── nc_result_aisandbox.png
+│   ├── newones
+│   │   ├── build telegram payload shuffle.png
+│   │   ├── build virustotal target.png
+│   │   ├── c2 Recommended Analyst Actions.png
+│   │   ├── create the hive case shuffle.png
+│   │   ├── End-to-end SOCaaS pipeline diagram.jpg
+│   │   ├── exfil recommended analyst actions.png
+│   │   ├── final response suffle.png
+│   │   ├── generate ai recommended actions shuffle.png
+│   │   ├── helm deployment success.png
+│   │   ├── helm templates folder.png
+│   │   ├── Kubernetes packages installed.png
+│   │   ├── malware Recommended Analyst Actions.png
+│   │   ├── newones_ch4_renamed_figs.zip
+│   │   ├── nmap scan telegram notification.png
+│   │   ├── normalize soc altert shuffle.png
+│   │   ├── Pipeline Gateway pod + service.png
+│   │   ├── suffle runs.png
+│   │   ├── suffle welcome page.png
+│   │   ├── telegram notification malware.png
+│   │   └── tree helm chart structure.png
+│   ├── newones.zip
+│   ├── nmap_scan_cli.png
+│   ├── recent
+│   │   ├── after opencode run.png
+│   │   ├── before opencode run .png
+│   │   ├── c2 email notification.png
+│   │   ├── create and test suspicous file.png
+│   │   ├── exfil server path.png
+│   │   ├── file deleted.png
+│   │   ├── fim deleted telegram.png
+│   │   ├── mttr brute force.png
+│   │   ├── new
+│   │   │   ├── 1.png
+│   │   │   ├── 2.png
+│   │   │   ├── 3.png
+│   │   │   ├── 4.png
+│   │   │   ├── 5.png
+│   │   │   ├── 6.png
+│   │   │   └── 7.png
+│   │   ├── recent.zip
+│   │   ├── Screenshot at 2026-06-04 18-50-07.png
+│   │   ├── setup fot the mttr calcule vms.png
+│   │   ├── thehivecase malware.png
+│   │   ├── thehive responce time.png
+│   │   ├── tree report dir.png
+│   │   └── vm destroy after opencode run.png
+│   ├── reports.png
+│   ├── run the malware.png
+│   ├── sandbox-vm.png
+│   ├── shuffle pods.png
+│   ├── SOCaaS Kubernetes Cluster Architecture.png
+│   ├── suffle_run.png
+│   ├── telegram malware notification.png
+│   ├── telegram_nmap_alert.png
+│   ├── thehive_case_nmap.png
+│   ├── thehive cases full.png
+│   ├── thehive malware case.png
+│   ├── thehive pods.png
+│   ├── virsh list --all.png
+│   ├── wazuh dashboard.png
+│   └── wazuh pods.png
+├── screenshots.zip
+├── simulation
+│   ├── Ai_sandbox
+│   │   ├── build
+│   │   │   └── virus_simulation
+│   │   │       ├── Analysis-00.toc
+│   │   │       ├── base_library.zip
+│   │   │       ├── EXE-00.toc
+│   │   │       ├── localpycs
+│   │   │       │   ├── pyimod01_archive.pyc
+│   │   │       │   ├── pyimod02_importers.pyc
+│   │   │       │   ├── pyimod03_ctypes.pyc
+│   │   │       │   └── struct.pyc
+│   │   │       ├── PKG-00.toc
+│   │   │       ├── PYZ-00.pyz
+│   │   │       ├── PYZ-00.toc
+│   │   │       ├── virus_simulation.pkg
+│   │   │       ├── warn-virus_simulation.txt
+│   │   │       └── xref-virus_simulation.html
+│   │   ├── dist
+│   │   │   └── virus_simulation
+│   │   ├── exfil
+│   │   ├── exfil.py
+│   │   ├── exfiltrations
+│   │   │   └── captured.txt
+│   │   ├── passwords.txt
+│   │   ├── sandbox
+│   │   │   ├── re_report.pdf
+│   │   │   ├── virus_simulation
+│   │   │   └── virus_simulation_extracted
+│   │   │       ├── base_library.zip
+│   │   │       ├── exfil.pyc
+│   │   │       ├── libbz2.so.1.0
+│   │   │       ├── libcrypto.so.3
+│   │   │       ├── libexpat.so.1
+│   │   │       ├── liblzma.so.5
+│   │   │       ├── libpython3.13.so.1.0
+│   │   │       ├── libz.so.1
+│   │   │       ├── libzstd.so.1
+│   │   │       ├── pyiboot01_bootstrap.pyc
+│   │   │       ├── pyimod01_archive.pyc
+│   │   │       ├── pyimod02_importers.pyc
+│   │   │       ├── pyimod03_ctypes.pyc
+│   │   │       ├── pyi_rth_inspect.pyc
+│   │   │       ├── python3.13
+│   │   │       │   └── lib-dynload
+│   │   │       │       ├── _bz2.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _codecs_cn.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _codecs_hk.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _codecs_iso2022.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _codecs_jp.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _codecs_kr.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _codecs_tw.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _contextvars.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _decimal.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _hashlib.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _lzma.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       ├── _multibytecodec.cpython-313-x86_64-linux-gnu.so
+│   │   │       │       └── resource.cpython-313-x86_64-linux-gnu.so
+│   │   │       ├── PYZ.pyz
+│   │   │       ├── PYZ.pyz_extracted
+│   │   │       │   ├── argparse.pyc
+│   │   │       │   ├── ast.pyc
+│   │   │       │   ├── base64.pyc
+│   │   │       │   ├── bisect.pyc
+│   │   │       │   ├── bz2.pyc
+│   │   │       │   ├── calendar.pyc
+│   │   │       │   ├── _colorize.pyc
+│   │   │       │   ├── _compat_pickle.pyc
+│   │   │       │   ├── _compression.pyc
+│   │   │       │   ├── contextlib.pyc
+│   │   │       │   ├── contextvars.pyc
+│   │   │       │   ├── copy.pyc
+│   │   │       │   ├── csv.pyc
+│   │   │       │   ├── dataclasses.pyc
+│   │   │       │   ├── datetime.pyc
+│   │   │       │   ├── decimal.pyc
+│   │   │       │   ├── dis.pyc
+│   │   │       │   ├── email
+│   │   │       │   │   ├── base64mime.pyc
+│   │   │       │   │   ├── charset.pyc
+│   │   │       │   │   ├── contentmanager.pyc
+│   │   │       │   │   ├── _encoded_words.pyc
+│   │   │       │   │   ├── encoders.pyc
+│   │   │       │   │   ├── errors.pyc
+│   │   │       │   │   ├── feedparser.pyc
+│   │   │       │   │   ├── generator.pyc
+│   │   │       │   │   ├── header.pyc
+│   │   │       │   │   ├── headerregistry.pyc
+│   │   │       │   │   ├── _header_value_parser.pyc
+│   │   │       │   │   ├── __init__.pyc
+│   │   │       │   │   ├── iterators.pyc
+│   │   │       │   │   ├── message.pyc
+│   │   │       │   │   ├── _parseaddr.pyc
+│   │   │       │   │   ├── parser.pyc
+│   │   │       │   │   ├── _policybase.pyc
+│   │   │       │   │   ├── policy.pyc
+│   │   │       │   │   ├── quoprimime.pyc
+│   │   │       │   │   └── utils.pyc
+│   │   │       │   ├── fnmatch.pyc
+│   │   │       │   ├── fractions.pyc
+│   │   │       │   ├── __future__.pyc
+│   │   │       │   ├── getopt.pyc
+│   │   │       │   ├── gettext.pyc
+│   │   │       │   ├── glob.pyc
+│   │   │       │   ├── gzip.pyc
+│   │   │       │   ├── hashlib.pyc
+│   │   │       │   ├── importlib
+│   │   │       │   │   ├── _abc.pyc
+│   │   │       │   │   ├── abc.pyc
+│   │   │       │   │   ├── _bootstrap_external.pyc
+│   │   │       │   │   ├── _bootstrap.pyc
+│   │   │       │   │   ├── __init__.pyc
+│   │   │       │   │   ├── machinery.pyc
+│   │   │       │   │   ├── metadata
+│   │   │       │   │   │   ├── _adapters.pyc
+│   │   │       │   │   │   ├── _collections.pyc
+│   │   │       │   │   │   ├── _functools.pyc
+│   │   │       │   │   │   ├── __init__.pyc
+│   │   │       │   │   │   ├── _itertools.pyc
+│   │   │       │   │   │   ├── _meta.pyc
+│   │   │       │   │   │   └── _text.pyc
+│   │   │       │   │   ├── readers.pyc
+│   │   │       │   │   ├── resources
+│   │   │       │   │   │   ├── abc.pyc
+│   │   │       │   │   │   ├── _adapters.pyc
+│   │   │       │   │   │   ├── _common.pyc
+│   │   │       │   │   │   ├── _functional.pyc
+│   │   │       │   │   │   ├── __init__.pyc
+│   │   │       │   │   │   ├── _itertools.pyc
+│   │   │       │   │   │   └── readers.pyc
+│   │   │       │   │   └── util.pyc
+│   │   │       │   ├── inspect.pyc
+│   │   │       │   ├── ipaddress.pyc
+│   │   │       │   ├── json
+│   │   │       │   │   ├── decoder.pyc
+│   │   │       │   │   ├── encoder.pyc
+│   │   │       │   │   ├── __init__.pyc
+│   │   │       │   │   └── scanner.pyc
+│   │   │       │   ├── logging
+│   │   │       │   │   └── __init__.pyc
+│   │   │       │   ├── lzma.pyc
+│   │   │       │   ├── numbers.pyc
+│   │   │       │   ├── _opcode_metadata.pyc
+│   │   │       │   ├── opcode.pyc
+│   │   │       │   ├── pathlib
+│   │   │       │   │   ├── _abc.pyc
+│   │   │       │   │   ├── __init__.pyc
+│   │   │       │   │   └── _local.pyc
+│   │   │       │   ├── pickle.pyc
+│   │   │       │   ├── pprint.pyc
+│   │   │       │   ├── _py_abc.pyc
+│   │   │       │   ├── py_compile.pyc
+│   │   │       │   ├── _pydatetime.pyc
+│   │   │       │   ├── _pydecimal.pyc
+│   │   │       │   ├── quopri.pyc
+│   │   │       │   ├── random.pyc
+│   │   │       │   ├── selectors.pyc
+│   │   │       │   ├── shutil.pyc
+│   │   │       │   ├── signal.pyc
+│   │   │       │   ├── socket.pyc
+│   │   │       │   ├── statistics.pyc
+│   │   │       │   ├── stringprep.pyc
+│   │   │       │   ├── string.pyc
+│   │   │       │   ├── _strptime.pyc
+│   │   │       │   ├── subprocess.pyc
+│   │   │       │   ├── tarfile.pyc
+│   │   │       │   ├── tempfile.pyc
+│   │   │       │   ├── textwrap.pyc
+│   │   │       │   ├── _threading_local.pyc
+│   │   │       │   ├── threading.pyc
+│   │   │       │   ├── tokenize.pyc
+│   │   │       │   ├── token.pyc
+│   │   │       │   ├── tracemalloc.pyc
+│   │   │       │   ├── typing.pyc
+│   │   │       │   ├── urllib
+│   │   │       │   │   ├── __init__.pyc
+│   │   │       │   │   └── parse.pyc
+│   │   │       │   └── zipfile
+│   │   │       │       ├── __init__.pyc
+│   │   │       │       └── _path
+│   │   │       │           ├── glob.pyc
+│   │   │       │           └── __init__.pyc
+│   │   │       └── struct.pyc
+│   │   ├── virus_simulation
+│   │   └── virus_simulation.spec
+│   ├── ChatGPT_C2_Beacon.exe
+│   ├── ChatGPTPro-Setup.bat
+│   ├── ChatGPTPro-Setup.exe
+│   ├── ChatGPTPro-Setup.ps1
+│   ├── dropper.ps1
+│   ├── dropper.sh
+│   ├── eicar.com.txt
+│   ├── index.html
+│   ├── Memoire-SSI-026-Francais.pdf
+│   ├── openai.png
+│   └── ossec.conf
+├── socaas_ai_sandbox_feature.md
+├── SOCaaS_BLUEPRINT_MULTINODE
+│   ├── backups
+│   │   └── storage.yaml.bak
+│   ├── charts
+│   │   └── socaas
+│   │       ├── Chart.yaml
+│   │       ├── templates
+│   │       │   ├── _helpers.tpl
+│   │       │   ├── namespaces.yaml
+│   │       │   ├── networkpolicies.yaml
+│   │       │   ├── NOTES.txt
+│   │       │   ├── pipeline.yaml
+│   │       │   ├── rbac.yaml
+│   │       │   ├── secrets.yaml
+│   │       │   ├── shuffle.yaml
+│   │       │   ├── storage.yaml
+│   │       │   ├── thehive.yaml
+│   │       │   └── wazuh.yaml
+│   │       ├── values-multinode.yaml
+│   │       └── values.yaml
+│   ├── docs
+│   │   ├── 00_GLOBAL_CONSTRAINTS.md
+│   │   ├── 01_ARCHITECTURE_OVERVIEW.md
+│   │   ├── 02_HARDWARE_AND_VM_PLAN.md
+│   │   ├── 03_KVM_LIBVIRT_SETUP.md
+│   │   ├── 04_VM_CREATION.md
+│   │   ├── 05_KUBERNETES_BOOTSTRAP.md
+│   │   ├── 06_CALICO_CNI_AND_NETWORK_POLICIES.md
+│   │   ├── 07_NODE_LABELS_AND_SCHEDULING.md
+│   │   ├── 08_STORAGE_DESIGN.md
+│   │   ├── 09_HAPROXY_LOAD_BALANCER.md
+│   │   ├── 10_HELM_DEPLOYMENT.md
+│   │   ├── 11_WAZUH_DEPLOYMENT.md
+│   │   ├── 12_SHUFFLE_DEPLOYMENT.md
+│   │   ├── 13_THEHIVE_DEPLOYMENT.md
+│   │   ├── 14_WAZUH_AGENT_SETUP.md
+│   │   ├── 15_ALERT_PIPELINE_TEST.md
+│   │   ├── 16_VERIFICATION_CHECKLIST.md
+│   │   ├── 17_TROUBLESHOOTING.md
+│   │   ├── 18_SECURITY_HARDENING.md
+│   │   ├── 19_THESIS_COMPARISON_SINGLE_NODE_VS_MULTI_NODE.md
+│   │   ├── 20_LIMITATIONS_AND_MIGRATION_TO_PRODUCTION.md
+│   │   ├── 21_AUDIT_NOTES.md
+│   │   └── SOCAAS_INFRASTRUCTURE_OVERVIEW.md
+│   ├── env
+│   │   ├── socaas.env
+│   │   ├── socaas.env.bak.shuffle-webhook
+│   │   ├── socaas.env.bak.vt-real
+│   │   └── socaas.env.example
+│   ├── EXECUTION_PLAN.md
+│   ├── manifests
+│   │   ├── debug
+│   │   │   └── netshoot.yaml
+│   │   ├── namespaces.yaml
+│   │   ├── networkpolicies
+│   │   │   └── calico-baseline.yaml
+│   │   ├── storage
+│   │   │   └── local-pv-pvc-example.yaml
+│   │   └── tests
+│   │       ├── curl-alert-test-pod.yaml
+│   │       └── scheduling-test-pods.yaml
+│   ├── README.md
+│   ├── scripts
+│   │   ├── 00_check_host_resources.sh
+│   │   ├── 00_prepare_socaas_storage.sh
+│   │   ├── 01_install_kvm_parrot.sh
+│   │   ├── 01_install_kvm_parrot.sh.bak
+│   │   ├── 02_create_vms.sh
+│   │   ├── 02_create_vms.sh.bak
+│   │   ├── 03_prepare_all_nodes.sh
+│   │   ├── 04_init_master.sh
+│   │   ├── 05_join_workers_template.sh
+│   │   ├── 06_install_calico.sh
+│   │   ├── 07_label_nodes.sh
+│   │   ├── 08_prepare_worker_storage.sh
+│   │   ├── 09_install_haproxy_host.sh
+│   │   ├── 10_install_helm.sh
+│   │   ├── 11_deploy_socaas.sh
+│   │   ├── 12_verify_cluster.sh
+│   │   ├── 13_test_alert_pipeline.sh
+│   │   ├── 99_fix_shuffle_docker_nat.sh
+│   │   ├── 99_fix_shuffle_docker_tcp.sh
+│   │   ├── 99_reset_lab.sh
+│   │   ├── 99_reset_lab.sh.bak
+│   │   ├── 99_rollback_shuffle_docker_nat.sh
+│   │   ├── 99_verify_storage_layout.sh
+│   │   ├── 99_verify_storage_layout.sh.bak
+│   │   ├── lib.sh
+│   │   ├── phase5_update_friend_endpoint_ips.sh
+│   │   └── phase5_use_tailscale_for_friend_endpoint.sh
+│   ├── tools
+│   │   ├── audit_helm_values_paths.rb
+│   │   └── validate_repo.sh
+│   └── TREE.txt
+├── SOCaaS_BruteForce_Case.md
+├── socaas_demo_screenshots.sh
+├── SOCaaS_Nmap_Case.md
+├── tables.md
+├── thehive-auth-debug-20260508T185547
+│   ├── 01b_user_current_header_admin.http
+│   ├── 01c_user_current_header_id.http
+│   ├── 01_user_current.http
+│   ├── 02_license_current.http
+│   ├── 03_create_case.http
+│   ├── 04_create_alert.http
+│   ├── 05_thehive_logs_tail1000.log
+│   ├── 06_deploy_socaas-thehive.yaml
+│   ├── 07_configmaps_socaas-thehive.yaml
+│   ├── 08_services_socaas-thehive.yaml
+│   ├── jars
+│   │   ├── org.thp.scalligraph-5.3.11-1.jar
+│   │   ├── org.thp.scalligraph-app-5.3.11-1.jar
+│   │   ├── org.thp.scalligraph-auth-5.3.11-1.jar
+│   │   ├── org.thp.scalligraph-core-5.3.11-1.jar
+│   │   ├── org.thp.thehive-5.3.11-1.jar
+│   │   └── org.thp.thehive-core-5.3.11-1.jar
+│   ├── javap_AlertCtrl.txt
+│   ├── javap_CaseCtrl.txt
+│   ├── javap_EntrypointWithEndpoint_Builder.txt
+│   ├── javap_LocalKeyAuthSrv.txt
+│   ├── javap_LocalPasswordAuthSrv.txt
+│   ├── javap_LocalUserSrv.txt
+│   ├── javap_Organisation$.txt
+│   ├── javap_Permissions$.txt
+│   ├── javap_PreAuthContext.txt
+│   ├── javap_RequestOrganisationFromConfig.txt
+│   ├── javap_UserCtrl.txt
+│   └── javap_UserOps_UserOpsDefs.txt
+├── thesis_prompt.md
+└── tree.txt
+
+114 directories, 704 files
